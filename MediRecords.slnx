@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="MediRecords.Domain/MediRecords.Domain.csproj" />
-  <Project Path="MediRecords/MediRecords.csproj" />
-</Solution>
