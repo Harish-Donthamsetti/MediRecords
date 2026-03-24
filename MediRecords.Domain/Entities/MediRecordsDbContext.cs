@@ -70,8 +70,7 @@ public class MediRecordsDbContext : DbContext
             e.Property(x => x.Name).HasMaxLength(100);
             e.Property(x => x.Email).HasMaxLength(255);
             e.Property(x => x.Phone).HasMaxLength(20);
-            e.Property(x => x.PasswordHash).HasColumnType("nvarchar(max)");
-            e.Property(x => x.PasswordSalt).HasColumnType("nvarchar(max)");
+            e.Property(x => x.Password).HasColumnType("nvarchar(max)");
 
             e.HasOne(x => x.RoleIdNavigation)
                 .WithMany(r => r.Users)
