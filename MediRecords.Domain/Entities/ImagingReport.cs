@@ -15,10 +15,10 @@ public class ImagingReport
     public int ImagingOrderId { get; set; }
 
     [Column(TypeName = "VARCHAR(MAX)")]
-    public string Findings { get; set; }
+    public string Findings { get; set; } = null!;
 
     [Column(TypeName = "VARCHAR(100)")]
-    public string Impression { get; set; }
+    public string Impression { get; set; } = null!;
 
     public DateTime ReportDate { get; set; }
 

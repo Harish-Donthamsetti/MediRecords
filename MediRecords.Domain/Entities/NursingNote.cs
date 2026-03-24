@@ -17,11 +17,11 @@ public class NursingNote
     public int EncounterId { get; set; } // IDs for every Encounters
 
     [Column(TypeName ="VARCHAR(50)")]
-    public string Notes { get; set; } // Notes By the nurse.
+    public string? Notes { get; set; } // Notes By the nurse.
 
     [Required]
     [Column(TypeName ="VARCHAR(50)")]
-    public string RecordedBy { get; set; } // Name of the person who recorded this note 
+    public string RecordedBy { get; set; } = null!; // Name of the person who recorded this note 
 
     public DateTime RecordedDate { get; set; } // Date of the Note record.
 

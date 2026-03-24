@@ -15,19 +15,20 @@ public class SOAPNote
     public int EncounterId { get; set; }
 
     [Column(TypeName = "nvarchar(max)")]
-    public string Subjective { get; set; }
+    public string Subjective { get; set; } = null!;
 
     [Column(TypeName = "nvarchar(max)")]
-    public string Objective { get; set; }
+    public string? Objective { get; set; }
 
     [Column(TypeName = "nvarchar(max)")]
-    public string Assessment { get; set; }
+    public string? Assessment { get; set; }
 
     [Column( TypeName = "nvarchar(max)")]
-    public string Plan { get; set; }
+    public string? Plan { get; set; }
 
     public DateTime CreatedDate { get; set; }
 
     public bool Status { get; set; }
+    
     public virtual Encounter? EncounterIdNavigation { get; set; }
 }

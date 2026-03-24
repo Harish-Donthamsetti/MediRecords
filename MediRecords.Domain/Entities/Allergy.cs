@@ -11,11 +11,12 @@ public class Allergy
     public int AllergyId { get; set; }
 
     [Required]
+    [ForeignKey("PatientIdNavigation")]
     public int PatientId { get; set; }
 
     [Required]
     [MaxLength(255)]
-    public string Allergen { get; set; }
+    public string Allergen { get; set; } = null!;
 
     public string? Reaction { get; set; }
 
@@ -27,6 +28,5 @@ public class Allergy
 
     public DateTime NotedDate { get; set; } = DateTime.Now;
 
-    [ForeignKey("PatientId")]
-    public virtual Patient Patient { get; set; }
+    public virtual Patient? PatientIdNavigation { get; set; }
 }

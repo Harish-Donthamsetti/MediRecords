@@ -16,10 +16,10 @@ public class ImagingOrder
     public int EncounterId { get; set; }
 
     [Column(TypeName = "VARCHAR(100)")]
-    public string StudyType { get; set; }
+    public string StudyType { get; set; } = null!;
 
     [Column(TypeName = "VARCHAR(MAX)")]
-    public string Notes { get; set; }
+    public string? Notes { get; set; }
 
     public DateTime OrderedDate { get; set; }
 

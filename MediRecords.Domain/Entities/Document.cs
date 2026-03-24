@@ -11,8 +11,10 @@ public class Document
     public int DocumentID { get; set; }
 
     [Required]
+    [ForeignKey("PatientIdNavigation")]
     public int PatientID { get; set; }
 
+    [ForeignKey("EncounterIdNavigation")]
     public int? EncounterID { get; set; }
 
     [Required]

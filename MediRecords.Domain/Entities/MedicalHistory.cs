@@ -11,16 +11,16 @@ public class MedicalHistory
     public int HistoryId { get; set; }
 
     [Required]
+    [ForeignKey("PatientIdNavigation")]
     public int PatientId { get; set; }
 
     [Required]
     [MaxLength(255)]
-    public string Condition { get; set; }
+    public string Condition { get; set; } = null!;
 
     public string? Notes { get; set; }
 
     public DateTime RecordedDate { get; set; } = DateTime.Now;
 
-    [ForeignKey("PatientId")]
-    public virtual Patient Patient { get; set; }
+    public virtual Patient? PatientIdNavigation { get; set; }
 }

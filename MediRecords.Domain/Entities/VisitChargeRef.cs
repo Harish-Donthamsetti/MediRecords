@@ -25,6 +25,5 @@ public class VisitChargeRef
     public bool Status { get; set; }
 
     public virtual Encounter? EncounterIdNavigation { get; set; }
-
     public virtual ProcedureCode? ProcedureCodeNavigation { get; set; }
 }

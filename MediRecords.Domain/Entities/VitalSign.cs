@@ -14,7 +14,7 @@ public class VitalSign
     public int VitalId { get; set; } // Primary Key ID for all Vital Signs.
     
     [Required]
-    [ForeignKey("EncounterNavigation")]
+    [ForeignKey("EncounterIdNavigation")]
     public int EncounterId { get; set; } // ID of the Encounter.
 
     [Required]
@@ -27,15 +27,15 @@ public class VitalSign
     
     [Required]
     [Column(TypeName="VARCHAR(20)")]
-    public string Unit{ get; set; } // Unit in which the Vitals are recorded.
+    public string Unit{ get; set; } = null!; // Unit in which the Vitals are recorded.
     
     public DateTime RecordedDate { get; set; } // Date of the Vitals recorded.
 
     [Required]
     [Column(TypeName="VARCHAR(50)")]
-    public string RecordedBy { get; set; } // Name of the User who recorded the Vitals.
+    public string RecordedBy { get; set; } = null!; // Name of the User who recorded the Vitals.
 
     //Foreign Key
-    public virtual Encounter? EncounterNavigation { get; set; }
+    public virtual Encounter? EncounterIdNavigation { get; set; }
 
 }

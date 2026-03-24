@@ -12,7 +12,7 @@ public class UserRole
 
     [Required]
     [Column(TypeName = "VARCHAR(30)")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

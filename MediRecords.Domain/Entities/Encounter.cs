@@ -21,8 +21,9 @@ public class Encounter
 
     public DateTime Date { get; set; }
 
+    [Required]
     [Column(TypeName = "nvarchar(MAX)")]
-    public string VisitType { get; set; }
+    public string VisitType { get; set; } = null!;
     
     public bool Status { get; set; }
 
