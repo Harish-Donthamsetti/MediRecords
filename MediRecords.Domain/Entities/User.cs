@@ -27,12 +27,10 @@ public class User
     [Column(TypeName = "VARCHAR(15)")]
     public string Phone { get; set; } = null!;
 
+    [Required]
     [Column(TypeName = "NVARCHAR(MAX)")]
-    public string PasswordHash { get; set; } = null!;
-    
-    [Column(TypeName = "NVARCHAR(MAX)")]
-    public string PasswordSalt { get; set; } = null!;
-    
+    public string Password { get; set; } = null!;
+
     public bool Status { get; set; }
 
     /*-------------------------Foreign Key References--------------------------------*/
