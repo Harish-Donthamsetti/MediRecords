@@ -46,7 +46,4 @@ public class Patient
     public virtual ICollection<ProblemList> ProblemLists { get; set; } = new List<ProblemList>();
 
     public virtual User? PrimaryProviderIdNavigation { get; set; }
-
-
-
 }
