@@ -16,16 +16,16 @@ namespace MediRecords.Domain.Entities
         
         [Required]
         [Column(TypeName = "VARCHAR(100)")]
-        public string DrugName { get; set; }
+        public string DrugName { get; set; } = null!;
 
         [Column(TypeName = "VARCHAR(50)")]
-        public string Dose { get; set; }
+        public string Dose { get; set; } = null!;
 
         [Column(TypeName = "VARCHAR(50)")]
-        public string Frequency { get; set; }
+        public string Frequency { get; set; } = null!;
 
         [Column(TypeName = "VARCHAR(50)")]
-        public string Route { get; set; }
+        public string? Route { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }

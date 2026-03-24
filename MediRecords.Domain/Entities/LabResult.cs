@@ -15,7 +15,7 @@ public class LabResult
     public int LabOrderId { get; set; }
 
     [Column(TypeName = "VARCHAR(MAX)")]
-    public string ResultJson { get; set; }
+    public string? ResultJson { get; set; }
 
     public DateTime ResultDate { get; set; }
     

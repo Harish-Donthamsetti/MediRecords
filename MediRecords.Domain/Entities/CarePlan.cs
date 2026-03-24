@@ -11,17 +11,17 @@ public class CarePlan
     public int CarePlanId { get; set; }
 
     [Required]
+    [ForeignKey("PatientIdNavigation")]
     public int PatientId { get; set; }
 
     [Column(TypeName = "VARCHAR(MAX)")]
-    public string GoalsJSON { get; set; }
+    public string GoalsJSON { get; set; } = null!;
 
     [Column(TypeName = "VARCHAR(MAX)")]
-    public string Instructions { get; set; }
+    public string Instructions { get; set; } = null!;
 
     // 0: Active, 1: Completed
     public bool Status { get; set; }
 
-    [ForeignKey("PatientId")]
-    public virtual Patient Patient { get; set; }
+    public virtual Patient? PatientIdNavigation { get; set; }
 }

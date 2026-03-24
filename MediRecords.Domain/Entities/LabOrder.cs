@@ -21,7 +21,7 @@ public class LabOrder
 
     [Required]
     [Column(TypeName = "VARCHAR(MAX)")]
-    public string TestJson { get; set; }
+    public string TestJson { get; set; } = null!;
 
     public DateTime OrderDate { get; set; }
     

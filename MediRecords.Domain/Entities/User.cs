@@ -13,7 +13,7 @@ public class User
 
     [Required]
     [Column(TypeName = "VARCHAR(30)")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -22,16 +22,16 @@ public class User
 
     [Required]
     [Column(TypeName = "VARCHAR(100)")]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [Column(TypeName = "VARCHAR(15)")]
-    public string Phone { get; set; }
+    public string Phone { get; set; } = null!;
 
     [Column(TypeName = "NVARCHAR(MAX)")]
-    public string PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = null!;
     
     [Column(TypeName = "NVARCHAR(MAX)")]
-    public string PasswordSalt { get; set; }
+    public string PasswordSalt { get; set; } = null!;
     
     public bool Status { get; set; }
 

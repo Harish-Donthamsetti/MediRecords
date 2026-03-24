@@ -187,7 +187,7 @@ public class MediRecordsDbContext : DbContext
         {
             e.HasKey(x => x.VitalId);
 
-            e.HasOne(x => x.EncounterNavigation)
+            e.HasOne(x => x.EncounterIdNavigation)
                 .WithMany(e => e.VitalSigns)
                 .HasForeignKey(x => x.EncounterId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -219,6 +219,29 @@ public class MediRecordsDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<FollowUp>(e =>
+        {
+            e.HasKey(x => x.FollowupId);
+
+            e.Property(x => x.EncounterId)
+                .IsRequired();
+
+            e.Property(x => x.RecommendedDate)
+                .IsRequired();
+
+            e.Property(x => x.Notes)
+                .HasColumnType("VARCHAR(MAX)")
+                .IsRequired();
+
+            e.Property(x => x.CreatedDate)
+                .HasDefaultValueSql("GETDATE()");
+
+            e.HasOne(x => x.EncounterIdNavigation)
+                .WithMany(enc => enc.FollowUps)
+                .HasForeignKey(x => x.EncounterId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        
         //Orders and Diagnostics
         modelBuilder.Entity<Prescription>(e =>
         {
@@ -267,6 +290,28 @@ public class MediRecordsDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<MedicalHistory>(e =>
+        {
+            e.HasKey(x => x.HistoryId);
+
+            e.Property(x => x.PatientId)
+                .IsRequired();
+
+            e.Property(x => x.Condition)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            e.Property(x => x.Notes);
+
+            e.Property(x => x.RecordedDate)
+                .HasDefaultValueSql("GETDATE()");
+
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.MedicalHistories)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
         // Imaging
         modelBuilder.Entity<ImagingOrder>(e =>
         {
@@ -286,6 +331,39 @@ public class MediRecordsDbContext : DbContext
                 .WithMany(o => o.ImagingReports)
                 .HasForeignKey(x => x.ImagingOrderId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ClinicalTemplate>(e =>
+        {
+            e.HasKey(x => x.TemplateId);
+
+            e.Property(x => x.TemplateId)
+                .ValueGeneratedNever();
+
+            e.Property(x => x.Name)
+                .HasColumnType("varchar(100)")
+                .IsRequired();
+
+            e.Property(x => x.TemplateType)
+                .HasColumnType("varchar(50)")
+                .IsRequired();
+
+            e.Property(x => x.ContentJSON)
+                .HasColumnType("nvarchar(max)");
+
+            e.Property(x => x.CreatedBy)
+                .IsRequired();
+
+            e.Property(x => x.CreatedDate)
+                .IsRequired();
+
+            e.Property(x => x.Status)
+                .IsRequired();
+
+            e.HasOne(x => x.CreatedByNavigation)
+                .WithMany(u => u.ClinicalTemplates)
+                .HasForeignKey(x => x.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         //Billing and Documents
