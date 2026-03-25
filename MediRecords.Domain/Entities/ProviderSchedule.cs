@@ -20,11 +20,9 @@ public class ProviderSchedule
     public string DayOfWeek { get; set; } = string.Empty;
 
     [Required]
-    [Column(TypeName = "time")]
     public DateTime StartTime { get; set; }
 
     [Required]
-    [Column(TypeName = "time")]
     public DateTime EndTime { get; set; }
 
     [Required]

@@ -3,6 +3,9 @@
 # .env File
 .env
 
+# Sql LocalDB Files
+.sql
+
 # Build Folders
 bin/
 obj/

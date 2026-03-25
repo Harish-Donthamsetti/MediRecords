@@ -124,27 +124,89 @@ public class MediRecordsDbContext : DbContext
         });
 
         //Patient-linked Tables
-        void ConfigurePatientChild<TEntity>(string tableName)
-            where TEntity : class
+        // Explicit configuration for Patient-linked tables to set up cascade delete from Patient -> Child, otherwise EF Core will default to Restrict which causes issues when deleting patients with existing records.
+        modelBuilder.Entity<ProblemList>(e =>
         {
-            modelBuilder.Entity<TEntity>(e =>
-            {
-                e.ToTable(tableName);
-                e.HasKey("Id");
+            e.ToTable("ProblemList");
 
-                e.HasOne("Patient")
-                    .WithMany()
-                    .HasForeignKey("PatientId")
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-        }
+            e.HasKey(x => x.ProblemId);
 
-        ConfigurePatientChild<ProblemList>("ProblemList");
-        ConfigurePatientChild<Allergy>("Allergy");
-        ConfigurePatientChild<MedicalHistory>("MedicalHistory");
-        ConfigurePatientChild<MedicationList>("MedicationList");
-        ConfigurePatientChild<Immunization>("Immunization");
-        ConfigurePatientChild<CarePlan>("CarePlan");
+            e.Property(x => x.ProblemId)
+                .ValueGeneratedOnAdd();
+
+            e.Property(x => x.Diagnosis)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            e.Property(x => x.Status)
+                .HasMaxLength(20);
+
+            e.Property(x => x.StartDate)
+                .IsRequired();
+
+            e.Property(x => x.EndDate);
+
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.ProblemLists)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Allergy>(e =>
+        {
+            e.ToTable("Allergy");
+
+            e.HasKey(x => x.AllergyId);
+
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.Allergies)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<MedicalHistory>(e =>
+        {
+            e.ToTable("MedicalHistory");
+
+            e.HasKey(x => x.HistoryId);
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.MedicalHistories)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<MedicationList>(e =>
+        {
+            e.ToTable("MedicationList");
+
+            e.HasKey(x => x.MedId);
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.MedicationLists)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Immunization>(e =>
+        {
+            e.ToTable("Immunization");
+
+            e.HasKey(x => x.ImmunizationId);
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.Immunizations)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<CarePlan>(e =>
+        {
+            e.ToTable("CarePlan");
+
+            e.HasKey(x => x.CarePlanId);
+            e.HasOne(x => x.PatientIdNavigation)
+                .WithMany(p => p.CarePlans)
+                .HasForeignKey(x => x.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         //Encounter and Notes
         modelBuilder.Entity<Encounter>(e =>
