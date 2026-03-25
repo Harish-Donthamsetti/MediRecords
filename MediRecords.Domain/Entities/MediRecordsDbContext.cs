@@ -124,31 +124,6 @@ public class MediRecordsDbContext : DbContext
         });
 
         //Patient-linked Tables
-        /* Generic Configuration method for patient-linked tables to set up cascade delete from Patient -> Child, otherwise EF Core will default to Restrict which causes issues when deleting patients with existing records. */
-        /* void ConfigurePatientChild<TEntity>(string tableName)
-            where TEntity : class
-        {
-            modelBuilder.Entity<TEntity>(e =>
-            {
-                e.ToTable(tableName);
-
-                e.HasKey("Id");
-
-                e.HasOne("Patient")
-                    .WithMany()
-                    .HasForeignKey("PatientId")
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-        } */
-
-        /* These need to be explicitly configured to set up the cascade delete from Patient -> Child, otherwise EF Core will default to Restrict which causes issues when deleting patients with existing records. */
-        /* ConfigurePatientChild<ProblemList>("ProblemList");
-        ConfigurePatientChild<Allergy>("Allergy");
-        ConfigurePatientChild<MedicalHistory>("MedicalHistory");
-        ConfigurePatientChild<MedicationList>("MedicationList");
-        ConfigurePatientChild<Immunization>("Immunization");
-        ConfigurePatientChild<CarePlan>("CarePlan"); */
-
         // Explicit configuration for Patient-linked tables to set up cascade delete from Patient -> Child, otherwise EF Core will default to Restrict which causes issues when deleting patients with existing records.
         modelBuilder.Entity<ProblemList>(e =>
         {
