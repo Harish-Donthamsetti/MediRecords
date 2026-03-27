@@ -2,6 +2,8 @@
 {
 	public static class Constant
 	{
+        public const string Admin = "Admin";
+        
 		public const string RegisterSuccess = "User Registered Succesfully";
 
 		public const string RequestNull = "Registration request cannot be null.";

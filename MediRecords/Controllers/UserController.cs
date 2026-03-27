@@ -49,10 +49,10 @@ namespace MediRecords.Controllers
         /// Retrieves a list of all registered users.
         /// </summary>
         /// <returns>A collection of UserViewDto objects.</returns>
-        // [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetAll")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserViewDto>>> GetAll()
         {
             try
@@ -70,11 +70,11 @@ namespace MediRecords.Controllers
         /// Fetches a specific user's details by their unique ID.
         /// </summary>
         /// <param name="id">The numeric ID of the user.</param>
-        // [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetById/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserViewDto>> GetById(int id)
         {
             if (id <= 0)
