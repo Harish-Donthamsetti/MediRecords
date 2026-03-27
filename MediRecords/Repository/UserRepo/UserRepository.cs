@@ -17,9 +17,7 @@ public class UserRepository : IUserRepository
     /// <summary>
     /// Handles the database logic for registering a user, including email uniqueness checks and persistence.
     /// </summary>
-    /// <param name="request">The registration request containing user details.</param>
-    /// <returns>A response DTO containing the mapped details of the newly created user.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the request object is null.</exception>
+    /// <param name="user">The registration request containing user details.</param>
     /// <exception cref="Exception">Thrown when a user with the provided email already exists.</exception>
     public async Task RegisterUserAsync(User user)
     {

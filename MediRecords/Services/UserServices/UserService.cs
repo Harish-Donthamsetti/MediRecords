@@ -18,7 +18,7 @@ public class UserService : IUserService
     /// <summary>
     /// Checks the user's data, hashes the password, and saves the user to the database.
     /// </summary>
-    /// <param name="request">The data provided for registration.</param>
+    /// <param name="requestDto">The data provided for registration.</param>
     /// <returns>The result of the registration process.</returns>
     public async Task RegisterUserAsync(UserRegisterRequestDto requestDto)
     {

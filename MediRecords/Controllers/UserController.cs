@@ -21,8 +21,8 @@ namespace MediRecords.Controllers
         /// <summary>
         /// Registers a new user into the MediRecords system.
         /// </summary>
-        /// <param name="user">The user registration data transfer object containing credentials and profile info.</param>
-        /// <returns>An IActionResult containing the registration response or an error message.</returns>
+        /// <param name="requestDto">The user registration data transfer object containing credentials and profile info.</param>
+        /// <returns>Return the Success or ErrorMessage</returns>
         [HttpPost("register")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
