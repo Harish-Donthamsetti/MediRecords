@@ -1,5 +1,6 @@
 using MediRecords.Domain.Entities;
 using MediRecords.Repository.UserRepo;
+using MediRecords.Services.AuthService;
 using MediRecords.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
