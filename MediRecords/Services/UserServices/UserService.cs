@@ -68,15 +68,7 @@ public class UserService : IUserService
     {
         var users = await _userRepository.GetAllUsersAsync();
 
-        return users.Select(u => new UserViewDto
-        {
-            UserId = u.UserId,
-            Name = u.Name,
-            Email = u.Email,
-            Phone = u.Phone,
-            // Replaced hardcoded string with centralized constant
-            RoleName = u.RoleIdNavigation?.Name ?? Constant.Unassigned
-        });   
+        return users.Select(UserViewDto.FromEntity);   
     }
 
     /// <summary>
@@ -88,18 +80,6 @@ public class UserService : IUserService
     {
         var user = await _userRepository.GetUserByIdAsync(id);
         
-        if (user == null)
-        {
-            return null;
-        }
-
-        return new UserViewDto 
-        {
-            UserId = user.UserId,
-            Name = user.Name,
-            Email = user.Email,
-            Phone = user.Phone, // Restored the missing Phone property
-            RoleName = user.RoleIdNavigation?.Name ?? Constant.Unassigned
-        };
+        return user != null ? UserViewDto.FromEntity(user) : null;
     }   
 }

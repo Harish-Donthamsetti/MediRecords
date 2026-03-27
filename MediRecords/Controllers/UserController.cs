@@ -49,7 +49,7 @@ namespace MediRecords.Controllers
         /// Retrieves a list of all registered users.
         /// </summary>
         /// <returns>A collection of UserViewDto objects.</returns>
-        [Authorize(Roles = Constant.Admin)]
+        // [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetAll")]
         [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError)]
@@ -70,7 +70,7 @@ namespace MediRecords.Controllers
         /// Fetches a specific user's details by their unique ID.
         /// </summary>
         /// <param name="id">The numeric ID of the user.</param>
-        [Authorize(Roles = Constant.Admin)]
+        // [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetById/{id}")]
         [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
