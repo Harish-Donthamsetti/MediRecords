@@ -19,13 +19,12 @@ public class UserService : IUserService
     /// Checks the user's data, hashes the password, and saves the user to the database.
     /// </summary>
     /// <param name="requestDto">The data provided for registration.</param>
-    /// <returns>The result of the registration process.</returns>
     public async Task RegisterUserAsync(UserRegisterRequestDto requestDto)
     {
         // Check if the request (dto) exists
         if (requestDto == null)
         {
-            throw new ArgumentException(ErrorMessages.User.RequestNull);
+            throw new ArgumentException(Constant.RequestNull);
         }
 
         // Make sure all required information is filled in
@@ -33,7 +32,7 @@ public class UserService : IUserService
            string.IsNullOrWhiteSpace(requestDto.Email) ||
            string.IsNullOrWhiteSpace(requestDto.Name) ||
            requestDto.RoleId <= 0) {
-            throw new ArgumentException(ErrorMessages.User.RequiredFields);
+            throw new ArgumentException(Constant.RequiredFields);
            }
 
 
@@ -41,14 +40,14 @@ public class UserService : IUserService
         var emailResult = EmailHelper.ValidateEmail(requestDto.Email);
         if(!emailResult.IsValid)
         {
-            throw new Exception(ErrorMessages.Validation.InvalidEmailFormat);
+            throw new MediRecordsException(Constant.InvalidEmailFormat);
         }
 
         // Validate password
         var passwordResult = PasswordHelper.ValidatePassword(requestDto.Password);
         if(!passwordResult.IsValid)
         {
-            throw new Exception(ErrorMessages.Validation.WeakPassword);
+            throw new MediRecordsException(Constant.WeakPassword);
         }
         
         // Hash the password to keep it safe in the databse

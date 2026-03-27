@@ -24,21 +24,22 @@ namespace MediRecords.Controllers
         /// <param name="requestDto">The user registration data transfer object containing credentials and profile info.</param>
         /// <returns>Return the Success or ErrorMessage</returns>
         [HttpPost("register")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RegisterUser(UserRegisterRequestDto requestDto)
         {
-            try {
+            try
+            {
                 if(!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
                 await _userService.RegisterUserAsync(requestDto);
-                return StatusCode(201, ErrorMessages.User.RegisterSuccess);
+                return Ok(Constant.RegisterSuccess);
             }
             catch (MediRecordsException) {
-                return StatusCode(500, ErrorMessages.User.InternalError);
+                return StatusCode(500, Constant.InternalError);
             }
         }
     }

@@ -25,13 +25,13 @@ public class UserRepository : IUserRepository
         {
             if(user == null)
             {
-                throw new ArgumentNullException(ErrorMessages.User.RequestNull);
+                throw new ArgumentNullException(Constant.RequestNull);
             }
 
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Status == true);
             if(existingUser != null)
             {
-                throw new Exception(ErrorMessages.User.EmailExists);
+                throw new MediRecordsException(Constant.EmailExists);
             }
 
             await _context.Users.AddAsync(user);
@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository
         }
         catch(Exception)
         {
-            throw new Exception(ErrorMessages.Database.SaveFailed);
+            throw new MediRecordsException(Constant.SaveFailed);
         }
     }
 }
