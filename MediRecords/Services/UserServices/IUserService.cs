@@ -6,5 +6,5 @@ namespace MediRecords.Services.UserServices;
 
 public interface IUserService
 {
-    Task RegisterUserAsync(UserRegisterDto dto);
+    Task RegisterUserAsync(UserRegisterRequestDto requestDto);
 }

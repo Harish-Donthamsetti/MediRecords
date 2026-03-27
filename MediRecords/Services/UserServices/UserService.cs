@@ -14,25 +14,50 @@ public class UserService : IUserService
     {
         _userRepository = userRepository;
     }
-    public Task RegisterUserAsync(UserRegisterDto dto)
+
+    /// <summary>
+    /// Checks the user's data, hashes the password, and saves the user to the database.
+    /// </summary>
+    /// <param name="request">The data provided for registration.</param>
+    /// <returns>The result of the registration process.</returns>
+    public async Task RegisterUserAsync(UserRegisterRequestDto requestDto)
     {
-        // Basic validations
-        if (string.IsNullOrWhiteSpace(dto.Email))
-            throw new ArgumentException("Email is required");
+        // Check if the request (dto) exists
+        if (requestDto == null)
+        {
+            throw new ArgumentException(ErrorMessages.User.RequestNull);
+        }
+
+        // Make sure all required information is filled in
+        if(string.IsNullOrWhiteSpace(requestDto.Password) ||
+           string.IsNullOrWhiteSpace(requestDto.Email) ||
+           string.IsNullOrWhiteSpace(requestDto.Name) ||
+           requestDto.RoleId <= 0) {
+            throw new ArgumentException(ErrorMessages.User.RequiredFields);
+           }
+
+
+        // Validate Email
+        var emailResult = EmailHelper.ValidateEmail(requestDto.Email);
+        if(!emailResult.IsValid)
+        {
+            throw new Exception(ErrorMessages.Validation.InvalidEmailFormat);
+        }
 
         // Validate password
-        PasswordValidator.Validate(dto.Password);
-
-        var user = new User
+        var passwordResult = PasswordHelper.ValidatePassword(requestDto.Password);
+        if(!passwordResult.IsValid)
         {
-            Name = dto.Name,
-            RoleId = dto.RoleId,
-            Email = dto.Email,
-            Phone = dto.Phone ?? "",
-            Password = PasswordHasher.HashPassword(dto.Password),
-            Status = dto.Status
-        };
+            throw new Exception(ErrorMessages.Validation.WeakPassword);
+        }
+        
+        // Hash the password to keep it safe in the databse
+        requestDto.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password);
 
-        return _userRepository.RegisterUserAsync(user);
+        // Map the Dto to Domain (User) entity
+        var user = requestDto.ToUserRegisterRequest();
+        
+        // Pass the data to the repository to get saved
+        await _userRepository.RegisterUserAsync(user);
     }
 }

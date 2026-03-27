@@ -1,5 +1,8 @@
+using System.Net;
 using MediRecords.Dto.UserDtos;
 using MediRecords.Services.UserServices;
+using MediRecords.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,21 +18,27 @@ namespace MediRecords.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Registers a new user into the MediRecords system.
+        /// </summary>
+        /// <param name="user">The user registration data transfer object containing credentials and profile info.</param>
+        /// <returns>An IActionResult containing the registration response or an error message.</returns>
         [HttpPost("register")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> RegisterUser(UserRegisterDto dto)
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RegisterUser(UserRegisterRequestDto requestDto)
         {
             try {
-                await _userService.RegisterUserAsync(dto);
-                return Ok(new { Message = "User registered successfully."});
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                await _userService.RegisterUserAsync(requestDto);
+                return StatusCode(201, ErrorMessages.User.RegisterSuccess);
             }
-            catch(ArgumentException ex) {
-                return BadRequest(new { error = ex.Message });
-            }
-            catch (Exception ex) {
-                return BadRequest(ex.Message);
+            catch (MediRecordsException) {
+                return StatusCode(500, ErrorMessages.User.InternalError);
             }
         }
     }

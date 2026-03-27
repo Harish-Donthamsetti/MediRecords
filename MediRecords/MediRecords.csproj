@@ -16,13 +16,10 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Dto\" />
-    <Folder Include="Dto\UserDtos\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Services\" />
     <Folder Include="Services\UserServices\" />
-    <Folder Include="Utility\" />
     <Folder Include="Utility\TokenUtility\" />
   </ItemGroup>
 
