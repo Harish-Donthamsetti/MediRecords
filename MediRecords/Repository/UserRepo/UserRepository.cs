@@ -15,6 +15,32 @@ public class UserRepository : IUserRepository
     }
 
     /// <summary>
+    /// Retrieves all users from the database, including their associated role information.
+    /// </summary>
+    /// <returns>A list of User entities with Role navigation properties populated.</returns>
+    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    {
+        // Use AsNoTracking for "Read-Only" operations to improve performance 
+        // and reduce memory usage in Entity Framework.
+        return await _context.Users
+            .Include(u => u.RoleIdNavigation) 
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    /// <summary>
+    /// Finds a specific user by their unique ID.
+    /// </summary>
+    /// <param name="id">The primary key ID of the user.</param>
+    /// <returns>The User entity if found; otherwise, null.</returns>
+    public async Task<User?> GetUserByIdAsync(int id)
+    {
+        return await _context.Users
+            .Include(u => u.RoleIdNavigation)
+            .FirstOrDefaultAsync(u => u.UserId == id);
+    }
+
+    /// <summary>
     /// Handles the database logic for registering a user, including email uniqueness checks and persistence.
     /// </summary>
     /// <param name="user">The registration request containing user details.</param>
