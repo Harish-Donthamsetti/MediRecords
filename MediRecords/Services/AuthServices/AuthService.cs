@@ -6,7 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using MediRecords.Domain.Entities;
 using MediRecords.Dto.UserDtos;
 using MediRecords.Repositories;
-using BCrypt.Net; 
+using BCrypt.Net;
+using MediRecords.Dto.LoginDtos;
 
 namespace MediRecords.Services.AuthServices;
 
@@ -25,7 +26,7 @@ public class AuthService : IAuthService
     {
         var user = await _authRepo.GetUserByEmailAsync(dto.Email);
         
-        // If user not found or password doesn't match BCrypt format/value
+       
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password)) 
         {
             return null;
