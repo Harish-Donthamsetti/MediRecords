@@ -1,8 +1,10 @@
-using MediRecords.Domain.Entities;
-using MediRecords.Repository.UserRepo;
-using MediRecords.Services.AuthService;
+using Microsoft.EntityFrameworkCore; 
+using MediRecords.Domain.Entities;   
+using MediRecords.Services.AuthServices;
 using MediRecords.Services.UserServices;
-using Microsoft.EntityFrameworkCore;
+using MediRecords.Repository;
+using MediRecords.Repositories;
+using MediRecords.Repository.UserRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,33 +15,34 @@ builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     )
 );
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddScoped<IAuthRepository,AuthRepository>(); 
+builder.Services.AddScoped<IUserRepository,UserRepository>(); 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService,UserService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.MapControllers();
+        
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "MediRecords API v1");
+    });
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication(); 
+app.UseAuthorization(); 
 
-// Authentication and Authorization
-app.UseAuthentication();
-app.UseAuthorization();
+app.MapControllers(); 
 
 app.Run();
