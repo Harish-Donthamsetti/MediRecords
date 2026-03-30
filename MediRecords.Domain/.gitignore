@@ -2,6 +2,8 @@
 
 # .env File
 .env
+.env.*
+*.env
 
 # Sql LocalDB Files
 .sql
