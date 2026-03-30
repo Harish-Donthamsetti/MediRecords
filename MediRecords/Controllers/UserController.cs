@@ -1,6 +1,5 @@
 using System.Net;
 using MediRecords.Dto.UserDtos;
-using MediRecords.Dto.UserDtos;
 using MediRecords.Services.UserServices;
 using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;
