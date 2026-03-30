@@ -12,4 +12,5 @@ public interface IUserService
 
     Task<UserViewDto?> GetUserByIdAsync(int id);
 
+    public Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request);
 }
