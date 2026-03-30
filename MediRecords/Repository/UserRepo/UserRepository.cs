@@ -47,25 +47,18 @@ public class UserRepository : IUserRepository
     /// <exception cref="Exception">Thrown when a user with the provided email already exists.</exception>
     public async Task RegisterUserAsync(User user)
     {
-        try
+        if(user == null)
         {
-            if(user == null)
-            {
-                throw new ArgumentNullException(Constant.RequestNull);
-            }
-
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Status == true);
-            if(existingUser != null)
-            {
-                throw new MediRecordsException(Constant.EmailExists);
-            }
-
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            throw new ArgumentNullException(Constant.RequestNull);
         }
-        catch(Exception)
+
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Status == true);
+        if(existingUser != null)
         {
-            throw new MediRecordsException(Constant.SaveFailed);
+            throw new MediRecordsException(Constant.EmailExists);
         }
+
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
     }
 }

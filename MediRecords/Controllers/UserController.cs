@@ -30,17 +30,19 @@ namespace MediRecords.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RegisterUser(UserRegisterRequestDto requestDto)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 await _userService.RegisterUserAsync(requestDto);
                 return Ok(Constant.RegisterSuccess);
             }
-            catch (MediRecordsException)
-            {
+            catch (MediRecordsException ex) {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception) {
                 return StatusCode(500, Constant.InternalError);
             }
         }

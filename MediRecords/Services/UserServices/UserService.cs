@@ -24,7 +24,7 @@ public class UserService : IUserService
         // Check if the request (dto) exists
         if (requestDto == null)
         {
-            throw new ArgumentException(Constant.RequestNull);
+            throw new MediRecordsException(Constant.RequestNull);
         }
 
         // Make sure all required information is filled in
@@ -32,7 +32,7 @@ public class UserService : IUserService
            string.IsNullOrWhiteSpace(requestDto.Email) ||
            string.IsNullOrWhiteSpace(requestDto.Name) ||
            requestDto.RoleId <= 0) {
-            throw new ArgumentException(Constant.RequiredFields);
+            throw new MediRecordsException(Constant.RequiredFields);
            }
 
 
