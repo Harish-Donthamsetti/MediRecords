@@ -7,4 +7,9 @@ namespace MediRecords.Services.UserServices;
 public interface IUserService
 {
     Task RegisterUserAsync(UserRegisterRequestDto requestDto);
+    
+    Task<IEnumerable<UserViewDto>> GetAllUsersAsync();
+
+    Task<UserViewDto?> GetUserByIdAsync(int id);
+
 }
