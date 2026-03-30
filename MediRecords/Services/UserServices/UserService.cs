@@ -24,7 +24,7 @@ public class UserService : IUserService
         // Check if the request (dto) exists
         if (requestDto == null)
         {
-            throw new ArgumentException(Constant.RequestNull);
+            throw new MediRecordsException(Constant.RequestNull);
         }
 
         // Make sure all required information is filled in
@@ -32,7 +32,7 @@ public class UserService : IUserService
            string.IsNullOrWhiteSpace(requestDto.Email) ||
            string.IsNullOrWhiteSpace(requestDto.Name) ||
            requestDto.RoleId <= 0) {
-            throw new ArgumentException(Constant.RequiredFields);
+            throw new MediRecordsException(Constant.RequiredFields);
            }
 
 
@@ -59,4 +59,27 @@ public class UserService : IUserService
         // Pass the data to the repository to get saved
         await _userRepository.RegisterUserAsync(user);
     }
+
+    /// <summary>
+    /// Retrieves all users and transforms the domain models into presentation-ready DTOs.
+    /// </summary>
+    /// <returns>A collection of UserViewDto objects.</returns>
+    public async Task<IEnumerable<UserViewDto>> GetAllUsersAsync()
+    {
+        var users = await _userRepository.GetAllUsersAsync();
+
+        return users.Select(UserViewDto.FromEntity);   
+    }
+
+    /// <summary>
+    /// Fetches a specific user by ID and converts the entity to a DTO for the API.
+    /// </summary>
+    /// <param name="id">The unique identifier of the user.</param>
+    /// <returns>The populated UserViewDto if found; otherwise, null.</returns>
+    public async Task<UserViewDto?> GetUserByIdAsync(int id)
+    {
+        var user = await _userRepository.GetUserByIdAsync(id);
+        
+        return user != null ? UserViewDto.FromEntity(user) : null;
+    }   
 }

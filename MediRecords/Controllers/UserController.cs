@@ -30,18 +30,76 @@ namespace MediRecords.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RegisterUser(UserRegisterRequestDto requestDto)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
-                if(!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 await _userService.RegisterUserAsync(requestDto);
                 return Ok(Constant.RegisterSuccess);
             }
-            catch (MediRecordsException) {
+            catch (MediRecordsException ex) {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception) {
                 return StatusCode(500, Constant.InternalError);
             }
         }
+
+        /// <summary>
+        /// Retrieves a list of all registered users.
+        /// </summary>
+        /// <returns>A collection of UserViewDto objects.</returns>
+        // [Authorize(Roles = Constant.Admin)]
+        [HttpGet("GetAll")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<UserViewDto>>> GetAll()
+        {
+            try
+            {
+                var result = await _userService.GetAllUsersAsync();
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = Constant.InternalError});
+            }
+        }
+
+        /// <summary>
+        /// Fetches a specific user's details by their unique ID.
+        /// </summary>
+        /// <param name="id">The numeric ID of the user.</param>
+        // [Authorize(Roles = Constant.Admin)]
+        [HttpGet("GetById/{id}")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserViewDto>> GetById(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest(new { message = Constant.InvalidUserId});
+            }
+
+            try
+            {
+                var result = await _userService.GetUserByIdAsync(id);
+
+                if (result == null)
+                {
+                    return NotFound(new { message = string.Format(Constant.UserNotFound, id) });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = Constant.InternalError});
+            }
+        }
+
     }
 }

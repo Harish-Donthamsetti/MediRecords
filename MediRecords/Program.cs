@@ -8,9 +8,8 @@ using MediRecords.Repository.UserRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-
-builder.Services.AddDbContext<MediRecordsDbContext>(options =>
+// Add DbContext
+builder.Services.AddDbContext<MediRecordsDbContext>(options => 
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
