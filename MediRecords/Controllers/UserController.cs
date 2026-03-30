@@ -101,5 +101,51 @@ namespace MediRecords.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Updates user details by an administrator.
+        /// </summary>
+        /// <param name="user">User details to be updated by admin</param>
+        /// <returns>Returns updated user information</returns>
+        /// <response code="200">User updated successfully</response>
+        /// <response code="400">Invalid request or validation error</response>
+        /// <response code="500">Server error</response>
+        // [Authorize(Roles = "Admin")]  
+        [HttpPut("update")]  
+        [ProducesResponseType(typeof(UserUpdateResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateUserByAdmin(
+            [FromBody] UserUpdateRequestDto user)
+        {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+            try
+            {
+ 
+                var response = await _userService.UpdateUser(user);
+                return Ok(response);
+            }
+           catch (ArgumentNullException ex)
+            {
+                return BadRequest(new
+                {
+                    error = ex.Message
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, Constant.InternalError);
+            }
+ 
+        }
     }
 }
