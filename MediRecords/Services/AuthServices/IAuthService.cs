@@ -1,4 +1,5 @@
 using MediRecords.Domain.Entities;
+using MediRecords.Dto.LoginDtos;
 using MediRecords.Dto.UserDtos;
 
 namespace MediRecords.Services.AuthServices;
