@@ -7,4 +7,7 @@ namespace MediRecords.Repository.UserRepo;
 public interface IUserRepository
 {
     Task RegisterUserAsync(User user);
+    Task<IEnumerable<User>> GetAllUsersAsync();
+    Task<User?> GetUserByIdAsync(int id);
+    
 }
