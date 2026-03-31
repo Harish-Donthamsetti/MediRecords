@@ -1,11 +1,13 @@
-using System;
 using MediRecords.Domain.Entities;
 using MediRecords.Dto.LoginDtos;
 using MediRecords.Dto.UserDtos;
 
-namespace MediRecords.Services.AuthService;
+namespace MediRecords.Services.AuthServices;
 
 public interface IAuthService
 {
-    Task <(bool Success, string Message)> ForgotPasswordAsync(UserForgotPasswordDto model);
+    Task<LoginResponseDto?> LoginUser(LoginRequestDto dto);
+    Task SaveAuditLog(int userId, string action);
+    string GenerateJwtToken(User user);
+    string GenerateRefreshToken();
 }
