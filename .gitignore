@@ -64,4 +64,4 @@ coverage/
 # Others
 Thumbs.db
 Desktop.ini
-Migrations
+# Migrations

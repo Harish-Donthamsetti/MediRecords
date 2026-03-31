@@ -111,41 +111,53 @@ namespace MediRecords.Controllers
         /// <response code="400">Invalid request or validation error</response>
         /// <response code="500">Server error</response>
         // [Authorize(Roles = "Admin")]  
-        [HttpPut("update")]  
+        [HttpPut("update")]
+
+        // Specifies possible response types for documentation (Swagger/OpenAPI)
         [ProducesResponseType(typeof(UserUpdateResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUserByAdmin(
-            [FromBody] UserUpdateRequestDto user)
+            [FromBody] UserUpdateRequestDto user) // <-- request body comes from JSON
         {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+            // Validate the incoming model
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             try
             {
- 
+                // Call the service layer to perform the update
                 var response = await _userService.UpdateUser(user);
-                return Ok(response);
-            }
-           catch (ArgumentNullException ex)
-            {
-                return BadRequest(new
+
+                // Return a custom success message + data
+                return Ok(new
                 {
-                    error = ex.Message
+                    Message = "User successfully updated",
+                    Data = response
                 });
+            }
+            catch (ArgumentNullException ex)
+            {
+                // Bad request if required data is missing
+                return BadRequest(new { error = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { error = ex.Message });
+                // Not found if invalid arguments (like user not existing)
+                return NotFound(new { error = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
+                // Not found if operation is invalid (like role mismatch)
                 return NotFound(new { error = ex.Message });
             }
             catch (Exception)
             {
+                // Internal server error for unexpected issues
                 return StatusCode(500, Constant.InternalError);
             }
- 
         }
+    
     }
 }
