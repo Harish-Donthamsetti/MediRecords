@@ -1,5 +1,6 @@
 # .gitignore for .NET Class Library
 
+
 # Build Folders
 bin/
 obj/
@@ -63,5 +64,4 @@ coverage/
 # Others
 Thumbs.db
 Desktop.ini
-
-MediRecords.Domain/Migrations/
+Migrations

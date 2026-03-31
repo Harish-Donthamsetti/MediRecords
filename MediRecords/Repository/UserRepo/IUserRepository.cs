@@ -12,3 +12,6 @@ public interface IUserRepository
     Task<User> GetByEmailAsync(string email);
     Task UpdateAsync(User user);
 }
+    
+    public Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request);
+}

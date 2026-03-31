@@ -82,4 +82,29 @@ public class UserService : IUserService
         
         return user != null ? UserViewDto.FromEntity(user) : null;
     }   
+    public async Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request)
+    {
+        // Check if the request exists
+        if (request == null)
+            throw new MediRecordsException(Constant.UserUpdate.UpdateUserRequest);
+ 
+        // Validate that the UserID is a positive number
+        if (request.UserID <= 0)
+            throw new ArgumentException(Constant.UserUpdate.InvalidUserId, nameof(request.UserID));
+ 
+        // Validate that the user's name is provided
+        if (string.IsNullOrWhiteSpace(request.Name))
+            throw new ArgumentException(Constant.UserUpdate.NameRequired, nameof(request.Name));
+ 
+        // Validate that the phone number is provided
+        if (string.IsNullOrWhiteSpace(request.Phone))
+            throw new ArgumentException(Constant.UserUpdate.PhoneRequired, nameof(request.Phone));
+ 
+        // Validate that the RoleID is valid
+        if (request.RoleID <= 0)
+            throw new ArgumentException(Constant.UserUpdate.InvalidRoleId, nameof(request.RoleID));
+ 
+        // Delegate persistence and data update logic to the repository layer
+        return await _userRepository.UpdateUser(request);
+    }
 }

@@ -71,4 +71,8 @@ coverage/
 # Others
 Thumbs.db
 Desktop.ini
+Migrations
 
+#
+SqlTestQuries/ Seeding Data.sql
+MediRecords.Domain.sln
