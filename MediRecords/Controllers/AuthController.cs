@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MediRecords.Services.AuthServices;
 using MediRecords.Dto.UserDtos;
+using Microsoft.AspNetCore.Http;
 
 namespace MediRecords.Controllers;
 
@@ -15,7 +16,15 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+    /// <summary>
+    /// Authenticates a user and provides a login response (e.g., JWT token).
+    /// </summary>
+    /// <param name="dto">The login request data transfer object containing user credentials.</param>
+    /// <returns>Returns the authentication result or an unauthorized error.</returns>
     [HttpPost("login")]
+    [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
         try
