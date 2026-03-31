@@ -1,109 +1,55 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using MediRecords.Domain.Entities;
+using System.Text.RegularExpressions;
 using MediRecords.Dto.UserDtos;
-using MediRecords.Repositories;
-using BCrypt.Net;
-using MediRecords.Dto.LoginDtos;
+using MediRecords.Repository.UserRepo;
+using MediRecords.Utility;
 
-namespace MediRecords.Services.AuthServices;
+namespace MediRecords.Services.AuthService;
 
 public class AuthService : IAuthService
 {
-    private readonly IAuthRepository _authRepo;
-    private readonly IConfiguration _config;
+    private readonly IUserRepository _userRepository;
 
-    public AuthService(IAuthRepository authRepo, IConfiguration config)
+    public AuthService(IUserRepository userRepository)
     {
-        _authRepo = authRepo;
-        _config = config;
+        _userRepository = userRepository;
     }
 
-    /// <summary>
-    /// Verifies user credentials, generates authentication tokens, and logs the login activity.
-    /// </summary>
-    /// <param name="dto">The login credentials provided by the user.</param>
-    /// <returns>A LoginResponseDto containing tokens if successful; otherwise, null.</returns>
-    public async Task<LoginResponseDto?> LoginUser(LoginRequestDto dto)
+    public async Task<(bool Success, string Message)> ForgotPasswordAsync(UserForgotPasswordDto model)
     {
-        // Fetch the user from the database by their email
-        var user = await _authRepo.GetUserByEmailAsync(dto.Email);
-        
-        // Verify the user exists and the provided password matches the hashed password
-        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password)) 
+        try
         {
-            return null;
+            // Validate password match
+            if (model.NewPassword != model.ConfirmPassword)
+                return (false,  Messages.PasswordMismatch);
+
+            // Validate password strength
+            if (!IsValidPassword(model.NewPassword))
+                return (false, Messages.WeakPassword);
+
+            // Check user exists
+            var user = await _userRepository.GetByEmailAsync(model.Email);
+            if (user == null)
+                return (false, Messages.UserNotFound);
+
+            // Hash and update password
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            await _userRepository.UpdateAsync(user);
+
+            return (true,  Messages.PasswordUpdated);
         }
-
-        // Generate the secure tokens for the session
-        var accessToken = GenerateJwtToken(user);
-        var refreshToken = GenerateRefreshToken();
-
-        // Record the login action in the audit logs
-        await SaveAuditLog(user.UserId, "Login");
-
-        return new LoginResponseDto
+        catch (Exception ex)
         {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken,
-            Expires = DateTime.UtcNow.AddHours(1)
-        };
+            // Log ex here if a logger is injected (recommended)
+            return (false, Messages.SomethingWentWrong);
+        }
     }
 
-    /// <summary>
-    /// Records a specific user action into the system audit trail.
-    /// </summary>
-    /// <param name="userId">The ID of the user performing the action.</param>
-    /// <param name="action">A description of the action being performed.</param>
-    public async Task SaveAuditLog(int userId, string action)
+    private bool IsValidPassword(string password)
     {
-        await _authRepo.AddAuditLogAsync(new AuditLog
-        {
-            UserId = userId,
-            Action = action
-        });
-    }
+        if (string.IsNullOrWhiteSpace(password)) return false;
 
-    /// <summary>
-    /// Creates a JSON Web Token (JWT) containing user identity claims and a secure signature.
-    /// </summary>
-    /// <param name="user">The user entity for which the token is being generated.</param>
-    /// <returns>A serialized JWT string.</returns>
-    public string GenerateJwtToken(User user)
-    {
-        // Define the identity claims to be stored in the token
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Email, user.Email)
-        };
-
-        // Set up the security key and signing credentials
-        var keyStr = _config["Jwt:Key"] ?? "SecretKeyWithAtLeast32CharactersLong123!";
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyStr));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        // Create the token with the specified configuration and expiration
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    /// <summary>
-    /// Generates a cryptographically strong random string to be used as a refresh token.
-    /// </summary>
-    /// <returns>A Base64 encoded random string.</returns>
-    public string GenerateRefreshToken()
-    {
-        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        // Min 8 chars, at least one uppercase, one lowercase, one digit, one special char
+        var pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$";
+        return Regex.IsMatch(password, pattern);
     }
 }

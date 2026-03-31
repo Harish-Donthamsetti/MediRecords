@@ -22,6 +22,7 @@
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Utility\TokenUtility\" />
     <Folder Include="Services\" />
+    <Folder Include="Services\AuthServices\" />
     <Folder Include="Services\UserServices\" />
   </ItemGroup>
  
