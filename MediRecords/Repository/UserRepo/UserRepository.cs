@@ -107,4 +107,15 @@ public class UserRepository : IUserRepository
         }
     
     }
+
+    public async Task<User> GetByEmailAsync(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync( x => x.Email == email) ?? throw new InvalidOperationException(Constant.UserNotFound);
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
 }
