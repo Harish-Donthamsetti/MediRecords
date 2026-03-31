@@ -4,6 +4,7 @@ using MediRecords.Domain.Entities;
 using MediRecords.Dto.UserDtos;
 using MediRecords.Repository.UserRepo;
 using MediRecords.Utility;
+using System.Text.RegularExpressions;
 
 namespace MediRecords.Services.UserServices;
 
@@ -106,5 +107,44 @@ public class UserService : IUserService
  
         // Delegate persistence and data update logic to the repository layer
         return await _userRepository.UpdateUser(request);
+    }
+
+    public async Task<(bool Success, string Message)> ForgotPasswordAsync(UserForgotPasswordDto model)
+    {
+        try
+        {
+            // Validate password match
+            if (model.NewPassword != model.ConfirmPassword)
+                return (false,  Messages.PasswordMismatch);
+
+            // Validate password strength
+            if (!IsValidPassword(model.NewPassword))
+                return (false, Messages.WeakPassword);
+
+            // Check user exists
+            var user = await _userRepository.GetByEmailAsync(model.Email);
+            if (user == null)
+                return (false, Messages.UserNotFound);
+
+            // Hash and update password
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            await _userRepository.UpdateAsync(user);
+
+            return (true,  Messages.PasswordUpdated);
+        }
+        catch (Exception)
+        {
+            // Log ex here if a logger is injected (recommended)
+            return (false, Messages.SomethingWentWrong);
+        }
+    }
+
+    private bool IsValidPassword(string password)
+    {
+        if (string.IsNullOrWhiteSpace(password)) return false;
+
+        // Min 8 chars, at least one uppercase, one lowercase, one digit, one special char
+        var pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$";
+        return Regex.IsMatch(password, pattern);
     }
 }
