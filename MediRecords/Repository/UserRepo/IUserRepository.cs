@@ -9,9 +9,6 @@ public interface IUserRepository
     Task RegisterUserAsync(User user);
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task<User?> GetUserByIdAsync(int id);
-    Task<User> GetByEmailAsync(string email);
-    Task UpdateAsync(User user);
-}
     
     public Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request);
 }

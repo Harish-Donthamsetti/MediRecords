@@ -5,7 +5,6 @@ using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MediRecords.Services.AuthService;
 
 namespace MediRecords.Controllers
 {
@@ -14,14 +13,11 @@ namespace MediRecords.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IAuthService _authService;
-
-        // Combine both services into one constructor
-        public UserController(IUserService userService, IAuthService authService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _authService = authService;
         }
+
         /// <summary>
         /// Registers a new user into the MediRecords system.
         /// </summary>
@@ -40,15 +36,13 @@ namespace MediRecords.Controllers
             }
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
                 await _userService.RegisterUserAsync(requestDto);
                 return Ok(Constant.RegisterSuccess);
             }
-            catch (MediRecordsException)
-            {
+            catch (MediRecordsException ex) {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception) {
                 return StatusCode(500, Constant.InternalError);
             }
         }
@@ -107,21 +101,6 @@ namespace MediRecords.Controllers
             }
         }
 
-        [HttpPost("forgotpassword")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UserForgotPassword([FromBody] UserForgotPasswordDto model)
-        {
-            if (model == null)
-                return BadRequest(Messages.InvalidRequest);
-
-            var (success, message) = await _authService.ForgotPasswordAsync(model);
-
-            if (!success)
-                return BadRequest(message);
-
-            return Ok(new { message });
 
         /// <summary>
         /// Updates user details by an administrator.
