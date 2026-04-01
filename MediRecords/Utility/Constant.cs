@@ -30,7 +30,8 @@
 
         public const string InvalidUserId = "Invalid ID provided.";
 
-
+		public const string InvalidRoleId = "Invalid RoleID.";
+		
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";

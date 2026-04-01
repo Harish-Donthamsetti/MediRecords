@@ -5,15 +5,19 @@ using MediRecords.Dto.UserDtos;
 using MediRecords.Repository.UserRepo;
 using MediRecords.Utility;
 using System.Text.RegularExpressions;
+using MediRecords.Repository.UserRoleRepository;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace MediRecords.Services.UserServices;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    public UserService(IUserRepository userRepository)
+    private readonly IUserRoleRepository _userRoleRepository;
+    public UserService(IUserRepository userRepository, IUserRoleRepository userRoleRepository)
     {
         _userRepository = userRepository;
+        _userRoleRepository = userRoleRepository;
     }
 
     /// <summary>
@@ -36,6 +40,12 @@ public class UserService : IUserService
             throw new MediRecordsException(Constant.RequiredFields);
            }
 
+        // Check whether the role exists or not
+        bool roleExists = await _userRoleRepository.RoleExistsAsync(requestDto.RoleId);
+        if(!roleExists)
+        {
+            throw new MediRecordsException(Constant.InvalidRoleId);
+        }
 
         // Validate Email
         var emailResult = EmailHelper.ValidateEmail(requestDto.Email);
