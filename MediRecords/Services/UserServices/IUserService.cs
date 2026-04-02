@@ -14,5 +14,5 @@ public interface IUserService
 
     public Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request);
 
-    Task <(bool Success, string Message)> ForgotPasswordAsync(UserForgotPasswordDto model);
+    Task <(bool Success, string Message, int StatusCode)> ForgotPasswordAsync(UserForgotPasswordDto model);
 }

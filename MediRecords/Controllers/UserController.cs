@@ -30,7 +30,7 @@ namespace MediRecords.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> RegisterUser(UserRegisterRequestDto requestDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -39,10 +39,12 @@ namespace MediRecords.Controllers
                 await _userService.RegisterUserAsync(requestDto);
                 return Ok(Constant.RegisterSuccess);
             }
-            catch (MediRecordsException ex) {
+            catch (MediRecordsException ex)
+            {
                 return BadRequest(ex.Message);
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return StatusCode(500, Constant.InternalError);
             }
         }
@@ -65,7 +67,7 @@ namespace MediRecords.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, new { message = Constant.InternalError});
+                return StatusCode(500, new { message = Constant.InternalError });
             }
         }
 
@@ -83,7 +85,7 @@ namespace MediRecords.Controllers
         {
             if (id <= 0)
             {
-                return BadRequest(new { message = Constant.InvalidUserId});
+                return BadRequest(new { message = Constant.InvalidUserId });
             }
 
             try
@@ -99,7 +101,7 @@ namespace MediRecords.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, new { message = Constant.InternalError});
+                return StatusCode(500, new { message = Constant.InternalError });
             }
         }
 
@@ -121,15 +123,15 @@ namespace MediRecords.Controllers
         public async Task<IActionResult> UpdateUserByAdmin(
             [FromBody] UserUpdateRequestDto user)
         {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             try
             {
- 
+
                 var response = await _userService.UpdateUser(user);
                 return Ok(response);
             }
-           catch (ArgumentNullException ex)
+            catch (ArgumentNullException ex)
             {
                 return BadRequest(new
                 {
@@ -148,7 +150,7 @@ namespace MediRecords.Controllers
             {
                 return StatusCode(500, Constant.InternalError);
             }
- 
+
         }
 
         /// <summary>
@@ -158,18 +160,32 @@ namespace MediRecords.Controllers
         [HttpPost("forgotpassword")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UserForgotPassword([FromBody] UserForgotPasswordDto model)
         {
             if (model == null)
-                return BadRequest(Messages.InvalidRequest);
+                return BadRequest(Constant.Messages.InvalidRequest);
 
-            var (success, message) = await _userService.ForgotPasswordAsync(model);
+            if (!ModelState.IsValid)
+            {
+                var firstError = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .FirstOrDefault();
 
-            if (!success)
-                return BadRequest(message);
+                return BadRequest(new { message = firstError });
+            }
 
-            return Ok(new { message });
+            var (success, message, statusCode) = await _userService.ForgotPasswordAsync(model);
+
+            return statusCode switch
+            {
+                200 => Ok(new { message }),
+                404 => NotFound(new { message }),
+                500 => StatusCode(500, new { message }),
+                _ => BadRequest(new { message })
+            };
         }
     }
 }

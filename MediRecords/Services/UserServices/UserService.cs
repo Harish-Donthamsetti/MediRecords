@@ -33,12 +33,13 @@ public class UserService : IUserService
         }
 
         // Make sure all required information is filled in
-        if(string.IsNullOrWhiteSpace(requestDto.Password) ||
+        if (string.IsNullOrWhiteSpace(requestDto.Password) ||
            string.IsNullOrWhiteSpace(requestDto.Email) ||
            string.IsNullOrWhiteSpace(requestDto.Name) ||
-           requestDto.RoleId <= 0) {
+           requestDto.RoleId <= 0)
+        {
             throw new MediRecordsException(Constant.RequiredFields);
-           }
+        }
 
         // Check whether the role exists or not
         bool roleExists = await _userRoleRepository.RoleExistsAsync(requestDto.RoleId);
@@ -49,24 +50,24 @@ public class UserService : IUserService
 
         // Validate Email
         var emailResult = EmailHelper.ValidateEmail(requestDto.Email);
-        if(!emailResult.IsValid)
+        if (!emailResult.IsValid)
         {
             throw new MediRecordsException(Constant.InvalidEmailFormat);
         }
 
         // Validate password
         var passwordResult = PasswordHelper.ValidatePassword(requestDto.Password);
-        if(!passwordResult.IsValid)
+        if (!passwordResult.IsValid)
         {
             throw new MediRecordsException(Constant.WeakPassword);
         }
-        
+
         // Hash the password to keep it safe in the databse
         requestDto.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password);
 
         // Map the Dto to Domain (User) entity
         var user = requestDto.ToUserRegisterRequest();
-        
+
         // Pass the data to the repository to get saved
         await _userRepository.RegisterUserAsync(user);
     }
@@ -79,7 +80,7 @@ public class UserService : IUserService
     {
         var users = await _userRepository.GetAllUsersAsync();
 
-        return users.Select(UserViewDto.FromEntity);   
+        return users.Select(UserViewDto.FromEntity);
     }
 
     /// <summary>
@@ -90,62 +91,64 @@ public class UserService : IUserService
     public async Task<UserViewDto?> GetUserByIdAsync(int id)
     {
         var user = await _userRepository.GetUserByIdAsync(id);
-        
+
         return user != null ? UserViewDto.FromEntity(user) : null;
-    }   
+    }
     public async Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request)
     {
         // Check if the request exists
         if (request == null)
             throw new MediRecordsException(Constant.UserUpdate.UpdateUserRequest);
- 
+
         // Validate that the UserID is a positive number
         if (request.UserID <= 0)
             throw new ArgumentException(Constant.UserUpdate.InvalidUserId, nameof(request.UserID));
- 
+
         // Validate that the user's name is provided
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ArgumentException(Constant.UserUpdate.NameRequired, nameof(request.Name));
- 
+
         // Validate that the phone number is provided
         if (string.IsNullOrWhiteSpace(request.Phone))
             throw new ArgumentException(Constant.UserUpdate.PhoneRequired, nameof(request.Phone));
- 
+
         // Validate that the RoleID is valid
         if (request.RoleID <= 0)
             throw new ArgumentException(Constant.UserUpdate.InvalidRoleId, nameof(request.RoleID));
- 
+
         // Delegate persistence and data update logic to the repository layer
         return await _userRepository.UpdateUser(request);
     }
 
-    public async Task<(bool Success, string Message)> ForgotPasswordAsync(UserForgotPasswordDto model)
+    public async Task<(bool Success, string Message, int StatusCode)> ForgotPasswordAsync(UserForgotPasswordDto model)
     {
         try
         {
+            if (!IsValidEmail(model.Email))
+                return (false, Constant.Messages.EmailInvalid, 400);
             // Validate password match
             if (model.NewPassword != model.ConfirmPassword)
-                return (false,  Messages.PasswordMismatch);
+                return (false, Constant.Messages.PasswordMismatch, 400);
 
             // Validate password strength
             if (!IsValidPassword(model.NewPassword))
-                return (false, Messages.WeakPassword);
+                return (false, Constant.Messages.WeakPassword, 400);
 
             // Check user exists
             var user = await _userRepository.GetByEmailAsync(model.Email);
             if (user == null)
-                return (false, Messages.UserNotFound);
+                return (false, Constant.Messages.UserNotFound, 404);
 
             // Hash and update password
             user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
             await _userRepository.UpdateAsync(user);
 
-            return (true,  Messages.PasswordUpdated);
+            return (true, Constant.Messages.PasswordUpdated, 200);
         }
         catch (Exception)
         {
             // Log ex here if a logger is injected (recommended)
-            return (false, Messages.SomethingWentWrong);
+            return (false, Constant.Messages.SomethingWentWrong, 500);
         }
     }
 
@@ -156,5 +159,11 @@ public class UserService : IUserService
         // Min 8 chars, at least one uppercase, one lowercase, one digit, one special char
         var pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$";
         return Regex.IsMatch(password, pattern);
+    }
+    private bool IsValidEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return false;
+        var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        return Regex.IsMatch(email, pattern);
     }
 }
