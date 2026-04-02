@@ -2,8 +2,8 @@
 {
 	public static class Constant
 	{
-        public const string Admin = "Admin";
-        
+		public const string Admin = "Admin";
+
 		public const string RegisterSuccess = "User Registered Succesfully";
 
 		public const string RequestNull = "Registration request cannot be null.";
@@ -20,15 +20,15 @@
 
 		public const string SaveFailed = "An error occurred while saving the user to the database.";
 
-        public const string UserNotFound = "User with ID {0} not found.";
+		public const string UserNotFound = "User with ID {0} not found.";
 
-        public const string FetchAllUsersError = "Critical failure while retrieving the user list.";
+		public const string FetchAllUsersError = "Critical failure while retrieving the user list.";
 
-        public const string FetchUserByIdError = "Failure while retrieving details for User ID: {0}";
+		public const string FetchUserByIdError = "Failure while retrieving details for User ID: {0}";
 
-        public const string Unassigned = "No Role Assigned";
+		public const string Unassigned = "No Role Assigned";
 
-        public const string InvalidUserId = "Invalid ID provided.";
+		public const string InvalidUserId = "Invalid ID provided.";
 
 		public const string InvalidRoleId = "Invalid RoleID.";
 		
@@ -41,6 +41,20 @@
 			public const string PhoneRequired = "Phone number is required.";
 			public const string InvalidRoleId = "Invalid RoleID.";
 			public const string UpdateFailed = "User update failed.";
+		}
+		public static class Messages
+		{
+			public const string InvalidRequest = "Invalid request.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+			public const string Success = "Operation completed successfully.";
+			public const string UserNotFound = "No account found with that email address.";
+			public const string PasswordMismatch = "New Password and Confirm Password do not match.";
+			public const string WeakPassword = "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.";
+			public const string PasswordUpdated = "Password updated successfully.";
+			public const string EmailRequired = "Email is required.";
+			public const string EmailInvalid = "Invalid email format.";
+			public const string NewPasswordRequired = "New password is required.";
+			public const string ConfirmPasswordRequired = "Confirm password is required.";
 		}
 	}
 
