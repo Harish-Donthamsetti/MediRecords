@@ -81,8 +81,12 @@ public class AuthService : IAuthService
         {
             new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.RoleIdNavigation?.Name ?? "FrontDesk") 
+
         };
+        if (!string.IsNullOrWhiteSpace(user.RoleIdNavigation?.Name))
+        {
+            claims.Add(new Claim(ClaimTypes.Role, user.RoleIdNavigation.Name));
+        }
 
         // Set up the security key and signing credentials
         var keyStr = _config["Jwt:Key"] ?? "SecretKeyWithAtLeast32CharactersLong123!";
