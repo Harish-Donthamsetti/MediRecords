@@ -16,7 +16,7 @@
 
 		public const string InvalidEmailFormat = "The email address provided is not in a valid format.";
 
-		public const string WeakPassword = "The password does not meet the security requirements.";
+		public const string WeakPassword = "The password should contain atleast 8 characters which consists 1 uppercase, 1 lowercase, 1 number and 1 special character";
 
 		public const string SaveFailed = "An error occurred while saving the user to the database.";
 
