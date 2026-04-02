@@ -24,7 +24,7 @@ namespace MediRecords.Controllers
         /// <param name="requestDto">The user registration data transfer object containing credentials and profile info.</param>
         /// <returns>Return the Success or ErrorMessage</returns>
         [HttpPost("register")]
-        [Authorize(Roles = "Constant.Admin")]
+        [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
@@ -53,6 +53,7 @@ namespace MediRecords.Controllers
         /// <returns>A collection of UserViewDto objects.</returns>
         // [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetAll")]
+        [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserViewDto>>> GetAll()
@@ -74,6 +75,7 @@ namespace MediRecords.Controllers
         /// <param name="id">The numeric ID of the user.</param>
         // [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetById/{id}")]
+        [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
@@ -112,6 +114,7 @@ namespace MediRecords.Controllers
         /// <response code="500">Server error</response>
         // [Authorize(Roles = "Admin")]  
         [HttpPut("update")]  
+        [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(UserUpdateResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -147,6 +150,11 @@ namespace MediRecords.Controllers
             }
  
         }
+
+        /// <summary>
+        /// Allows users to reset their password by providing their email and new password details. 
+        /// Only accessible by administrators to ensure security and proper user management.
+        /// </summary>
         [HttpPost("forgotpassword")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
