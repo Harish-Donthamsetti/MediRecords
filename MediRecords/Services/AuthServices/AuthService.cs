@@ -63,7 +63,9 @@ public class AuthService : IAuthService
         await _authRepo.AddAuditLogAsync(new AuditLog
         {
             UserId = userId,
-            Action = action
+            Action = action,
+            TimeStamp = DateTime.Now
+            
         });
     }
 
@@ -78,7 +80,8 @@ public class AuthService : IAuthService
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.RoleIdNavigation?.Name ?? "FrontDesk") 
         };
 
         // Set up the security key and signing credentials

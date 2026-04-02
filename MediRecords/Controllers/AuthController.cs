@@ -27,12 +27,17 @@ public class AuthController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
+        //Missing fields check
+        if(string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Password))
+        {
+            return BadRequest(new { message = "400-Missing Fields" });
+        }
         try
         {
             var result = await _authService.LoginUser(dto);
 
             if (result == null)
-                return Unauthorized(new { message = "Unauthenticated user" });
+                return Unauthorized(new {message = "401-Username or password doesn't match" });
 
             return Ok(result);
         }
