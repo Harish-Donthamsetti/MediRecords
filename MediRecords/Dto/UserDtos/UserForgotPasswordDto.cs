@@ -5,13 +5,12 @@ namespace MediRecords.Dto.UserDtos;
 
 public class UserForgotPasswordDto
 {
-    [Required(ErrorMessage = Messages.EmailRequired)]
-    [EmailAddress(ErrorMessage = Messages.EmailInvalid)]
+    [Required(ErrorMessage = Constant.Messages.EmailRequired)]
     public string Email { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = Messages.NewPasswordRequired)]
+    [Required(ErrorMessage = Constant.Messages.NewPasswordRequired)]
     public string NewPassword { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = Messages.ConfirmPasswordRequired)]
+    [Required(ErrorMessage = Constant.Messages.ConfirmPasswordRequired)]
     public string ConfirmPassword { get; set; } = string.Empty;
 }
