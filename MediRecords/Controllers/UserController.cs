@@ -119,9 +119,10 @@ namespace MediRecords.Controllers
         [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(UserUpdateResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUserByAdmin(
-            [FromBody] UserUpdateRequestDto user)
+            [FromBody] UserUpdateRequestDto user) // <-- request body comes from JSON
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -135,19 +136,28 @@ namespace MediRecords.Controllers
             {
                 return BadRequest(new
                 {
-                    error = ex.Message
+                    Message = "User successfully updated",
+                    Data = response
                 });
+            }
+            catch (ArgumentNullException ex)
+            {
+                // Bad request if required data is missing
+                return BadRequest(new { error = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { error = ex.Message });
+                // Not found if invalid arguments (like user not existing)
+                return NotFound(new { error = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
+                // Not found if operation is invalid (like role mismatch)
                 return NotFound(new { error = ex.Message });
             }
             catch (Exception)
             {
+                // Internal server error for unexpected issues
                 return StatusCode(500, Constant.InternalError);
             }
 
@@ -187,5 +197,6 @@ namespace MediRecords.Controllers
                 _ => BadRequest(new { message })
             };
         }
+    
     }
 }
