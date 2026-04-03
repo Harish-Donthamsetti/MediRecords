@@ -71,7 +71,7 @@ coverage/
 # Others
 Thumbs.db
 Desktop.ini
-# Migrations
+Migrations
 
 #
 SqlTestQuries/ Seeding Data.sql

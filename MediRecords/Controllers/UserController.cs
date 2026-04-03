@@ -130,15 +130,7 @@ namespace MediRecords.Controllers
             {
 
                 var response = await _userService.UpdateUser(user);
-                return Ok(response);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(new
-                {
-                    Message = "User successfully updated",
-                    Data = response
-                });
+                return Ok(new {Message = "User updated successfully", Data = response});
             }
             catch (ArgumentNullException ex)
             {
@@ -148,12 +140,12 @@ namespace MediRecords.Controllers
             catch (ArgumentException ex)
             {
                 // Not found if invalid arguments (like user not existing)
-                return NotFound(new { error = ex.Message });
+                return BadRequest(new { error = ex.Message });
             }
-            catch (InvalidOperationException ex)
+            catch (MediRecordsException ex)
             {
                 // Not found if operation is invalid (like role mismatch)
-                return NotFound(new { error = ex.Message });
+                return BadRequest(new { error = ex.Message });
             }
             catch (Exception)
             {
@@ -168,6 +160,7 @@ namespace MediRecords.Controllers
         /// Only accessible by administrators to ensure security and proper user management.
         /// </summary>
         [HttpPost("forgotpassword")]
+        [Authorize]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]

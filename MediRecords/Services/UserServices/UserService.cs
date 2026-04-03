@@ -104,6 +104,11 @@ public class UserService : IUserService
         if (request.UserID <= 0)
             throw new ArgumentException(Constant.UserUpdate.InvalidUserId, nameof(request.UserID));
 
+        // Validate if the userID not found in the table
+        var user = await _userRepository.GetUserByIdAsync(request.UserID);
+        if (user == null)
+            throw new MediRecordsException(Constant.UserUpdate.UserNotFound);
+
         // Validate that the user's name is provided
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ArgumentException(Constant.UserUpdate.NameRequired, nameof(request.Name));
@@ -114,7 +119,13 @@ public class UserService : IUserService
 
         // Validate that the RoleID is valid
         if (request.RoleID <= 0)
-            throw new ArgumentException(Constant.UserUpdate.InvalidRoleId, nameof(request.RoleID));
+            throw new MediRecordsException(Constant.UserUpdate.InvalidRoleId);
+
+        bool roleExists = await _userRoleRepository.RoleExistsAsync(request.RoleID);
+        if(!roleExists)
+        {
+            throw new MediRecordsException(Constant.InvalidRoleId);
+        }
 
         // Delegate persistence and data update logic to the repository layer
         return await _userRepository.UpdateUser(request);
