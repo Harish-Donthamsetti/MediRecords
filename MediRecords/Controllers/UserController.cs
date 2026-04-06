@@ -201,6 +201,7 @@ namespace MediRecords.Controllers
         /// <returns></returns>
         [Authorize(Roles ="Admin")]
         [HttpPost("delete/{id}")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
@@ -209,7 +210,7 @@ namespace MediRecords.Controllers
             try
             {
                 await _userService.SoftDeleteUserByIdAsync(id);
-                return Ok("User deleted successfully.");
+                return Ok(Constant.DeleteSucess);
             }
             catch (ArgumentException ex)
             {
@@ -221,7 +222,7 @@ namespace MediRecords.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "An unexpected error occurred.");
+                return StatusCode(500, Constant.InternalError);
             }
         }
     }

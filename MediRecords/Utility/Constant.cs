@@ -35,6 +35,8 @@
 		public const string Active = "Active";
 
 		public const string Inactive = "Inactive";
+
+		public const string DeleteSucess = "User deleted Successfully";
 		
 		public static class UserUpdate
 		{
