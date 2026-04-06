@@ -64,48 +64,28 @@ public class UserRepository : IUserRepository
 
     public async Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request)
     {
-        try
+        if (request == null)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == request.UserID && request.Status == true);
-
-            if (user == null)
-            {
-                throw new InvalidOperationException(Constant.UserUpdate.UserNotFound);
-            }
-
-            // Update allowed fields
-            user.Name = request.Name;
-            user.Phone = request.Phone;
-            user.RoleId = request.RoleID;
-            user.Status = request.Status;
-
-            await _context.SaveChangesAsync();
-
-            // Map Domain Entity to Response DTO
-            return user.ToUserUpdateResponse();
-        }
-        catch (ArgumentNullException ex)
-        {
-            throw new ApplicationException(Constant.UserUpdate.UpdateUserRequest, ex);
-        }
-        catch (InvalidOperationException ex)
-        {
-            throw new ApplicationException(Constant.UserUpdate.UserNotFound, ex);
-        }
-        catch (DbUpdateException ex)
-        {
-            throw new DbUpdateException(Constant.UserUpdate.UpdateFailed, ex);
-        }
-        catch (Exception ex)
-        {
-            throw new ApplicationException(Constant.InternalError, ex);
+            throw new ArgumentNullException(nameof(request));
         }
 
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == request.UserID && request.Status == true);
+
+        if (user == null)
+        {
+            throw new InvalidOperationException(Constant.UserUpdate.UserNotFound);
+        }
+
+        // Update allowed fields
+        user.Name = request.Name;
+        user.Phone = request.Phone;
+        user.RoleId = request.RoleID;
+        user.Status = request.Status;
+
+        await _context.SaveChangesAsync();
+
+        // Map Domain Entity to Response DTO
+        return user.ToUserUpdateResponse();
     }
 
     public async Task<User> GetByEmailAsync(string email)
