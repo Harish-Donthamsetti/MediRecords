@@ -10,6 +10,8 @@ using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using MediRecords.Repository.EncounterRepo;
+using MediRecords.Services.EncounterServices;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -72,6 +74,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository,AuthRepository>();
 builder.Services.AddScoped<IUserRoleRepository,UserRoleRepository>();
+builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
+builder.Services.AddScoped<IEncounterService, EncounterService>();
  
 var app = builder.Build();
  

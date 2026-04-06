@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Metadata;
+using MediRecords.Domain.Enums;
 using MediRecords.Models;
 
 namespace MediRecords.Domain.Entities;
@@ -25,7 +26,7 @@ public class Encounter
     [Column(TypeName = "nvarchar(MAX)")]
     public string VisitType { get; set; } = null!;
     
-    public bool Status { get; set; }
+    public EncounterStatus Status { get; set; }
 
     public virtual ICollection<SOAPNote> SOAPNotes { get; set; } = new List<SOAPNote>();
 
