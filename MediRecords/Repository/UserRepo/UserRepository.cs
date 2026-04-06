@@ -119,6 +119,12 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Finds a specific user by their unique ID and changes the status from Active to InActive
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="KeyNotFoundException"></exception>
     public async Task SoftDeleteUserByIdAsync(int id)
     {
         var user = await _context.Users
