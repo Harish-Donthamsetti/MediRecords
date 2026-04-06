@@ -7,6 +7,8 @@ using MediRecords.Utility;
 using System.Text.RegularExpressions;
 using MediRecords.Repository.UserRoleRepository;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using NuGet.Packaging.Signing;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MediRecords.Services.UserServices;
 
@@ -165,5 +167,20 @@ public class UserService : IUserService
         if (string.IsNullOrWhiteSpace(email)) return false;
         var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         return Regex.IsMatch(email, pattern);
+    }
+    
+    /// <summary>
+    /// Fetches a specific user by ID and change the status from Active to InActive.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task SoftDeleteUserByIdAsync(int id)
+    {
+        if(id < 0)
+        {
+            throw new ArgumentException(Constant.InvalidUserId);
+        }
+       await _userRepository.SoftDeleteUserByIdAsync(id);
     }
 }

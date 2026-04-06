@@ -31,6 +31,10 @@
 		public const string InvalidUserId = "Invalid ID provided.";
 
 		public const string InvalidRoleId = "Invalid RoleID.";
+
+		public const string Active = "Active";
+
+		public const string Inactive = "Inactive";
 		
 		public static class UserUpdate
 		{
