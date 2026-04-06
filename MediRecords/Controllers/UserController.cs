@@ -119,9 +119,10 @@ namespace MediRecords.Controllers
         [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(UserUpdateResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUserByAdmin(
-            [FromBody] UserUpdateRequestDto user)
+            [FromBody] UserUpdateRequestDto user) // <-- request body comes from JSON
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -129,25 +130,26 @@ namespace MediRecords.Controllers
             {
 
                 var response = await _userService.UpdateUser(user);
-                return Ok(response);
+                return Ok(new {Message = "User updated successfully", Data = response});
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest(new
-                {
-                    error = ex.Message
-                });
+                // Bad request if required data is missing
+                return BadRequest(new { error = ex.Message });
             }
             catch (ArgumentException ex)
             {
+                // Not found if invalid arguments (like user not existing)
                 return BadRequest(new { error = ex.Message });
             }
-            catch (InvalidOperationException ex)
+            catch (MediRecordsException ex)
             {
-                return NotFound(new { error = ex.Message });
+                // Not found if operation is invalid (like role mismatch)
+                return BadRequest(new { error = ex.Message });
             }
             catch (Exception)
             {
+                // Internal server error for unexpected issues
                 return StatusCode(500, Constant.InternalError);
             }
 
@@ -158,6 +160,7 @@ namespace MediRecords.Controllers
         /// Only accessible by administrators to ensure security and proper user management.
         /// </summary>
         [HttpPost("forgotpassword")]
+        [Authorize]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
@@ -187,5 +190,6 @@ namespace MediRecords.Controllers
                 _ => BadRequest(new { message })
             };
         }
+    
     }
 }
