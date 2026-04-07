@@ -5,6 +5,8 @@ using MediRecords.Services.UserServices;
 using MediRecords.Repository;
 using MediRecords.Repositories;
 using MediRecords.Repository.UserRepo;
+using MediRecords.Repository.MedicationRepository;
+using MediRecords.Services.MedicationServices;
 using Microsoft.OpenApi;
 using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
@@ -72,6 +74,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository,AuthRepository>();
 builder.Services.AddScoped<IUserRoleRepository,UserRoleRepository>();
+builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
+builder.Services.AddScoped<IMedicationService, MedicationService>();
  
 var app = builder.Build();
  

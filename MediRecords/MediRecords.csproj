@@ -18,6 +18,7 @@
  
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
