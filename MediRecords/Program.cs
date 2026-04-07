@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using MediRecords.Repository.PatientRepo;
 using MediRecords.Services.PatientServices;
+using MediRecords.Repository.EncounterRepo;
+using MediRecords.Services.EncounterServices;
+using MediRecords.MappingProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -77,6 +80,10 @@ builder.Services.AddScoped<IUserRoleRepository,UserRoleRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 
+builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
+builder.Services.AddScoped<IEncounterService, EncounterService>();
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
+ 
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
