@@ -1,5 +1,6 @@
 using System;
 using DotNetEnv;
+using MediRecords.Domain.Enums;
 using MediRecords.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -212,6 +213,12 @@ public class MediRecordsDbContext : DbContext
         modelBuilder.Entity<Encounter>(e =>
         {
             e.HasKey(x => x.EncounterId);
+
+            e.Property(x => x.Status)
+                .HasColumnType("INT")
+                .HasConversion(
+                    v => (int)v,
+                    v => (EncounterStatus)v);
 
             e.HasOne(x => x.PatientIdNavigation)
                 .WithMany(p => p.Encounters)
