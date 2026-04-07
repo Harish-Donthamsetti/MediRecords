@@ -19,7 +19,7 @@ public class Patient
     public string Name { get; set; } = null!;
 
     [Required]
-    public DateTime DOB { get; set; }
+    public DateOnly DOB { get; set; }
 
     [MaxLength(20)]
     public string? Gender { get; set; }
