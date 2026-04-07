@@ -5,6 +5,7 @@ using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging.Signing;
 
 namespace MediRecords.Controllers
 {
@@ -56,8 +57,8 @@ namespace MediRecords.Controllers
         // [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetAll")]
         [Authorize(Roles = Constant.Admin)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserViewDto>>> GetAll()
         {
             try
@@ -78,9 +79,9 @@ namespace MediRecords.Controllers
         // [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetById/{id}")]
         [Authorize(Roles = Constant.Admin)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserViewDto>> GetById(int id)
         {
             if (id <= 0)
@@ -115,13 +116,14 @@ namespace MediRecords.Controllers
         /// <response code="400">Invalid request or validation error</response>
         /// <response code="500">Server error</response>
         // [Authorize(Roles = "Admin")]  
-        [HttpPut("update")]  
+        [HttpPut("update")]
         [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(UserUpdateResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUserByAdmin(
-            [FromBody] UserUpdateRequestDto user)
+            [FromBody] UserUpdateRequestDto user) // <-- request body comes from JSON
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -129,25 +131,26 @@ namespace MediRecords.Controllers
             {
 
                 var response = await _userService.UpdateUser(user);
-                return Ok(response);
+                return Ok(new {Message = "User updated successfully", Data = response});
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest(new
-                {
-                    error = ex.Message
-                });
+                // Bad request if required data is missing
+                return BadRequest(new { error = ex.Message });
             }
             catch (ArgumentException ex)
             {
+                // Not found if invalid arguments (like user not existing)
                 return BadRequest(new { error = ex.Message });
             }
-            catch (InvalidOperationException ex)
+            catch (MediRecordsException ex)
             {
-                return NotFound(new { error = ex.Message });
+                // Not found if operation is invalid (like role mismatch)
+                return BadRequest(new { error = ex.Message });
             }
             catch (Exception)
             {
+                // Internal server error for unexpected issues
                 return StatusCode(500, Constant.InternalError);
             }
 
@@ -158,6 +161,7 @@ namespace MediRecords.Controllers
         /// Only accessible by administrators to ensure security and proper user management.
         /// </summary>
         [HttpPost("forgotpassword")]
+        [Authorize]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
@@ -186,6 +190,40 @@ namespace MediRecords.Controllers
                 500 => StatusCode(500, new { message }),
                 _ => BadRequest(new { message })
             };
+        }
+
+
+        /// <summary>
+        /// Soft deletes a user by marking the user as inactive.
+        /// This operation can only be performed by an authorized admin user.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize(Roles ="Admin")]
+        [HttpPost("delete/{id}")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                await _userService.SoftDeleteUserByIdAsync(id);
+                return Ok(Constant.DeleteSucess);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, Constant.InternalError);
+            }
         }
     }
 }

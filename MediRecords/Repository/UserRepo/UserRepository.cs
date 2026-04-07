@@ -23,7 +23,7 @@ public class UserRepository : IUserRepository
         // Use AsNoTracking for "Read-Only" operations to improve performance 
         // and reduce memory usage in Entity Framework.
         return await _context.Users
-            .Include(u => u.RoleIdNavigation) 
+            .Include(u => u.RoleIdNavigation)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -47,13 +47,13 @@ public class UserRepository : IUserRepository
     /// <exception cref="Exception">Thrown when a user with the provided email already exists.</exception>
     public async Task RegisterUserAsync(User user)
     {
-        if(user == null)
+        if (user == null)
         {
             throw new ArgumentNullException(Constant.RequestNull);
         }
 
         var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Status == true);
-        if(existingUser != null)
+        if (existingUser != null)
         {
             throw new MediRecordsException(Constant.EmailExists);
         }
@@ -64,58 +64,52 @@ public class UserRepository : IUserRepository
 
     public async Task<UserUpdateResponseDto> UpdateUser(UserUpdateRequestDto request)
     {
-        try
+        if (request == null)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
- 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == request.UserID && request.Status == true);
- 
-            if (user == null)
-            {
-                throw new InvalidOperationException(Constant.UserUpdate.UserNotFound);
-            }
- 
-            // Update allowed fields
-            user.Name = request.Name;
-            user.Phone = request.Phone;
-            user.RoleId = request.RoleID;
-            user.Status = request.Status;
- 
-            await _context.SaveChangesAsync();
- 
-            // Map Domain Entity to Response DTO
-            return user.ToUserUpdateResponse();
+            throw new ArgumentNullException(nameof(request));
         }
-        catch (ArgumentNullException ex)
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == request.UserID && request.Status == true);
+
+        if (user == null)
         {
-            throw new ApplicationException(Constant.UserUpdate.UpdateUserRequest, ex);
+            throw new InvalidOperationException(Constant.UserUpdate.UserNotFound);
         }
-        catch (InvalidOperationException ex)
-        {
-            throw new ApplicationException(Constant.UserUpdate.UserNotFound, ex);
-        }
-        catch (DbUpdateException ex)
-        {
-            throw new DbUpdateException(Constant.UserUpdate.UpdateFailed, ex);
-        }
-        catch (Exception ex)
-        {
-            throw new ApplicationException(Constant.InternalError, ex);
-        }
-    
+
+        // Update allowed fields
+        user.Name = request.Name;
+        user.Phone = request.Phone;
+        user.RoleId = request.RoleID;
+        user.Status = request.Status;
+
+        await _context.SaveChangesAsync();
+
+        // Map Domain Entity to Response DTO
+        return user.ToUserUpdateResponse();
     }
 
     public async Task<User> GetByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync( x => x.Email == email);
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public async Task UpdateAsync(User user)
     {
         _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Finds a specific user by their unique ID and changes the status from Active to InActive
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    public async Task SoftDeleteUserByIdAsync(int id)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.UserId == id && u.Status) ?? throw new KeyNotFoundException(Constant.Admin);
+        user.Status = false;
         await _context.SaveChangesAsync();
     }
 }

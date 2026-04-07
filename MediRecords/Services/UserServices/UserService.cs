@@ -7,6 +7,8 @@ using MediRecords.Utility;
 using System.Text.RegularExpressions;
 using MediRecords.Repository.UserRoleRepository;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using NuGet.Packaging.Signing;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MediRecords.Services.UserServices;
 
@@ -104,6 +106,11 @@ public class UserService : IUserService
         if (request.UserID <= 0)
             throw new ArgumentException(Constant.UserUpdate.InvalidUserId, nameof(request.UserID));
 
+        // Validate if the userID not found in the table
+        var user = await _userRepository.GetUserByIdAsync(request.UserID);
+        if (user == null)
+            throw new MediRecordsException(Constant.UserUpdate.UserNotFound);
+
         // Validate that the user's name is provided
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ArgumentException(Constant.UserUpdate.NameRequired, nameof(request.Name));
@@ -114,7 +121,13 @@ public class UserService : IUserService
 
         // Validate that the RoleID is valid
         if (request.RoleID <= 0)
-            throw new ArgumentException(Constant.UserUpdate.InvalidRoleId, nameof(request.RoleID));
+            throw new MediRecordsException(Constant.UserUpdate.InvalidRoleId);
+
+        bool roleExists = await _userRoleRepository.RoleExistsAsync(request.RoleID);
+        if(!roleExists)
+        {
+            throw new MediRecordsException(Constant.InvalidRoleId);
+        }
 
         // Delegate persistence and data update logic to the repository layer
         return await _userRepository.UpdateUser(request);
@@ -165,5 +178,20 @@ public class UserService : IUserService
         if (string.IsNullOrWhiteSpace(email)) return false;
         var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         return Regex.IsMatch(email, pattern);
+    }
+    
+    /// <summary>
+    /// Fetches a specific user by ID and change the status from Active to InActive.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task SoftDeleteUserByIdAsync(int id)
+    {
+        if(id < 0)
+        {
+            throw new ArgumentException(Constant.InvalidUserId);
+        }
+       await _userRepository.SoftDeleteUserByIdAsync(id);
     }
 }
