@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities;
 
@@ -28,12 +29,21 @@ public class Patient
 
     [MaxLength(255)]
     public string? ContactInfo { get; set; }
+    
+    [MaxLength(15)]
+    public string PhoneNo { get; set; } = null!;
+
+    [Required]
+    public int CreatedBy { get; set; }
+
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [ForeignKey("PrimaryProviderIdNavigation")]
     public int? PrimaryProviderId { get; set; }
 
     [MaxLength(20)]
-    public string Status { get; set; } = "Active";
+    public PatientStatus Status { get; set; } = PatientStatus.Active;
 
     public virtual ICollection<Allergy> Allergies { get; set; } = new List<Allergy>();
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
@@ -46,4 +56,6 @@ public class Patient
     public virtual ICollection<ProblemList> ProblemLists { get; set; } = new List<ProblemList>();
 
     public virtual User? PrimaryProviderIdNavigation { get; set; }
+    [ForeignKey(nameof(CreatedBy))]
+    public virtual User CreatedByUserNavigation { get; set; } = null!;
 }

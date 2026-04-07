@@ -10,6 +10,8 @@ using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using MediRecords.Repository.PatientRepo;
+using MediRecords.Services.PatientServices;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -72,7 +74,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository,AuthRepository>();
 builder.Services.AddScoped<IUserRoleRepository,UserRoleRepository>();
- 
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.

@@ -117,6 +117,8 @@ public class MediRecordsDbContext : DbContext
 
             e.Property(x => x.AddressJSON).HasColumnType("nvarchar(max)");
 
+            e.Property(x => x.Status).HasConversion<string>();
+            
             e.HasOne(x => x.PrimaryProviderIdNavigation)
                 .WithMany(u => u.Patients)
                 .HasForeignKey(x => x.PrimaryProviderId)
