@@ -7,6 +7,7 @@
   </PropertyGroup>
  
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
@@ -18,10 +19,19 @@
  
   <ItemGroup>
     <Folder Include="Controllers\" />
+<<<<<<< HEAD
     <Folder Include="Dto\MedicationListDtos\" />
+=======
+    <Folder Include="Dto\EncounterDtos\" />
+    <Folder Include="Dto\EncounterDtos\Request\" />
+    <Folder Include="Dto\EncounterDtos\Response\" />
+    <Folder Include="MappingProfiles\" />
+>>>>>>> 23243fda12c3777057959ed6217ff8ba76eb49c7
     <Folder Include="Repository\" />
+    <Folder Include="Repository\EncounterRepo\" />
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
+    <Folder Include="Services\EncounterServices\" />
     <Folder Include="Utility\TokenUtility\" />
     <Folder Include="Services\" />
     <Folder Include="Services\UserServices\" />

@@ -31,6 +31,12 @@
 		public const string InvalidUserId = "Invalid ID provided.";
 
 		public const string InvalidRoleId = "Invalid RoleID.";
+
+		public const string Active = "Active";
+
+		public const string Inactive = "Inactive";
+
+		public const string DeleteSucess = "User deleted Successfully";
 		
 		public static class UserUpdate
 		{
@@ -55,6 +61,17 @@
 			public const string EmailInvalid = "Invalid email format.";
 			public const string NewPasswordRequired = "New password is required.";
 			public const string ConfirmPasswordRequired = "Confirm password is required.";
+		}
+
+		public static class EncounterMessages
+		{
+			public const string InvalidProviderId = "Invalid provider ID.";
+			public const string InvalidEncounterId = "Invalid encounter ID.";
+			public const string InvalidStatus = "Invalid encounter status value.";
+			public const string EncounterNotFound = "Encounter not found.";
+			public const string EncounterLocked = "This encounter is locked and cannot be modified.";
+			public const string StatusUpdated = "Encounter status updated successfully.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
 	}
 
