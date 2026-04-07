@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using MediRecords.Domain.Entities;
 using MediRecords.Domain.Enums;
 using MediRecords.Dto.EncounterDtos.Request;
@@ -11,10 +12,11 @@ namespace MediRecords.Services.EncounterServices;
 public class EncounterService : IEncounterService
 {
     private readonly IEncounterRepository _encounterRepository;
-
-    public EncounterService(IEncounterRepository encounterRepository)
+    private readonly IMapper _mapper;
+    public EncounterService(IEncounterRepository encounterRepository, IMapper mapper)
     {
         _encounterRepository = encounterRepository;
+        _mapper = mapper;
     }
     
     public async Task<EncounterDetailDto?> GetEncounterByIdAsync(int encounterId)
@@ -24,18 +26,18 @@ public class EncounterService : IEncounterService
 
         var encounter = await _encounterRepository.GetByIdAsync(encounterId);
 
-        return encounter != null ? EncounterDetailDto.FromEntity(encounter) : null;
+        return encounter != null ? _mapper.Map<EncounterDetailDto>(encounter) : null;
     }
 
     public async Task<IEnumerable<EncounterSummaryDto>> GetWorkspaceAsync(int providerId, DateTime? date)
     {
-        if(providerId <= 0)
+        if (providerId <= 0)
             throw new MediRecordsException(Constant.EncounterMessages.InvalidProviderId);
-        
-        var targetDate = date?.Date ?? DateTime.Today;
 
+        var targetDate = date?.Date ?? DateTime.Today;
         var encounters = await _encounterRepository.GetByProviderAndDateAsync(providerId, targetDate);
-        return encounters.Select(EncounterSummaryDto.FromEntity);
+
+        return _mapper.Map<IEnumerable<EncounterSummaryDto>>(encounters);
     }
 
     public async Task<(bool Success, string Message, EncounterStatusResponseDto? Data)> UpdateEncounterStatusAsync(
