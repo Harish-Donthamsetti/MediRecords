@@ -19,14 +19,11 @@
  
   <ItemGroup>
     <Folder Include="Controllers\" />
-<<<<<<< HEAD
     <Folder Include="Dto\MedicationListDtos\" />
-=======
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
     <Folder Include="Dto\EncounterDtos\Response\" />
     <Folder Include="MappingProfiles\" />
->>>>>>> 23243fda12c3777057959ed6217ff8ba76eb49c7
     <Folder Include="Repository\" />
     <Folder Include="Repository\EncounterRepo\" />
     <Folder Include="Repository\UserRepo\" />
