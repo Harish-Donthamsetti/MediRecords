@@ -9,15 +9,16 @@ namespace MediRecords.Controllers
     public class AppointmentsController : ControllerBase
     {
         private readonly IAppointmentsService _appointmentService;
+
         public AppointmentsController(IAppointmentsService appointmentService)
         {
             _appointmentService = appointmentService;
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)] // Missing fields / invalid patient/provider
-        [ProducesResponseType(StatusCodes.Status409Conflict)]   // Slot unavailable
+        [ProducesResponseType(typeof(AppointmentsResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> BookAppointment([FromBody] AppointmentsRequestDto dto)
         {
             if (!ModelState.IsValid)
@@ -25,17 +26,15 @@ namespace MediRecords.Controllers
 
             try
             {
-                int appointmentId = await _appointmentService.BookAppointmentAsync(dto);
-                return Created(string.Empty, new { AppointmentId = appointmentId });
+                var response = await _appointmentService.BookAppointmentAsync(dto);
+                return CreatedAtAction(nameof(BookAppointment), new { id = response.AppointmentId }, response);
             }
             catch (ArgumentException ex)
             {
-                // Patient or Provider not found
                 return BadRequest(new { message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                // Slot unavailable
                 return Conflict(new { message = ex.Message });
             }
         }

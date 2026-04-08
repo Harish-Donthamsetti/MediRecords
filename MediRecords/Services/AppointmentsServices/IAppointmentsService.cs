@@ -1,6 +1,10 @@
 using MediRecords.Dto.AppointmentsDtos;
-namespace MediRecords.Services.AppointmentsServices;
-public interface IAppointmentsService
+using System.Threading.Tasks;
+
+namespace MediRecords.Services.AppointmentsServices
 {
-    public Task<int> BookAppointmentAsync(AppointmentsRequestDto dto);
+    public interface IAppointmentsService
+    {
+        Task<AppointmentsResponseDto> BookAppointmentAsync(AppointmentsRequestDto dto);
+    }
 }

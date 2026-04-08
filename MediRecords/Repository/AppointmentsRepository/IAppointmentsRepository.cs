@@ -1,4 +1,6 @@
 using MediRecords.Domain.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace MediRecords.Repository
 {
@@ -11,5 +13,3 @@ namespace MediRecords.Repository
         Task SaveChangesAsync();
     }
 }
-
-

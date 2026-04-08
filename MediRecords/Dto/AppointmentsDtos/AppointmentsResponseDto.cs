@@ -1,20 +1,16 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using MediRecords.Domain.Enums;
 
 namespace MediRecords.Dto.AppointmentsDtos
 {
-    public class AppointmentsRequestDto
+    public class AppointmentsResponseDto
     {
-        [Required]
+        public int AppointmentId { get; set; }
         public int PatientId { get; set; }
-
-        [Required]
         public int ProviderId { get; set; }
-
-        [Required]
         public DateTime DateTime { get; set; }
-
         public string? Reason { get; set; }
+        public AppointmentStatus Status { get; set; } 
+        public string Message { get; set; } 
     }
 }

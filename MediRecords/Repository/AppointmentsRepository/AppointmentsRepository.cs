@@ -1,5 +1,9 @@
 using MediRecords.Domain.Entities;
+using MediRecords.Domain.Enums;
+using MediRecords.Dto.AppointmentsDtos;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace MediRecords.Repository
 {
@@ -24,11 +28,13 @@ namespace MediRecords.Repository
 
         public async Task<bool> SlotExistsAsync(int providerId, DateTime dateTime)
         {
-            return await _context.Appointments.AnyAsync(a =>
-                a.ProviderId == providerId &&
-                a.DateTime == dateTime &&
-                a.Status == true);
+            return await _context.Appointments.AsNoTracking()
+                .AnyAsync(a =>
+                    a.ProviderId == providerId &&
+                    a.DateTime == dateTime &&
+                    a.Status == AppointmentStatus.Booked); // since Status is bool in entity
         }
+
 
         public async Task AddAsync(Appointment appointment)
         {
