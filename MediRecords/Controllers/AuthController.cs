@@ -46,4 +46,6 @@ public class AuthController : ControllerBase
             return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
         }
     }
+
+    // AuthController Implemented Successfully
 }
