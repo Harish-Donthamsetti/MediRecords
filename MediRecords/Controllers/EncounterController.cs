@@ -6,6 +6,7 @@ using MediRecords.Dto.EncounterDtos.Response;
 using MediRecords.Dto.EncounterDtos.Request;
 using Microsoft.VisualBasic;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace MediRecords.Controllers
 {
@@ -20,15 +21,18 @@ namespace MediRecords.Controllers
             _encounterService = encounterService;
         }
 
+        // [Authorize(Roles = Constant.Physician)]
         [HttpGet("workspace")]
-        [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(IEnumerable<EncounterSummaryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetWorkspace([FromQuery] int providerId, [FromQuery] DateTime? date)
+        public async Task<IActionResult> GetWorkspace([FromQuery] DateTime? date)
         {
-            if (providerId <= 0)
-                return BadRequest(new { message = Constant.EncounterMessages.InvalidProviderId });
+            // Extract providerId from JWT token claims
+            var providerIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(providerIdClaim) || !int.TryParse(providerIdClaim, out int providerId))
+                return Unauthorized(new { message = "Invalid or missing provider token." });
 
             try
             {
