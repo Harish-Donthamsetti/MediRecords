@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediRecords.Dto.EncounterDtos.Response;
 using MediRecords.Dto.EncounterDtos.Request;
 using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MediRecords.Controllers
 {
@@ -20,6 +21,7 @@ namespace MediRecords.Controllers
         }
 
         [HttpGet("workspace")]
+        [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(IEnumerable<EncounterSummaryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
@@ -44,6 +46,7 @@ namespace MediRecords.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(EncounterDetailDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
@@ -73,6 +76,7 @@ namespace MediRecords.Controllers
         }
 
         [HttpPatch("{id}/status")]
+        [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(EncounterStatusResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
