@@ -14,7 +14,7 @@ public class AppointmentsService : IAppointmentsService
 
     public async Task<int> BookAppointmentAsync(AppointmentsRequestDto dto)
     {
-        // 🔹 Verify patient exists
+        // Verify patient exists
         bool patientExists = await _context.Patients.AnyAsync(p => p.PatientId == dto.PatientId);
         if (!patientExists)
         {

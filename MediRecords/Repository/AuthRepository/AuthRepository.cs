@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+
 using MediRecords.Domain.Entities;
 
 namespace MediRecords.Repositories;
-
 public class AuthRepository : IAuthRepository
 {
     private readonly MediRecordsDbContext _context;
