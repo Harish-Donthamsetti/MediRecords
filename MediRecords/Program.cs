@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore; 
-using MediRecords.Domain.Entities;   
+using MediRecords.Domain.Entities;   
 using MediRecords.Services.AuthServices;
 using MediRecords.Services.UserServices;
 using MediRecords.Repository;
@@ -20,6 +20,10 @@ using MediRecords.MappingProfiles;
 using MediRecords.Services.AppointmentsServices;
 
 var builder = WebApplication.CreateBuilder(args);
+using MediRecords.Repository.VitalSignRepository;
+using MediRecords.Services.VitalSignServices;
+using MediRecords.Repository.NursingNoteRepository;
+using MediRecords.Services.NursingNoteServices;var builder = WebApplication.CreateBuilder(args);
  
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
@@ -87,6 +91,10 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 
 builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
+builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
+builder.Services.AddScoped<IVitalSignService, VitalSignService>();
+builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
+builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
  
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
