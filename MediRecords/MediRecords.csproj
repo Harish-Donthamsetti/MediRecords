@@ -30,7 +30,6 @@
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\EncounterServices\" />
     <Folder Include="Utility\TokenUtility\" />
-    <Folder Include="Services\" />
     <Folder Include="Services\UserServices\" />
   </ItemGroup>
  

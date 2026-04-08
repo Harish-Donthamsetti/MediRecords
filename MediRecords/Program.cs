@@ -17,6 +17,7 @@ using MediRecords.Services.PatientServices;
 using MediRecords.Repository.EncounterRepo;
 using MediRecords.Services.EncounterServices;
 using MediRecords.MappingProfiles;
+using MediRecords.Services.AppointmentsServices;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -88,6 +89,8 @@ builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
  
+builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
+builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
