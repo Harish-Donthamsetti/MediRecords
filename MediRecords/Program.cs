@@ -12,7 +12,6 @@ using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-<<<<<<< HEAD
 using MediRecords.Repository.PatientRepo;
 using MediRecords.Services.PatientServices;
 using MediRecords.Repository.EncounterRepo;
@@ -23,13 +22,6 @@ using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
-=======
-using MediRecords.Repository.EncounterRepo;
-using MediRecords.Services.EncounterServices;
-using MediRecords.MappingProfiles;
-using MediRecords.Repository.PatientRepo;
-using MediRecords.Services.PatientServices;
->>>>>>> 9d875be (Validation done for Create Patient Functionality)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +85,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository,AuthRepository>();
 builder.Services.AddScoped<IUserRoleRepository,UserRoleRepository>();
+builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
+builder.Services.AddScoped<IMedicationService, MedicationService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+
 builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
 builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
@@ -101,14 +98,8 @@ builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
  
-<<<<<<< HEAD
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
-=======
->>>>>>> 9d875be (Validation done for Create Patient Functionality)
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IPatientService, PatientService>();
-
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.

@@ -12,8 +12,6 @@
 
 		public const string Admin = "Admin";
 
-		public const string Physician = "Physician";
-
 		public const string RegisterSuccess = "User Registered Succesfully";
 
 		public const string RequestNull = "Registration request cannot be null.";
