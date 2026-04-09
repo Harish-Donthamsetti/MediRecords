@@ -2,6 +2,14 @@
 {
 	public static class Constant
 	{
+		public const string FrontDesk = "FrontDesk";
+
+		public const string Nurse = "Nurse";
+
+		public const string Physician = "Physician";
+
+		public const string LabTech = "LabTech";
+
 		public const string Admin = "Admin";
 
 		public const string Physician = "Physician";
@@ -74,6 +82,19 @@
 			public const string EncounterLocked = "This encounter is locked and cannot be modified.";
 			public const string StatusUpdated = "Encounter status updated successfully.";
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
+
+		public static class PatientMessages {
+			public const string RequestNull = "Request body cannot be null.";
+			public const string RequiredFields = "Required Field are missing";
+			public const string NameRequired = "Patient name is required.";
+			public const string GenderRequired = "Gender is required.";
+			public const string PhoneNoRequired = "Phone number is required.";
+			public const string InvalidDOB = "Date of birth cannot be a future date.";
+			public const string ProviderNotFound = "Primary provider does not exist.";
+			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
+			public const string InvalidProviderId= "The providerId is not a physician.";
+
 		}
 	}
 
