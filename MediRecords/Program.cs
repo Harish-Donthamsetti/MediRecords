@@ -12,7 +12,6 @@ using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-<<<<<<< HEAD
 using MediRecords.Repository.PatientRepo;
 using MediRecords.Services.PatientServices;
 using MediRecords.Repository.EncounterRepo;
@@ -23,32 +22,6 @@ using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-using MediRecords.Repository.PatientRepo;
-using MediRecords.Services.PatientServices;
-=======
-<<<<<<< HEAD
->>>>>>> 1816484 (Conflicts Resolved)
-=======
->>>>>>> b48a2db (Rebased the development branch)
-using MediRecords.Repository.EncounterRepo;
-using MediRecords.Services.EncounterServices;
-using MediRecords.MappingProfiles;
-<<<<<<< HEAD
-<<<<<<< HEAD
-using MediRecords.Repository.VitalSignRepository;
-using MediRecords.Services.VitalSignServices;
-using MediRecords.Repository.NursingNoteRepository;
-using MediRecords.Services.NursingNoteServices;var builder = WebApplication.CreateBuilder(args);
-=======
-=======
-=======
->>>>>>> 56bc729 (Rebased the development branch)
-using MediRecords.Repository.PatientRepo;
-using MediRecords.Services.PatientServices;
->>>>>>> 90886b5 (Rebased the development branch)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,24 +85,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository,AuthRepository>();
 builder.Services.AddScoped<IUserRoleRepository,UserRoleRepository>();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 90886b5 (Rebased the development branch)
 builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IMedicationService, MedicationService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
->>>>>>> 1816484 (Conflicts Resolved)
-=======
->>>>>>> b48a2db (Rebased the development branch)
->>>>>>> 90886b5 (Rebased the development branch)
 builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
 builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
@@ -138,14 +98,8 @@ builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
  
-<<<<<<< HEAD
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
-=======
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IPatientService, PatientService>();
-
->>>>>>> 90886b5 (Rebased the development branch)
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
