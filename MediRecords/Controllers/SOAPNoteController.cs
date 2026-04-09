@@ -1,6 +1,7 @@
 using MediRecords.Dto.SOAPNoteDtos.Request;
 using MediRecords.Dto.SOAPNoteDtos.Response;
 using MediRecords.Services.SOAPNoteService;
+using Microsoft.AspNetCore.Authorization;
 using MediRecords.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,20 +18,12 @@ public class SOAPNoteController : ControllerBase
         _soapNoteService = soapNoteService;
     }
 
-    /// <summary>
-    /// Saves a SOAP note for a given encounter.
-    /// Subjective tab: HPI + ROS
-    /// Objective tab: ExamFindings + Observations
-    /// Assessment tab: Assessment
-    /// Plan tab: Plan
-    /// IsDraft true = Save Draft | IsDraft false = Sign and Lock
-    /// </summary>
-    /// <param name="id">The Encounter ID.</param>
-    /// <param name="dto">The SOAP note content.</param>
-    // [Authorize(Roles = Constant.Physician)]
+    [Authorize(Roles = Constant.Physician)]
     [HttpPost("{id}/soap")]
     [ProducesResponseType(typeof(SOAPNoteResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SaveSOAPNote(int id, [FromBody] SaveSOAPNoteRequestDto dto)
