@@ -54,6 +54,12 @@ public class EncounterService : IEncounterService
         if (existing == null)
             return (false, Constant.EncounterMessages.EncounterNotFound, null);
 
+        if (existing.Status == dto.Status)
+        {
+            // Returns: "Encounter is already Open" or "Encounter is already Closed"
+            return (false, $"Encounter is already {existing.Status}", null);
+        }
+        
         // A locked encounter cannot be changed
         if (existing.Status == EncounterStatus.Locked)
             return (false, Constant.EncounterMessages.EncounterLocked, null);
