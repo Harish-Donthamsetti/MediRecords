@@ -30,6 +30,10 @@ public class MedicationController : ControllerBase
         try
         {
             var result = await _medicationService.GetMedicationListsAsync(filters);
+            if(result == null || !result.Any())
+            {
+                return NotFound(new { message = "No records found matching the provided filters." });
+            }
             return Ok(result);
         }
         catch (Exception)
