@@ -28,6 +28,8 @@ using MediRecords.Services.AllergyServices;
 using MediRecords.Repository.AllergyRepository;
 using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +103,9 @@ builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
 builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
+
+builder.Services.AddScoped<ISOAPNoteRepository, SOAPNoteRepository>();
+builder.Services.AddScoped<ISOAPNoteService, SOAPNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
