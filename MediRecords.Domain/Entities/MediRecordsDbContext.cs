@@ -278,6 +278,8 @@ public class MediRecordsDbContext : DbContext
         {
             e.HasKey(x => x.AppointmentId);
 
+            e.Property(x => x.Status).HasConversion<string>();
+            
             e.HasOne(x => x.PatientIdNavigation)
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(x => x.PatientId)

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities;
 
@@ -27,7 +28,7 @@ public class Appointment
     public string? Reason { get; set; }
 
     [Required]
-    public bool Status { get; set; }
+    public AppointmentStatus Status { get; set; } 
 
     public virtual User? ProviderIdNavigation { get; set; }
     public virtual Patient? PatientIdNavigation { get; set; }

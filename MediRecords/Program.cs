@@ -17,6 +17,9 @@ using MediRecords.Services.PatientServices;
 using MediRecords.Repository.EncounterRepo;
 using MediRecords.Services.EncounterServices;
 using MediRecords.MappingProfiles;
+using MediRecords.Services.AppointmentsServices;
+
+var builder = WebApplication.CreateBuilder(args);
 using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
@@ -94,6 +97,8 @@ builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
  
+builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
+builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
