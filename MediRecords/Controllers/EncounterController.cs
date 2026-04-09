@@ -21,10 +21,12 @@ namespace MediRecords.Controllers
             _encounterService = encounterService;
         }
 
-        // [Authorize(Roles = Constant.Physician)]
+        [Authorize(Roles = Constant.Physician)]
         [HttpGet("workspace")]
         [ProducesResponseType(typeof(IEnumerable<EncounterSummaryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetWorkspace([FromQuery] DateTime? date)
         {
@@ -53,6 +55,8 @@ namespace MediRecords.Controllers
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(EncounterDetailDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(int id)
@@ -83,6 +87,8 @@ namespace MediRecords.Controllers
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(EncounterStatusResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateStatus(int id, [FromBody] EncounterStatusUpdateDto dto)
