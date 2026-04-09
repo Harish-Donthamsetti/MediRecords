@@ -51,5 +51,24 @@ namespace MediRecords.Controllers
                 return Conflict(ex.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        // [Authorize(Roles = Constant.FrontDesk + "," + Constant.Physician + "," + Constant.Nurse)]
+        public async Task<IActionResult> GetPatientById(int id)
+        {
+            try
+            {
+                var result = await _patientService.GetPatientByIdAsync(id);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

@@ -104,4 +104,32 @@ public class PatientService : IPatientService
 
         return savedPatient.PatientId;
     }
+
+    public async Task<PatientDetailsDto> GetPatientByIdAsync(int patientId)
+    {
+        
+        if (patientId <= 0)
+            throw new ArgumentException("Invalid PatientId");
+
+        var patient = await _patientRepo.GetByIdWithDetailsAsync(patientId);
+
+        if (patient == null)
+            throw new KeyNotFoundException("Patient not found");
+
+        return new PatientDetailsDto
+        {
+            PatientId = patient.PatientId,
+            MRN = patient.MRN,
+            Name = patient.Name,
+            DOB = patient.DOB,
+            Gender = patient.Gender,
+            PhoneNo = patient.PhoneNo,
+            AddressJSON = patient.AddressJSON,
+            Status = patient.Status.ToString(),
+
+            Problems = patient.ProblemLists.Select(p => p.Diagnosis),
+            Allergies = patient.Allergies.Select(a => a.Allergen),
+            MedicalHistory = patient.MedicalHistories.Select(m => m.Condition)
+        };
+    }
 }

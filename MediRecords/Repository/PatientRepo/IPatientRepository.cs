@@ -8,4 +8,5 @@ public interface IPatientRepository
     Task<Patient> AddAsync(Patient patient);
     Task<string> GenerateMrnAsync();
     Task<bool> IsDuplicateAsync(string mrn, string? phone, DateOnly DOB);
+    Task<Patient?> GetByIdWithDetailsAsync(int patientId);
 }

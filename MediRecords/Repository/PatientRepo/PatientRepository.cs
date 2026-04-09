@@ -33,6 +33,14 @@ public class PatientRepository : IPatientRepository
         return $"MR-{nextVal}";
     }
 
+    public async Task<Patient?> GetByIdWithDetailsAsync(int patientId)
+    {
+        return await _context.Patients.Include(p => p.ProblemLists)
+                        .Include(p => p.Allergies)
+                        .Include(p => p.MedicalHistories)
+                        .FirstOrDefaultAsync(p => p.PatientId == patientId);
+    }
+
     public async Task<bool> IsDuplicateAsync(string mrn, string? phone, DateOnly DOB)
     {
         return await _context.Patients.AnyAsync(p => p.MRN == mrn || (!string.IsNullOrEmpty(phone) && p.PhoneNo == phone && p.DOB == DOB));
