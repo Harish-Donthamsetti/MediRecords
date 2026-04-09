@@ -120,5 +120,7 @@ namespace MediRecords.Controllers
                 return StatusCode(500, new { message = Constant.EncounterMessages.SomethingWentWrong });
             }
         }
+
+        
     }
 }

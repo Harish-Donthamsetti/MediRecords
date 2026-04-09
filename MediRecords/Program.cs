@@ -18,13 +18,14 @@ using MediRecords.Repository.EncounterRepo;
 using MediRecords.Services.EncounterServices;
 using MediRecords.MappingProfiles;
 using MediRecords.Services.AppointmentsServices;
-
-var builder = WebApplication.CreateBuilder(args);
 using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
-using MediRecords.Services.NursingNoteServices;var builder = WebApplication.CreateBuilder(args);
- 
+using MediRecords.Services.NursingNoteServices;
+
+var builder = WebApplication.CreateBuilder(args);
+
+
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
