@@ -19,6 +19,12 @@ namespace MediRecords.Controllers
             _patientService = patientService;
         }
 
+        
+        /// <summary>
+        /// Registers a new patient into the MediRecords system.
+        /// </summary>
+        /// <param name="requestDto">The patient registration data transfer object containing patient details.</param>
+        /// <returns>Return the Success or ErrorMessage</returns>
         [HttpPost]
         [Authorize(Roles = Constant.FrontDesk)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
@@ -53,6 +59,10 @@ namespace MediRecords.Controllers
             }
         }
 
+        /// <summary>
+        /// Fetches a specific patient's details by their unique ID.
+        /// </summary>
+        /// <param name="id">The numeric ID of the patient.</param>
         [HttpGet("{id}")]
         [Authorize(Roles = Constant.FrontDesk + "," + Constant.Physician + "," + Constant.Nurse)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -75,6 +85,11 @@ namespace MediRecords.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates patient details by an FrontDesk.
+        /// </summary>
+        /// <param name="dto">User details to be updated by frontdesk</param>
+        /// <returns>Returns updated patient information</returns>
         [HttpPut("{id}")]
         [Authorize(Roles = Constant.FrontDesk)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
