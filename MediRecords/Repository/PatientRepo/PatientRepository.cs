@@ -45,4 +45,15 @@ public class PatientRepository : IPatientRepository
     {
         return await _context.Patients.AnyAsync(p => p.MRN == mrn || (!string.IsNullOrEmpty(phone) && p.PhoneNo == phone && p.DOB == DOB));
     }
+
+    public async Task<Patient?> GetByIdAsync(int patientId)
+    {
+        return await _context.Patients.FindAsync(patientId);
+    }
+
+    public async Task UpdateAsync(Patient patient)
+    {
+        _context.Patients.Update(patient);
+        await _context.SaveChangesAsync();
+    }
 }

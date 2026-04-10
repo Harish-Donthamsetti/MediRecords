@@ -66,7 +66,6 @@ public class PatientService : IPatientService
             {
                 throw new MediRecordsException(Constant.PatientMessages.InvalidProviderId);
             }
-
         }
 
         // Generate MRN
@@ -131,5 +130,76 @@ public class PatientService : IPatientService
             Allergies = patient.Allergies.Select(a => a.Allergen),
             MedicalHistory = patient.MedicalHistories.Select(m => m.Condition)
         };
+    }
+
+    public async Task<PatientUpdateResponseDto> UpdatePatientAsync(
+    int patientId,
+    PatientUpdateRequestDto dto,
+    int frontDeskId)
+    {
+        // Validate Patient Id
+        if (patientId <= 0)
+            throw new ArgumentException(Constant.PatientMessages.InvalidId);
+
+        // Required field validations
+        if (string.IsNullOrWhiteSpace(dto.Name))
+            throw new ArgumentException(Constant.PatientMessages.NameRequired);
+        
+        if (string.IsNullOrWhiteSpace(dto.PhoneNo))
+            throw new ArgumentException(Constant.PatientMessages.PhoneNoRequired);
+
+        
+        // DOB validation
+        if (dto.DOB == default)
+            throw new MediRecordsException(Constant.PatientMessages.DOBRequired);
+
+        if (dto.DOB > DateOnly.FromDateTime(DateTime.UtcNow))
+            throw new MediRecordsException(Constant.PatientMessages.InvalidDOB);
+
+        // Fetch Patient
+        var patient = await _patientRepo.GetByIdAsync(patientId);
+        if (patient == null)
+            throw new KeyNotFoundException(Constant.PatientMessages.PatientNotFound);
+
+        // If primaryProviderId record is not present in the database
+        if (dto.PrimaryProviderId.HasValue)
+        {
+            var provider =
+                await _userRepo.GetUserByIdAsync(dto.PrimaryProviderId.Value);
+
+            if (provider == null)
+                throw new ArgumentException(
+                    Constant.PatientMessages.ProviderNotFound);
+            
+            if (provider.RoleIdNavigation == null ||
+                !string.Equals(
+                    provider.RoleIdNavigation.Name,
+                    Constant.Physician,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new MediRecordsException(Constant.PatientMessages.InvalidProviderId);
+            }
+
+        }
+
+        // Update fields
+        patient.Name = dto.Name;
+        patient.DOB = dto.DOB;
+        patient.Gender = dto.Gender;
+        patient.PhoneNo = dto.PhoneNo;
+        patient.AddressJSON = dto.AddressJSON;
+        patient.PrimaryProviderId = dto.PrimaryProviderId;
+        patient.Status = dto.Status;
+
+        await _patientRepo.UpdateAsync(patient);
+
+        // Audit
+        await _authService.SaveAuditLog(
+            frontDeskId,
+            $"UPDATE_PATIENT:{patientId}"
+        );
+
+        // Response DTO
+        return patient.ToPatientUpdateResponse();
     }
 }

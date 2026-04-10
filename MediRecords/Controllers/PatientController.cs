@@ -73,5 +73,38 @@ namespace MediRecords.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        [HttpPut("{id}")]
+        // [Authorize(Roles = Constant.FrontDesk)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdatePatient(
+            int id,
+            [FromBody] PatientUpdateRequestDto dto)
+        {
+            if (!ModelState.IsValid || dto == null)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                var updatedPatient = await _patientService.UpdatePatientAsync(id, dto, userId);
+                return Ok(updatedPatient);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (MediRecordsException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

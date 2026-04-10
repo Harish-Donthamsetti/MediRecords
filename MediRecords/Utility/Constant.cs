@@ -88,6 +88,7 @@
 			public const string NameRequired = "Patient name is required.";
 			public const string GenderRequired = "Gender is required.";
 			public const string PhoneNoRequired = "Phone number is required.";
+			public const string DOBRequired = "Date of birth is required.";
 			public const string InvalidDOB = "Date of birth cannot be a future date.";
 			public const string InvalidId = "Invalid PatientId";
 			public const string PatientNotFound = "Patient not found";
