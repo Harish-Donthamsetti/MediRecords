@@ -45,6 +45,9 @@
 		public const string Inactive = "Inactive";
 
 		public const string DeleteSucess = "User deleted Successfully";
+
+		public const string PatientIdRequired="PatientId is doesnot exiat";
+		public const string ProviderIdRequired="ProviderId is doesnot exist";
 		
 		public static class UserUpdate
 		{
