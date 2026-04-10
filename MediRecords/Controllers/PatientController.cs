@@ -20,6 +20,7 @@ namespace MediRecords.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constant.FrontDesk)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
@@ -53,7 +54,7 @@ namespace MediRecords.Controllers
         }
 
         [HttpGet("{id}")]
-        // [Authorize(Roles = Constant.FrontDesk + "," + Constant.Physician + "," + Constant.Nurse)]
+        [Authorize(Roles = Constant.FrontDesk + "," + Constant.Physician + "," + Constant.Nurse)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
@@ -75,7 +76,7 @@ namespace MediRecords.Controllers
         }
 
         [HttpPut("{id}")]
-        // [Authorize(Roles = Constant.FrontDesk)]
+        [Authorize(Roles = Constant.FrontDesk)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
