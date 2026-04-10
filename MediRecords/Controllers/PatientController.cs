@@ -54,6 +54,9 @@ namespace MediRecords.Controllers
 
         [HttpGet("{id}")]
         // [Authorize(Roles = Constant.FrontDesk + "," + Constant.Physician + "," + Constant.Nurse)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPatientById(int id)
         {
             try
@@ -65,9 +68,9 @@ namespace MediRecords.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
     }

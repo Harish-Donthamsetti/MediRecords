@@ -89,6 +89,8 @@
 			public const string GenderRequired = "Gender is required.";
 			public const string PhoneNoRequired = "Phone number is required.";
 			public const string InvalidDOB = "Date of birth cannot be a future date.";
+			public const string InvalidId = "Invalid PatientId";
+			public const string PatientNotFound = "Patient not found";
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
 			public const string InvalidProviderId= "The providerId is not a physician.";

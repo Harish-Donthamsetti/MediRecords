@@ -109,12 +109,12 @@ public class PatientService : IPatientService
     {
         
         if (patientId <= 0)
-            throw new ArgumentException("Invalid PatientId");
+            throw new ArgumentException(Constant.PatientMessages.InvalidId);
 
         var patient = await _patientRepo.GetByIdWithDetailsAsync(patientId);
 
         if (patient == null)
-            throw new KeyNotFoundException("Patient not found");
+            throw new KeyNotFoundException(Constant.PatientMessages.PatientNotFound);
 
         return new PatientDetailsDto
         {
