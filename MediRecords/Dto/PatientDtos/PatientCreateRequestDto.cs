@@ -9,6 +9,7 @@ public class PatientCreateRequestDto
     public DateOnly DOB { get; set; }
     public string Gender { get; set; } = null!;
     public string PhoneNo { get; set; } = null!;
+    public string? ContactInfo { get; set; }
     public string? AddressJSON { get; set; }
     public int? PrimaryProviderId { get; set; }
 }
