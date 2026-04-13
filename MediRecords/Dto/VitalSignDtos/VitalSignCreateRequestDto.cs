@@ -18,7 +18,4 @@ public class VitalSignCreateRequestDto
     public double? Height { get; set; }
 
     public double? Weight { get; set; }
-
-    [Required]
-    public string RecordedBy { get; set; } = null!;
 }

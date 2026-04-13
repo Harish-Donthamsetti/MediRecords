@@ -110,7 +110,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapControllers();
 }
- 
+
 app.UseHttpsRedirection();
  
 // Authentication and Authorization

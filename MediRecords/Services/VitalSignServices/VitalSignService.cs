@@ -15,126 +15,55 @@ public class VitalSignService : IVitalSignService
         _vitalSignRepository = vitalSignRepository;
     }
 
-    public async Task<VitalSignCreateResponseDto> CreateVitalSignsAsync(VitalSignCreateRequestDto request)
+    public async Task<VitalSignCreateResponseDto> CreateVitalSignsAsync(VitalSignCreateRequestDto request, string NurseId)
     {
+        //  Validation: Ensure the encounter exists and is open
         var encounter = await _vitalSignRepository.GetEncounterByIdAsync(request.EncounterId);
+        
         if (encounter == null)
         {
             throw new MediRecordsException("Encounter not found");
         }
+
         if (encounter.Status != EncounterStatus.Open)
         {
             throw new MediRecordsException("Encounter is closed");
         }
 
-        VitalSign? bmiVital = null;
-        double? bmi = null;
-        if (request.Height.HasValue && request.Weight.HasValue)
+        // Auto-calculate BMI
+        double? calculatedBmi = null;
+        if (request.Height.HasValue && request.Weight.HasValue && request.Height.Value > 0)
         {
-            bmi = request.Weight.Value / Math.Pow(request.Height.Value / 100, 2);
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "BMI",
-                Value = bmi.Value.ToString("F2"),
-                Unit = "kg/m²",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            bmiVital = await _vitalSignRepository.AddAsync(vital);
+            // BMI Formula: weight (kg) / [height (m)]^2
+            calculatedBmi = Math.Round(request.Weight.Value / Math.Pow(request.Height.Value / 100, 2), 2);
         }
 
-        VitalSign? firstVital = null;
-        if (!string.IsNullOrEmpty(request.Bp))
+        //  Mapping: Create a single Vitals record (One row in DB)
+        var vitalsEntry = new VitalSign
         {
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "BP",
-                Value = request.Bp,
-                Unit = "mmHg",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            var added = await _vitalSignRepository.AddAsync(vital);
-            firstVital = firstVital ?? added;
-        }
-        if (!string.IsNullOrEmpty(request.Hr))
-        {
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "HR",
-                Value = request.Hr,
-                Unit = "bpm",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            var added = await _vitalSignRepository.AddAsync(vital);
-            firstVital = firstVital ?? added;
-        }
-        if (!string.IsNullOrEmpty(request.Temp))
-        {
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "Temp",
-                Value = request.Temp,
-                Unit = "°F",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            var added = await _vitalSignRepository.AddAsync(vital);
-            firstVital = firstVital ?? added;
-        }
-        if (!string.IsNullOrEmpty(request.SpO2))
-        {
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "SpO2",
-                Value = request.SpO2,
-                Unit = "%",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            var added = await _vitalSignRepository.AddAsync(vital);
-            firstVital = firstVital ?? added;
-        }
-        if (request.Height.HasValue)
-        {
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "Height",
-                Value = request.Height.Value.ToString(),
-                Unit = "cm",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            var added = await _vitalSignRepository.AddAsync(vital);
-            firstVital = firstVital ?? added;
-        }
-        if (request.Weight.HasValue)
-        {
-            var vital = new VitalSign
-            {
-                EncounterId = request.EncounterId,
-                Type = "Weight",
-                Value = request.Weight.Value.ToString(),
-                Unit = "kg",
-                RecordedDate = DateTime.Now,
-                RecordedBy = request.RecordedBy
-            };
-            var added = await _vitalSignRepository.AddAsync(vital);
-            firstVital = firstVital ?? added;
-        }
+            EncounterId = request.EncounterId,
+            BP = request.Bp,
+            
+            // Converting strings from DTO to double? for the VitalSign model
+            HR = double.TryParse(request.Hr, out double hrVal) ? hrVal : null,
+            Temp = double.TryParse(request.Temp, out double tempVal) ? tempVal : null,
+            SpO2 = double.TryParse(request.SpO2, out double spo2Val) ? spo2Val : null,
+            
+            Height = request.Height,
+            Weight = request.Weight,
+            BMI = calculatedBmi,
+            RecordedDate = DateTime.UtcNow,
+            RecordedBy = NurseId
+        };
 
-        int vitalId = bmiVital?.VitalId ?? firstVital?.VitalId ?? throw new MediRecordsException("No vitals provided");
+        //  Persistence: Save the record via the repository
+        var savedVitals = await _vitalSignRepository.AddAsync(vitalsEntry);
+
+        //  Return Response DTO
         return new VitalSignCreateResponseDto
         {
-            VitalId = vitalId,
-            Bmi = bmi
+            VitalId = savedVitals.VitalsId,
+            Bmi = calculatedBmi
         };
     }
 }
