@@ -39,7 +39,7 @@ public class MediRecordsDbContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
     public virtual DbSet<VisitChargeRef> VisitChargeRefs { get; set; }
     public virtual DbSet<VitalSign> VitalSign { get; set; }
-
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         
@@ -253,15 +253,16 @@ public class MediRecordsDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<VitalSign>(e =>
+         modelBuilder.Entity<VitalSign>(e =>
         {
-            e.HasKey(x => x.VitalId);
+            e.HasKey(x => x.VitalsId);
 
             e.HasOne(x => x.EncounterIdNavigation)
                 .WithMany(e => e.VitalSigns)
                 .HasForeignKey(x => x.EncounterId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
 
         // Scheduling
         modelBuilder.Entity<ProviderSchedule>(e =>

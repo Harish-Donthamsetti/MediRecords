@@ -8,6 +8,5 @@ public class NursingNoteCreateRequestDto
     [Required]
     public string Notes { get; set; } = null!;
 
-    [Required]
-    public string RecordedBy { get; set; } = null!;
+    
 }
