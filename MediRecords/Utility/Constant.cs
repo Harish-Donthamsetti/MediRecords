@@ -104,19 +104,19 @@
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
 			public const string InvalidProviderId = "The providerId is not a physician.";
+		}
 
-			public static class SOAPNoteMessages
-			{
-				public const string InvalidEncounterId = "Invalid encounter ID.";
-				public const string EncounterNotFound = "Encounter not found.";
-				public const string EncounterLocked = "This encounter is locked. SOAP note cannot be saved.";
-				public const string HPIRequired = "HPI (History of Present Illness) is required.";
-				public const string SOAPNoteSaved = "SOAP note saved as draft successfully.";
-				public const string SOAPNoteSigned = "SOAP note signed and locked successfully.";
-				public const string SOAPNoteNotFound = "SOAP note not found.";
-				public const string SOAPNoteLocked = "This SOAP note is signed and locked. It cannot be modified.";
-				public const string SomethingWentWrong = "Something went wrong. Please try again.";
-			}
+		public static class SOAPNoteMessages
+		{
+			public const string InvalidEncounterId = "Invalid encounter ID.";
+			public const string EncounterNotFound = "Encounter not found.";
+			public const string EncounterLocked = "This encounter is locked. SOAP note cannot be saved.";
+			public const string HPIRequired = "HPI (History of Present Illness) is required.";
+			public const string SOAPNoteSaved = "SOAP note saved as draft successfully.";
+			public const string SOAPNoteSigned = "SOAP note signed and locked successfully.";
+			public const string SOAPNoteNotFound = "SOAP note not found.";
+			public const string SOAPNoteLocked = "This SOAP note is signed and locked. It cannot be modified.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
 
 	}
