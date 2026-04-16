@@ -37,22 +37,16 @@
     <Folder Include="Repository\" />
     <Folder Include="Repository\AllergyRepository\" />
     <Folder Include="Repository\EncounterRepo\" />
-<<<<<<< HEAD
     <Folder Include="Repository\MedicalHistoryRepository\" />
     <Folder Include="Repository\ProblemListRepository\" />
-=======
     <Folder Include="Repository\SOAPNoteRepo\" />
->>>>>>> 3d0ab7b (Save SOAP Note API)
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\AllergyServices\" />
     <Folder Include="Services\EncounterServices\" />
-<<<<<<< HEAD
     <Folder Include="Services\MedicalHistoryServices\" />
     <Folder Include="Services\ProblemListServices\" />
-=======
     <Folder Include="Services\SOAPNoteService\" />
->>>>>>> 3d0ab7b (Save SOAP Note API)
     <Folder Include="Utility\TokenUtility\" />
     <Folder Include="Services\UserServices\" />
   </ItemGroup>
