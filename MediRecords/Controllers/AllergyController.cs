@@ -24,6 +24,8 @@ namespace MediRecords.Controllers
         /// <param name="patientId">The numeric ID of the patient.</param>
         [HttpPost("{patientId}/allergies")]
         [Authorize(Roles = Constant.Physician)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddAllergy(int patientId, AllergyCreateRequestDto dto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -31,7 +33,7 @@ namespace MediRecords.Controllers
             try
             {
                 await _allergyService.CreateAllergyAsync(patientId, dto, userId);
-                return StatusCode(StatusCodes.Status201Created);
+                return Ok(Constant.AllergyCreated);
             }
             catch (MediRecordsException ex)
             {

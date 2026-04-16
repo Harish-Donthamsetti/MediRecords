@@ -45,6 +45,12 @@
 		public const string Inactive = "Inactive";
 
 		public const string DeleteSucess = "User deleted Successfully";
+
+		public const string ProblemCreated = "Problem Added Successfully";
+
+		public const string AllergyCreated = "Allergy Created Successfully";
+
+		public const string MedicalHistoryCreated = "Medical History Created Successfully";
 		
 		public static class UserUpdate
 		{

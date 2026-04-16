@@ -25,6 +25,8 @@ namespace MediRecords.Controllers
         /// <param name="patientId">The numeric ID of the patient.</param>
         [HttpPost("{patientId}/problems")]
         [Authorize(Roles = Constant.Physician)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddProblem(
             int patientId,
             [FromBody] ProblemCreateRequestDto dto)
@@ -34,7 +36,7 @@ namespace MediRecords.Controllers
             try
             {
                 await _problemListService.CreateProblemAsync(patientId, dto, userId);
-                return StatusCode(StatusCodes.Status201Created);
+                return Ok(Constant.ProblemCreated);
             }
             catch (MediRecordsException ex)
             {
