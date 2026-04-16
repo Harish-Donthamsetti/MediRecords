@@ -23,6 +23,7 @@
  
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Dto\ImagingOrderRequestDto\" />
     <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
@@ -30,9 +31,11 @@
     <Folder Include="MappingProfiles\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\EncounterRepo\" />
+    <Folder Include="Repository\ImagingOrderRepository\" />
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\EncounterServices\" />
+    <Folder Include="Services\ImagingOrderServices\" />
     <Folder Include="Utility\TokenUtility\" />
     <Folder Include="Services\UserServices\" />
   </ItemGroup>

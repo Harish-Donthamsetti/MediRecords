@@ -46,14 +46,25 @@
 
 		public const string DeleteSucess = "User deleted Successfully";
 
-		public const string PatientIdRequired="PatientId is doesnot exiat";
-		public const string ProviderIdRequired="ProviderId is doesnot exist";
-		
+		public const string PatientIdRequired = "PatientId is doesnot exiat";
+		public const string ProviderIdRequired = "ProviderId is doesnot exist";
+
+		// Validation & Error Messages
+		public const string RequestCannotBeNull = "Request body cannot be null.";
+		public const string InvalidEncounterId = "Provide a valid EncounterId.";
+		public const string EncounterNotFound = "The specified Encounter does not exist.";
+		public const string EncounterClosed = "Cannot add imaging orders to a closed encounter.";
+
+		// Success & General Responses
+		public const string OrderCreated = "Order created successfully.";
+		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
 			public const string InvalidUserId = "Invalid UserID.";
 			public const string UserNotFound = "User not found.";
+			public const string UserStatus = "User not found or User is already deleted";
 			public const string NameRequired = "Name is required.";
 			public const string PhoneRequired = "Phone number is required.";
 			public const string InvalidRoleId = "Invalid RoleID.";
@@ -85,7 +96,8 @@
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
 
-		public static class PatientMessages {
+		public static class PatientMessages
+		{
 			public const string RequestNull = "Request body cannot be null.";
 			public const string RequiredFields = "Required Field are missing";
 			public const string NameRequired = "Patient name is required.";
@@ -97,7 +109,7 @@
 			public const string PatientNotFound = "Patient not found";
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
-			public const string InvalidProviderId= "The providerId is not a physician.";
+			public const string InvalidProviderId = "The providerId is not a physician.";
 
 		}
 	}

@@ -22,6 +22,8 @@ using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
+using MediRecords.Repository.ImagingOrderRepository;
+using MediRecords.Services.ImagingOrderServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +31,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b=>b.MigrationsAssembly("MediRecords")
     )
 );
  
@@ -100,6 +103,8 @@ builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
  
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
+builder.Services.AddScoped<IImagingOrderServices,ImagingOrderServices>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
