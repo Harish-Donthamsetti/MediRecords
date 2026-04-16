@@ -17,19 +17,30 @@ public class AppointmentsService : IAppointmentsService
 
     public async Task<AppointmentsResponseDto> BookAppointmentAsync(AppointmentsRequestDto dto)
     {
+        // Guard clauses for required IDs
+        if (dto.PatientId <= 0)
+            throw new ArgumentException("PatientId is required");
+
+        if (dto.ProviderId <= 0)
+            throw new ArgumentException("ProviderId is required");
+
         // Patient check
         if (!await _context.Patients.AnyAsync(p => p.PatientId == dto.PatientId))
             throw new ArgumentException("Patient not found");
 
-        // Provider check
-        if (!await _context.ProviderSchedules.AnyAsync(pr => pr.ProviderId == dto.ProviderId))
+        // Provider check + duration
+        var providerSchedule = await _context.ProviderSchedules
+            .FirstOrDefaultAsync(pr => pr.ProviderId == dto.ProviderId);
+
+        if (providerSchedule == null)
             throw new ArgumentException("Provider not found");
 
-        // Slot conflict check
+        // Slot conflict check (overlap using provider’s duration)
         bool slotTaken = await _context.Appointments.AnyAsync(a =>
             a.ProviderId == dto.ProviderId &&
-            a.DateTime == dto.DateTime &&
-            a.Status == AppointmentStatus.Booked);
+            a.Status == AppointmentStatus.Booked &&
+            dto.DateTime < a.DateTime.AddMinutes(providerSchedule.SlotDuration) &&
+            dto.DateTime.AddMinutes(providerSchedule.SlotDuration) > a.DateTime);
 
         if (slotTaken)
             throw new InvalidOperationException("Provider slot unavailable");

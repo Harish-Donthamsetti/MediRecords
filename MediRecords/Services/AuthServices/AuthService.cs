@@ -81,6 +81,7 @@ public class AuthService : IAuthService
         {
             new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name,user.Name)
 
         };
         if (!string.IsNullOrWhiteSpace(user.RoleIdNavigation?.Name))

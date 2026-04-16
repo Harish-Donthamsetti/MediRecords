@@ -15,19 +15,10 @@ public class VitalSignRepository : IVitalSignRepository
 
     public async Task<VitalSign> AddAsync(VitalSign vitalSign)
     {
-        if (vitalSign.VitalId == 0)
-        {
-            vitalSign.VitalId = await GetNextVitalIdAsync();
-        }
-        _context.VitalSign.Add(vitalSign);
+        
+        await _context.VitalSign.AddAsync(vitalSign);
         await _context.SaveChangesAsync();
         return vitalSign;
-    }
-
-    public async Task<int> GetNextVitalIdAsync()
-    {
-        var maxId = await _context.VitalSign.MaxAsync(x => (int?)x.VitalId) ?? 0;
-        return maxId + 1;
     }
 
     public async Task<Encounter?> GetEncounterByIdAsync(int encounterId)

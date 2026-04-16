@@ -51,6 +51,8 @@
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
+		public const string PatientIdRequired="PatientId is doesnot exiat";
+		public const string ProviderIdRequired="ProviderId is doesnot exist";
 		
 		public static class UserUpdate
 		{
