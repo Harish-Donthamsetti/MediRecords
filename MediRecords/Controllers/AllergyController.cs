@@ -1,39 +1,36 @@
 using System.Security.Claims;
-using MediRecords.Services.PatientServices;
+using MediRecords.Dto.AllergyDtos;
+using MediRecords.Services.AllergyServices;
+using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MediRecords.Utility;
-using MediRecords.Dto.ProblemListDtos;
-using MediRecords.Services.ProblemListServices;
 
 namespace MediRecords.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProblemListController : ControllerBase
+    public class AllergyController : ControllerBase
     {
-        private readonly IProblemListService _problemListService;
-        public ProblemListController(IProblemListService problemListService)
+        private readonly IAllergyService _allergyService;
+        public AllergyController(IAllergyService allergyService)
         {
-            _problemListService = problemListService;
+            _allergyService = allergyService;
         }
-        
+
         /// <summary>
-        /// Records the problems of the patient.
+        /// Enters the allergy of the patient.
         /// </summary>
         /// <param name="patientId">The numeric ID of the patient.</param>
-        [HttpPost("{patientId}/problems")]
+        [HttpPost("{patientId}/allergies")]
         [Authorize(Roles = Constant.Physician)]
-        public async Task<IActionResult> AddProblem(
-            int patientId,
-            [FromBody] ProblemCreateRequestDto dto)
+        public async Task<IActionResult> AddAllergy(int patientId, AllergyCreateRequestDto dto)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
-                await _problemListService.CreateProblemAsync(patientId, dto, userId);
+                await _allergyService.CreateAllergyAsync(patientId, dto, userId);
                 return StatusCode(StatusCodes.Status201Created);
             }
             catch (MediRecordsException ex)

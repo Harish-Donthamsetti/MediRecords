@@ -22,6 +22,12 @@ using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
+using MediRecords.Services.ProblemListServices;
+using MediRecords.Repository.ProblemListRepository;
+using MediRecords.Services.AllergyServices;
+using MediRecords.Repository.AllergyRepository;
+using MediRecords.Services.MedicalHistoryServices;
+using MediRecords.Repository.MedicalHistoryRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,7 +95,6 @@ builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IMedicationService, MedicationService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
-
 builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
 builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
@@ -97,9 +102,14 @@ builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
- 
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+builder.Services.AddScoped<IProblemListService, ProblemListService>();
+builder.Services.AddScoped<IProblemListRepository, ProblemListRepository>();
+builder.Services.AddScoped<IAllergyService, AllergyService>();
+builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
+builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
