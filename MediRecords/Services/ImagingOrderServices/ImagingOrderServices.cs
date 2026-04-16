@@ -1,5 +1,6 @@
 using System;
 using MediRecords.Domain.Entities;
+using MediRecords.Dto.ImagingOrderDto;
 using MediRecords.Dto.ImagingOrderRequestDto;
 using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Utility;
@@ -31,5 +32,10 @@ public class ImagingOrderServices : IImagingOrderServices
             Status = true
         };
         await _repo.AddAsync(order);
+    }
+
+    public async Task<List<ImagingOrder>> GetAllAsync(ImagingOrderFilterDto filter)
+    {
+        return await _repo.GetAllAsync(filter);
     }
 }

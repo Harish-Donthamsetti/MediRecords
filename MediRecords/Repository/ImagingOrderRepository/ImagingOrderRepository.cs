@@ -1,5 +1,6 @@
 using System;
 using MediRecords.Domain.Entities;
+using MediRecords.Dto.ImagingOrderDto;
 using MediRecords.Utility;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,5 +32,31 @@ public class ImagingOrderRepository : IImagingOrderRepository
 
         await _context.ImagingOrders.AddAsync(order);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<ImagingOrder>> GetAllAsync(ImagingOrderFilterDto filter)
+    {
+        var query = _context.ImagingOrders.AsNoTracking().AsQueryable();
+
+        if (filter.ImagingOrderID.HasValue)
+            query = query.Where(x => x.ImagingOrderId == filter.ImagingOrderID);
+
+        if (filter.EncounterID.HasValue)
+            query = query.Where(x => x.EncounterId == filter.EncounterID);
+
+        if (!string.IsNullOrWhiteSpace(filter.StudyType))
+            query = query.Where(x => x.StudyType.Contains(filter.StudyType));
+
+        if (!string.IsNullOrWhiteSpace(filter.Notes))
+            query = query.Where(x => x.Notes.Contains(filter.Notes));
+
+        if (filter.OrderedDate.HasValue)
+            query = query.Where(x => x.OrderedDate.Date == filter.OrderedDate.Value.Date);
+
+        if (filter.Status.HasValue)
+            query = query.Where(x => x.Status == filter.Status);
+
+        return await query.ToListAsync();
+    
     }
 }

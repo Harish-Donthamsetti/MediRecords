@@ -1,3 +1,5 @@
+using MediRecords.Domain.Entities;
+using MediRecords.Dto.ImagingOrderDto;
 using MediRecords.Dto.ImagingOrderRequestDto;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Utility;
@@ -47,7 +49,23 @@ namespace MediRecords.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,Constant.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, Constant.InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Authorize(Roles = Constant.Physician)]
+        [ProducesResponseType(typeof(List<ImagingOrder>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> GetAllAsync([FromQuery] ImagingOrderFilterDto filter)
+        {
+            try
+            {
+                var results = await _service.GetAllAsync(filter);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, Constant.InternalServerError);
             }
         }
     }

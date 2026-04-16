@@ -23,7 +23,7 @@
  
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Dto\ImagingOrderRequestDto\" />
+    <Folder Include="Dto\ImagingOrderDto\" />
     <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
