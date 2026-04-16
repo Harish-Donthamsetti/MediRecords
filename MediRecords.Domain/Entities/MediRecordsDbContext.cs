@@ -134,6 +134,8 @@ public class MediRecordsDbContext : DbContext
 
             e.HasKey(x => x.ProblemId);
 
+            e.Property(x => x.Status).HasConversion<string>();
+            
             e.Property(x => x.ProblemId)
                 .ValueGeneratedOnAdd();
 
@@ -160,6 +162,8 @@ public class MediRecordsDbContext : DbContext
             e.ToTable("Allergy");
 
             e.HasKey(x => x.AllergyId);
+
+            e.Property(x => x.Status).HasConversion<string>();
 
             e.HasOne(x => x.PatientIdNavigation)
                 .WithMany(p => p.Allergies)
