@@ -37,8 +37,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        b=>b.MigrationsAssembly("MediRecords")
+        builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
  
