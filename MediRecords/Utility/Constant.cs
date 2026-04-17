@@ -147,5 +147,12 @@
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
 
+		public static class ImagingMessages
+		{
+			public const string InvalidImagingOrderId = "Invalid imaging order ID.";
+			public const string ImagingOrderNotFound = "Imaging order not found.";
+			public const string NoReportsFound = "No reports found for this imaging order.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
 	}
 }
