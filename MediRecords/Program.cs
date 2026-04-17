@@ -24,6 +24,8 @@ using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
 using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Services.ImagingOrderServices;
+using MediRecords.Repository.ImagingReportRepository;
+using MediRecords.Services.ImagingReportServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +107,14 @@ builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
 builder.Services.AddScoped<IImagingOrderServices,ImagingOrderServices>();
+
+// Inside Program.cs, after builder.Services.AddDbContext...
+
+// Register Repositories
+builder.Services.AddScoped<IImagingReportRepository, ImagingReportRepository>();
+
+// Register Services
+builder.Services.AddScoped<IImagingReportServices, ImagingReportServices>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
