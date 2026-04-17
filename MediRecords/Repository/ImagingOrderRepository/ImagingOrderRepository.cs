@@ -36,7 +36,7 @@ public class ImagingOrderRepository : IImagingOrderRepository
 
     public async Task<List<ImagingOrder>> GetAllAsync(ImagingOrderFilterDto filter)
     {
-        var query = _context.ImagingOrders.AsNoTracking().AsQueryable();
+        var query = _context.ImagingOrders.Include(x => x.ImagingReports).AsNoTracking().AsQueryable();
 
         if (filter.ImagingOrderID.HasValue)
             query = query.Where(x => x.ImagingOrderId == filter.ImagingOrderID);

@@ -1,7 +1,7 @@
 using System;
+using System.Text.Json;
 using MediRecords.Domain.Entities;
 using MediRecords.Dto.ImagingOrderDto;
-using MediRecords.Dto.ImagingOrderRequestDto;
 using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Utility;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
@@ -34,8 +34,29 @@ public class ImagingOrderServices : IImagingOrderServices
         await _repo.AddAsync(order);
     }
 
-    public async Task<List<ImagingOrder>> GetAllAsync(ImagingOrderFilterDto filter)
+    public async Task<List<ImagingOrderResponseDto>> GetAllAsync(ImagingOrderFilterDto filter)
     {
-        return await _repo.GetAllAsync(filter);
+        var orders = await _repo.GetAllAsync(filter);
+        return orders.Select(o => new ImagingOrderResponseDto
+        {
+            ImagingOrderId = o.ImagingOrderId,
+            EncounterId = o.EncounterId,
+            StudyType = o.StudyType,
+            Notes = o.Notes,
+            OrderedDate = o.OrderedDate,
+            Status = o.Status,
+            // Map the reports and unpack the Findings
+            Reports = o.ImagingReports.Select(r => new ImagingReportResponseDto
+            {
+                ReportId = r.ReportId,
+                ImagingOrderId = r.ImagingOrderId,
+                Impression = r.Impression,
+                ReportDate = r.ReportDate,
+                Status = r.Status,
+                Findings = string.IsNullOrWhiteSpace(r.Findings)
+                    ? new Dictionary<string, string>()
+                    : JsonSerializer.Deserialize<Dictionary<string, string>>(r.Findings) ?? new()
+            }).ToList()
+        }).ToList();
     }
 }

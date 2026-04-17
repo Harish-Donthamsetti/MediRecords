@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Claims;
 using MediRecords.Dto.VitalSignDtos;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Utility;
@@ -25,33 +26,38 @@ public class VitalSignController : ControllerBase
     /// <param name="requestDto">The vital signs data transfer object.</param>
     /// <returns>201 Created with VitalId</returns>
     [HttpPost("capture")]
-    // [Authorize] // Commented out to allow access without a token for now
+    [Authorize] 
     [ProducesResponseType(typeof(VitalSignCreateResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CaptureVitals(VitalSignCreateRequestDto requestDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
+
+        
+
         try
         {
-            var response = await _vitalSignService.CreateVitalSignsAsync(requestDto);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var response = await _vitalSignService.CreateVitalSignsAsync(requestDto, userId);
+
+            // Updated route values to match the property name in your Response DTO
             return CreatedAtAction(nameof(CaptureVitals), new { id = response.VitalId }, response);
         }
-        catch (MediRecordsException ex) when (ex.Message.Contains("closed"))
+        catch (MediRecordsException ex) when (ex.Message.Contains("closed", StringComparison.OrdinalIgnoreCase))
         {
-            return StatusCode(409, ex.Message);
+            return StatusCode(StatusCodes.Status409Conflict, ex.Message);
         }
         catch (MediRecordsException ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500, Constant.InternalError);
+            return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred: " + ex.Message);
         }
     }
 }
