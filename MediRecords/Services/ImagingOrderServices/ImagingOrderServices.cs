@@ -16,6 +16,13 @@ public class ImagingOrderServices : IImagingOrderServices
         _repo = repo;
     }
 
+    /// <summary>
+    /// Processes an imaging order request by validating the encounter ID, 
+    /// mapping the DTO to a domain entity, and persisting it via the repository.
+    /// </summary>
+    /// <param name="dto">The data transfer object containing imaging order details.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    /// <exception cref="ArgumentException">Thrown when the EncounterID is less than or equal to zero.</exception>
     public async Task AddAsync(ImagingOrderRequestDto dto)
     {
         if (dto.EncounterID <= 0)

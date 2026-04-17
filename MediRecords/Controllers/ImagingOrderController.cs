@@ -17,7 +17,19 @@ namespace MediRecords.Controllers
         {
             _service = service;
         }
-
+        /// <summary>
+        /// Handles the HTTP POST request to create a new imaging order.
+        /// This endpoint validates the request, ensures the user is authorized, 
+        /// and manages exception-to-status-code mapping.
+        /// </summary>
+        /// <param name="dto">The imaging order data transfer object containing request details.</param>
+        /// <returns>
+        /// A 201 Created response on success; 
+        /// 400 Bad Request if validation fails; 
+        /// 404 Not Found if the encounter is missing; 
+        /// 409 Conflict if the encounter is closed; 
+        /// or 500 Internal Server Error for unhandled exceptions.
+        /// </returns>
         [HttpPost]
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
@@ -47,7 +59,7 @@ namespace MediRecords.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,Constant.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, Constant.InternalServerError);
             }
         }
     }
