@@ -26,6 +26,12 @@ using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Repository.ImagingReportRepository;
 using MediRecords.Services.ImagingReportServices;
+using MediRecords.Services.ProblemListServices;
+using MediRecords.Repository.ProblemListRepository;
+using MediRecords.Services.AllergyServices;
+using MediRecords.Repository.AllergyRepository;
+using MediRecords.Services.MedicalHistoryServices;
+using MediRecords.Repository.MedicalHistoryRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +39,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        b=>b.MigrationsAssembly("MediRecords")
+        builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
  
@@ -94,7 +99,6 @@ builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IMedicationService, MedicationService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
-
 builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
 builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
@@ -102,19 +106,18 @@ builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
- 
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
 builder.Services.AddScoped<IImagingOrderServices,ImagingOrderServices>();
-
-// Inside Program.cs, after builder.Services.AddDbContext...
-
-// Register Repositories
 builder.Services.AddScoped<IImagingReportRepository, ImagingReportRepository>();
-
-// Register Services
 builder.Services.AddScoped<IImagingReportServices, ImagingReportServices>();
+builder.Services.AddScoped<IProblemListService, ProblemListService>();
+builder.Services.AddScoped<IProblemListRepository, ProblemListRepository>();
+builder.Services.AddScoped<IAllergyService, AllergyService>();
+builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
+builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
@@ -125,7 +128,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapControllers();
 }
- 
+
 app.UseHttpsRedirection();
  
 // Authentication and Authorization

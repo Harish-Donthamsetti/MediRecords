@@ -66,6 +66,12 @@
 		public const string ReportAlreadyExists = "A report has already been submitted for this order.";
 		public const string InvalidFindings = "Findings must contain at least one result.";
 
+		public const string ProblemCreated = "Problem Added Successfully";
+
+		public const string AllergyCreated = "Allergy Created Successfully";
+
+		public const string MedicalHistoryCreated = "Medical History Created Successfully";
+		
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";

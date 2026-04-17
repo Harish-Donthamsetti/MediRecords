@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities;
 
@@ -23,8 +24,7 @@ public class Allergy
     [MaxLength(50)]
     public string? Severity { get; set; }
 
-    [MaxLength(20)]
-    public string Status { get; set; } = "Active";
+    public AllergyStatus Status { get; set; } = AllergyStatus.Active;
 
     public DateTime NotedDate { get; set; } = DateTime.Now;
 
