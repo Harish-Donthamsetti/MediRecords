@@ -54,6 +54,22 @@
 		public const string PatientIdRequired="PatientId is doesnot exiat";
 		public const string ProviderIdRequired="ProviderId is doesnot exist";
 		
+		public const string AllergyExists = "Allergy already exists for this patient.";
+
+		public const string MedicalHistoryExists = "Medical history entry already exists.";
+
+		public const string AllergenRequired = "Allergen is required.";
+
+		public const string DiagnosisRequired = "Diagnosis is required.";
+
+		public const string ConditionRequired = "Condition is required.";
+
+		public const string StartDateValidation = "Start date cannot be in the future.";
+
+		public const string EndDateValidation = "End date cannot be earlier than start date.";
+
+		public const string ExceedLength = "Notes exceed allowed length.";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
@@ -103,7 +119,8 @@
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
 			public const string InvalidProviderId= "The providerId is not a physician.";
-
+			public const string NoSuchPrimaryProvider = "No primary provider is assigned to this patient.";
+			public const string UnauthorizedAccess = "You are not authorized to access this patient's clinical data.";
 		}
 	}
 

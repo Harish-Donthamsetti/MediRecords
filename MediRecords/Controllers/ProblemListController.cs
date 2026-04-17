@@ -26,17 +26,32 @@ namespace MediRecords.Controllers
         [HttpPost("{patientId}/problems")]
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddProblem(
             int patientId,
             [FromBody] ProblemCreateRequestDto dto)
         {
+            if(!ModelState.IsValid || dto == null)
+            {
+                return BadRequest(ModelState);
+            }
+            
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             try
             {
                 await _problemListService.CreateProblemAsync(patientId, dto, userId);
                 return Ok(Constant.ProblemCreated);
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (MediRecordsException ex)
             {
