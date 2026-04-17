@@ -59,6 +59,12 @@
 		public const string OrderCreated = "Order created successfully.";
 		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
 
+		public const string ProblemCreated = "Problem Added Successfully";
+
+		public const string AllergyCreated = "Allergy Created Successfully";
+
+		public const string MedicalHistoryCreated = "Medical History Created Successfully";
+		
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";

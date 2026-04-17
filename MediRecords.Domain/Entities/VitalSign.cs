@@ -9,33 +9,35 @@ namespace MediRecords.Models;
 [Table("VitalSign")]
 public class VitalSign
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public int VitalId { get; set; } // Primary Key ID for all Vital Signs.
+     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int VitalsId { get; set; }
+
+    [Required]
+    public int EncounterId { get; set; }
+
+    [MaxLength(20)]
+    public string? BP { get; set; } 
+
+    public double? HR { get; set; }
     
-    [Required]
-    [ForeignKey("EncounterIdNavigation")]
-    public int EncounterId { get; set; } // ID of the Encounter.
+    public double? Temp { get; set; }
+
+    public double? SpO2 { get; set; }
+
+    public double? Height { get; set; }
+
+    public double? Weight { get; set; }
+
+    public double? BMI { get; set; }
+
+    public DateTime RecordedDate { get; set; } = DateTime.UtcNow;
 
     [Required]
-    [Column(TypeName="VARCHAR(50)")]
-    public string Type { get; set; } = null!; // Type of Vitals recorded.
+    [MaxLength(50)]
+    public string RecordedBy { get; set; } = null!;
 
-    [Required]
-    [Column(TypeName="VARCHAR(50)")]
-    public string Value { get; set; } = null!; // Value of the Vitals recorded.
-    
-    [Required]
-    [Column(TypeName="VARCHAR(20)")]
-    public string Unit{ get; set; } = null!; // Unit in which the Vitals are recorded.
-    
-    public DateTime RecordedDate { get; set; } // Date of the Vitals recorded.
-
-    [Required]
-    [Column(TypeName="VARCHAR(50)")]
-    public string RecordedBy { get; set; } = null!; // Name of the User who recorded the Vitals.
-
-    //Foreign Key
+    [ForeignKey("EncounterId")]
     public virtual Encounter? EncounterIdNavigation { get; set; }
 
 }
