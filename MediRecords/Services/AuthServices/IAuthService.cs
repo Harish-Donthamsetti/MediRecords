@@ -10,4 +10,6 @@ public interface IAuthService
     Task SaveAuditLog(int userId, string action);
     string GenerateJwtToken(User user);
     string GenerateRefreshToken();
+    void EnsurePrimaryProviderAccess(Patient patient, int loggedInUserId);
+
 }
