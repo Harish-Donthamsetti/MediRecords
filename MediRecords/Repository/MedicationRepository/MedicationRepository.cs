@@ -28,6 +28,9 @@ public class MedicationRepository : IMedicationRepository
         if (filter.MedId.HasValue)
             query = query.Where(x => x.MedId == filter.MedId.Value);
 
+        if(filter.PatientName != null)
+            query = query.Where(x => x.PatientIdNavigation != null && x.PatientIdNavigation.Name.Contains(filter.PatientName));
+
         if (!string.IsNullOrWhiteSpace(filter.DrugName))
             query = query.Where(x => x.DrugName.Contains(filter.DrugName));
 
@@ -49,6 +52,9 @@ public class MedicationRepository : IMedicationRepository
         if (filter.Status.HasValue)
             query = query.Where(x => x.Status == filter.Status.Value);
 
-        return await query.OrderByDescending(x => x.StartDate).ToListAsync();
+        return await query
+        .OrderByDescending(x => x.StartDate)
+        .Include(x => x.PatientIdNavigation)
+        .ToListAsync();
     }
 }

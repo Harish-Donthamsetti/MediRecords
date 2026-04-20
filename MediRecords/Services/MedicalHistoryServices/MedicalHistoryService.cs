@@ -22,11 +22,24 @@ public class MedicalHistoryService : IMedicalHistoryService
     public async Task CreateMedicalHistoryAsync(int patientId, MedicalHistoryCreateRequestDto dto, int userId)
     {
         if (string.IsNullOrWhiteSpace(dto.Condition))
-            throw new MediRecordsException("Condition is required.");
+            throw new MediRecordsException(Constant.ConditionRequired);
 
+        // check if patient record exists or not
         var patient = await _patientRepo.GetByIdWithDetailsAsync(patientId);
         if (patient == null)
-            throw new MediRecordsException("Patient not found.");
+            throw new KeyNotFoundException(Constant.PatientMessages.PatientNotFound);
+
+        // Check only the primary provider is dealing/accessing the patient
+        _authService.EnsurePrimaryProviderAccess(patient, userId);
+
+        // Checks if medical history already exists in database (prevents duplicacy)
+        var exists = patient.MedicalHistories.Any(m => m.Condition == dto.Condition);
+        if (exists)
+            throw new MediRecordsException(Constant.MedicalHistoryExists);
+
+        // Length Check
+        if (dto.Notes?.Length > 1000)
+            throw new MediRecordsException(Constant.ExceedLength);
 
         var history = new MedicalHistory
         {
