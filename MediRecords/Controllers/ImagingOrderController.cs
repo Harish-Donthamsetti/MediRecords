@@ -1,4 +1,4 @@
-using MediRecords.Dto.ImagingOrderRequestDto;
+using MediRecords.Dto.ImagingOrdertDto;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;

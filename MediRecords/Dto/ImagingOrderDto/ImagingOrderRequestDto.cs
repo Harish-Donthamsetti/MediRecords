@@ -1,6 +1,6 @@
 using System;
 
-namespace MediRecords.Dto.ImagingOrderRequestDto;
+namespace MediRecords.Dto.ImagingOrdertDto;
 
 public class ImagingOrderRequestDto
 {

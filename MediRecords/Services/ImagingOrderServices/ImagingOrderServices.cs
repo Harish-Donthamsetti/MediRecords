@@ -1,6 +1,6 @@
 using System;
 using MediRecords.Domain.Entities;
-using MediRecords.Dto.ImagingOrderRequestDto;
+using MediRecords.Dto.ImagingOrdertDto;
 using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Utility;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
