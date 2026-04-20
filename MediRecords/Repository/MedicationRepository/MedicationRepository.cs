@@ -35,7 +35,7 @@ public class MedicationRepository : IMedicationRepository
             query = query.Where(x => x.DrugName.Contains(filter.DrugName));
 
         if (!string.IsNullOrWhiteSpace(filter.Dose))
-            query = query.Where(x => x.Dose.Contains(filter.Dose));
+            query = query.Where(x => x.Dose == filter.Dose);
 
         if (!string.IsNullOrWhiteSpace(filter.Frequency))
             query = query.Where(x => x.Frequency.Contains(filter.Frequency));
