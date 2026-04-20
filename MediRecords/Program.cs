@@ -7,6 +7,8 @@ using MediRecords.Repositories;
 using MediRecords.Repository.UserRepo;
 using MediRecords.Repository.MedicationRepository;
 using MediRecords.Services.MedicationServices;
+using MediRecords.Repository.PrescriptionItemRepository;
+using MediRecords.Services.PrescriptionItemServices;
 using Microsoft.OpenApi;
 using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +30,8 @@ using MediRecords.Services.AllergyServices;
 using MediRecords.Repository.AllergyRepository;
 using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
+using MediRecords.Services.PrescriptionService;
+using MediRecords.Repository.PrescriptionRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +114,10 @@ builder.Services.AddScoped<IAllergyService, AllergyService>();
 builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
 builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IPrescriptionItemRepository, PrescriptionItemRepository>();
+builder.Services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
