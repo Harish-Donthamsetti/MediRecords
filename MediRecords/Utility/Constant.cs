@@ -46,13 +46,24 @@
 
 		public const string DeleteSucess = "User deleted Successfully";
 
+		public const string PatientIdRequired = "PatientId is doesnot exiat";
+		public const string ProviderIdRequired = "ProviderId is doesnot exist";
+
+		// Validation & Error Messages
+		public const string RequestCannotBeNull = "Request body cannot be null.";
+		public const string InvalidEncounterId = "Provide a valid EncounterId.";
+		public const string EncounterNotFound = "The specified Encounter does not exist.";
+		public const string EncounterClosed = "Cannot add imaging orders to a closed encounter.";
+
+		// Success & General Responses
+		public const string OrderCreated = "Order created successfully.";
+		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
+
 		public const string ProblemCreated = "Problem Added Successfully";
 
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
-		public const string PatientIdRequired="PatientId is doesnot exiat";
-		public const string ProviderIdRequired="ProviderId is doesnot exist";
 		
 		public const string AllergyExists = "Allergy already exists for this patient.";
 
@@ -75,6 +86,7 @@
 			public const string UpdateUserRequest = "Update request cannot be null.";
 			public const string InvalidUserId = "Invalid UserID.";
 			public const string UserNotFound = "User not found.";
+			public const string UserStatus = "User not found or User is already deleted";
 			public const string NameRequired = "Name is required.";
 			public const string PhoneRequired = "Phone number is required.";
 			public const string InvalidRoleId = "Invalid RoleID.";
