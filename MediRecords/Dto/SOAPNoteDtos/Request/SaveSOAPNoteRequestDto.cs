@@ -5,6 +5,8 @@ namespace MediRecords.Dto.SOAPNoteDtos.Request;
 
 public class SaveSOAPNoteRequestDto
 {
+    [Required]
+    public int EncounterId { get; set; }
     // ── S - Subjective 
     [Required(ErrorMessage = Constant.SOAPNoteMessages.HPIRequired)]
     public string HPI { get; set; } = string.Empty;

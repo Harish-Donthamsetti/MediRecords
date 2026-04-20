@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediRecords.Controllers;
 
-[Route("api/v1/encounters")]
+[Route("api/v1/[controller]")]
 [ApiController]
 public class SOAPNoteController : ControllerBase
 {
@@ -19,7 +19,7 @@ public class SOAPNoteController : ControllerBase
     }
 
     [Authorize(Roles = Constant.Physician)]
-    [HttpPost("{id}/soap")]
+    [HttpPost("soap")]
     [ProducesResponseType(typeof(SOAPNoteResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
