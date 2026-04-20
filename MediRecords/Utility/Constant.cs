@@ -81,6 +81,12 @@
 
 		public const string ExceedLength = "Notes exceed allowed length.";
 
+		public const string Notes = "Notes are required";
+
+		public const string StudyType = "StudyType Required";
+
+		public const string ImagingOrderAlreadyExists = "Imaging Order Already Exists";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";

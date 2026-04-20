@@ -35,6 +35,22 @@ public class ImagingOrderRepository : IImagingOrderRepository
             throw new InvalidOperationException(Constant.EncounterClosed);
         }
 
+
+
+        // bool imagingOrderExists = await _context.ImagingOrders.AnyAsync(o =>
+        //     o.EncounterId == order.EncounterId &&
+        //     o.StudyType.Trim().ToLower() == order.StudyType.Trim().ToLower() &&
+        //     o.Status);
+
+        bool imagingOrderExists = await _context.ImagingOrders.AnyAsync(o => o.EncounterId == order.EncounterId && o.StudyType == order.StudyType && o.Status);
+
+
+        if (imagingOrderExists)
+        {
+            throw new InvalidOperationException(Constant.ImagingOrderAlreadyExists);
+        }
+
+
         await _context.ImagingOrders.AddAsync(order);
         await _context.SaveChangesAsync();
     }

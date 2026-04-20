@@ -2,6 +2,7 @@ using System;
 using MediRecords.Domain.Entities;
 using MediRecords.Dto.ImagingOrdertDto;
 using MediRecords.Repository.ImagingOrderRepository;
+using MediRecords.Services.AuthServices;
 using MediRecords.Utility;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 
@@ -10,10 +11,12 @@ namespace MediRecords.Services.ImagingOrderServices;
 public class ImagingOrderServices : IImagingOrderServices
 {
     private readonly IImagingOrderRepository _repo;
+    private readonly IAuthService _authService;
 
-    public ImagingOrderServices(IImagingOrderRepository repo)
+    public ImagingOrderServices(IImagingOrderRepository repo,IAuthService authService)
     {
         _repo = repo;
+        _authService = authService;
     }
 
     /// <summary>
@@ -23,20 +26,32 @@ public class ImagingOrderServices : IImagingOrderServices
     /// <param name="dto">The data transfer object containing imaging order details.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentException">Thrown when the EncounterID is less than or equal to zero.</exception>
-    public async Task AddAsync(ImagingOrderRequestDto dto)
+    public async Task AddAsync(int EncounterID,ImagingOrderRequestDto dto,int userId)
     {
-        if (dto.EncounterID <= 0)
+        if (EncounterID <= 0)
         {
             throw new ArgumentException(Constant.InvalidEncounterId);
         }
+        if(dto.StudyType == null)
+        {
+            throw new ArgumentException(Constant.StudyType);
+        }
+        if(string.IsNullOrWhiteSpace(dto.Notes))
+        {
+            throw new ArgumentException(Constant.Notes);
+        }
         var order = new ImagingOrder
         {
-            EncounterId = dto.EncounterID,
+            EncounterId = EncounterID,
             StudyType = dto.StudyType,
             Notes = dto.Notes,
             OrderedDate = DateTime.UtcNow,
             Status = true
         };
         await _repo.AddAsync(order);
+        await _authService.SaveAuditLog(
+            userId,
+            $"Imagin Order created for Encounter Id :{EncounterID}"
+        );
     }
 }
