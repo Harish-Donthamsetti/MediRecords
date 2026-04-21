@@ -24,11 +24,22 @@ public class AllergyService : IAllergyService
     public async Task CreateAllergyAsync(int patientId, AllergyCreateRequestDto dto, int userId)
     {
         if (string.IsNullOrWhiteSpace(dto.Allergen))
-            throw new MediRecordsException("Allergen is required.");
+            throw new MediRecordsException(Constant.AllergenRequired);
 
+        // check if patient record exists or not
         var patient = await _patientRepo.GetByIdWithDetailsAsync(patientId);
         if (patient == null)
-            throw new MediRecordsException("Patient not found.");
+            throw new KeyNotFoundException(Constant.PatientMessages.PatientNotFound);
+        
+        // Check only the assigned primary provider is dealing/accessing the patient
+        _authService.EnsurePrimaryProviderAccess(patient, userId);
+
+        // Checks if allergy already exists in database (prevents duplicacy)
+        var exists = patient.Allergies.Any(a =>
+            a.Allergen == dto.Allergen && a.Status == AllergyStatus.Active);
+
+        if (exists)
+            throw new MediRecordsException(Constant.AllergyExists);
 
         var allergy = new Allergy
         {

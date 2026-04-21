@@ -27,14 +27,26 @@ public class ProblemListService : IProblemListService
     {
         
         if (string.IsNullOrWhiteSpace(dto.Diagnosis))
-            throw new MediRecordsException("Diagnosis is required.");
+            throw new MediRecordsException(Constant.DiagnosisRequired);
 
         if (dto.StartDate > DateTime.UtcNow)
-            throw new MediRecordsException("Start date cannot be in the future.");
+            throw new MediRecordsException(Constant.StartDateValidation);
 
+        if (dto.EndDate.HasValue && dto.EndDate < dto.StartDate)
+            throw new MediRecordsException(Constant.EndDateValidation);
+
+        // check if patient record exists or not
         var patient = await _patientRepo.GetByIdWithDetailsAsync(patientId);
         if (patient == null)
-            throw new MediRecordsException("Patient not found.");
+            throw new KeyNotFoundException(Constant.PatientMessages.PatientNotFound);
+
+        // Check only assigned primary provider is accessing the patient 
+        _authService.EnsurePrimaryProviderAccess(patient, userId);
+
+        // Checks if problem list already exists in database (prevents duplicacy)
+        var exists = patient.ProblemLists.Any(m => m.Diagnosis == dto.Diagnosis || (m.StartDate == dto.StartDate && m.EndDate == dto.EndDate));
+        if (exists)
+            throw new MediRecordsException(Constant.MedicalHistoryExists);
 
         var problem = new ProblemList
         {

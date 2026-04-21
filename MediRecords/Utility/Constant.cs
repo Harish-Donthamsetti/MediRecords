@@ -64,6 +64,29 @@
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
+		
+		public const string AllergyExists = "Allergy already exists for this patient.";
+
+		public const string MedicalHistoryExists = "Medical history entry already exists.";
+
+		public const string AllergenRequired = "Allergen is required.";
+
+		public const string DiagnosisRequired = "Diagnosis is required.";
+
+		public const string ConditionRequired = "Condition is required.";
+
+		public const string StartDateValidation = "Start date cannot be in the future.";
+
+		public const string EndDateValidation = "End date cannot be earlier than start date.";
+
+		public const string ExceedLength = "Notes exceed allowed length.";
+
+		public const string Notes = "Notes are required";
+
+		public const string StudyType = "StudyType Required";
+
+		public const string ImagingOrderAlreadyExists = "Imaging Order Already Exists";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
@@ -115,8 +138,20 @@
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
 			public const string InvalidProviderId = "The providerId is not a physician.";
-
 		}
-	}
 
+		public static class SOAPNoteMessages
+		{
+			public const string InvalidEncounterId = "Invalid encounter ID.";
+			public const string EncounterNotFound = "Encounter not found.";
+			public const string EncounterLocked = "This encounter is locked. SOAP note cannot be saved.";
+			public const string HPIRequired = "HPI (History of Present Illness) is required.";
+			public const string SOAPNoteSaved = "SOAP note saved as draft successfully.";
+			public const string SOAPNoteSigned = "SOAP note signed and locked successfully.";
+			public const string SOAPNoteNotFound = "SOAP note not found.";
+			public const string SOAPNoteLocked = "This SOAP note is signed and locked. It cannot be modified.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
+
+	}
 }

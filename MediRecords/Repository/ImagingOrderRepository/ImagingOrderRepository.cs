@@ -14,10 +14,16 @@ public class ImagingOrderRepository : IImagingOrderRepository
         _context = context;
     }
 
+    /// <summary>
+    /// Validates the existence and status of an encounter before asynchronously adding a new imaging order.
+    /// </summary>
+    /// <param name="order">The imaging order entity to be added.</param>
+    /// <exception cref="KeyNotFoundException">Thrown when the associated encounter does not exist.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the encounter is closed (Status is 0).</exception>
     public async Task AddAsync(ImagingOrder order)
     {
         var encounter = await _context.Encounters
-            .Select(e => new { e.EncounterId, e.Status }) 
+            .Select(e => new { e.EncounterId, e.Status })
             .FirstOrDefaultAsync(e => e.EncounterId == order.EncounterId);
 
         if (encounter == null)
@@ -30,6 +36,13 @@ public class ImagingOrderRepository : IImagingOrderRepository
             throw new InvalidOperationException(Constant.EncounterClosed);
         }
 
+        bool imagingOrderExists = await _context.ImagingOrders.AnyAsync(o => o.EncounterId == order.EncounterId && o.StudyType == order.StudyType && o.Status);
+
+
+        if (imagingOrderExists)
+        {
+            throw new InvalidOperationException(Constant.ImagingOrderAlreadyExists);
+        }
         await _context.ImagingOrders.AddAsync(order);
         await _context.SaveChangesAsync();
     }
@@ -44,8 +57,10 @@ public class ImagingOrderRepository : IImagingOrderRepository
         if (filter.EncounterID.HasValue)
             query = query.Where(x => x.EncounterId == filter.EncounterID);
 
-        if (!string.IsNullOrWhiteSpace(filter.StudyType))
-            query = query.Where(x => x.StudyType.Contains(filter.StudyType));
+        if (filter.StudyType.HasValue)
+        {
+            query = query.Where(x => x.StudyType == filter.StudyType.Value);
+        }
 
         if (!string.IsNullOrWhiteSpace(filter.Notes))
             query = query.Where(x => x.Notes.Contains(filter.Notes));
@@ -57,6 +72,6 @@ public class ImagingOrderRepository : IImagingOrderRepository
             query = query.Where(x => x.Status == filter.Status);
 
         return await query.ToListAsync();
-    
+
     }
 }

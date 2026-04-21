@@ -30,6 +30,8 @@ using MediRecords.Services.AllergyServices;
 using MediRecords.Repository.AllergyRepository;
 using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +39,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        b=>b.MigrationsAssembly("MediRecords")
+        builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
  
@@ -104,6 +105,9 @@ builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
 builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
+
+builder.Services.AddScoped<ISOAPNoteRepository, SOAPNoteRepository>();
+builder.Services.AddScoped<ISOAPNoteService, SOAPNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
