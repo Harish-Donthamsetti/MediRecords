@@ -38,15 +38,15 @@ namespace MediRecords.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync(int EncounterId,[FromBody] ImagingOrderRequestDto dto)
+        public async Task<ActionResult> CreateAsync(int EncounterId,[FromBody] ImagingOrderRequestDto imagingDto)
         {
-            if (dto == null){
+            if (imagingDto == null){
                 return BadRequest(Constant.RequestCannotBeNull);
             }   
             try
             {
                 var userIdClaim = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.AddAsync(EncounterId,dto,userIdClaim);
+                await _service.AddAsync(EncounterId,imagingDto,userIdClaim);
                 return StatusCode(StatusCodes.Status201Created, Constant.OrderCreated);
             }
             catch (ArgumentException ex)

@@ -1,11 +1,7 @@
 using System;
 using System.Text.Json;
 using MediRecords.Domain.Entities;
-<<<<<<< HEAD
 using MediRecords.Dto.ImagingOrderDto;
-=======
-using MediRecords.Dto.ImagingOrdertDto;
->>>>>>> MRP-80
 using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Services.AuthServices;
 using MediRecords.Utility;

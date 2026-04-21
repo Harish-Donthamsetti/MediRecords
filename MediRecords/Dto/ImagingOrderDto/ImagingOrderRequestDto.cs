@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using MediRecords.Domain.Enums;
 
-namespace MediRecords.Dto.ImagingOrdertDto;
+namespace MediRecords.Dto.ImagingOrderDto;
 
 public class ImagingOrderRequestDto
 {

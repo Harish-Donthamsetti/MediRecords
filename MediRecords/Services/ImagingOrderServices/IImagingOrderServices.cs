@@ -1,10 +1,6 @@
 using System;
-<<<<<<< HEAD
 using MediRecords.Domain.Entities;
 using MediRecords.Dto.ImagingOrderDto;
-=======
-using MediRecords.Dto.ImagingOrdertDto;
->>>>>>> MRP-80
 namespace MediRecords.Services.ImagingOrderServices;
 
 public interface IImagingOrderServices
