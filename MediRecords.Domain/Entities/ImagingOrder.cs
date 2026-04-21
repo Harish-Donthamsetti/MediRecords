@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Xsl;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities;
 
@@ -16,7 +17,7 @@ public class ImagingOrder
     public int EncounterId { get; set; }
 
     [Column(TypeName = "VARCHAR(100)")]
-    public string StudyType { get; set; } = null!;
+    public ImagingOrderStudyType StudyType { get; set; }
 
     [Column(TypeName = "VARCHAR(MAX)")]
     public string? Notes { get; set; }

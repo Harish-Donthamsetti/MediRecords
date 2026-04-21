@@ -1,15 +1,16 @@
 using MediRecords.Domain.Entities;
 using MediRecords.Dto.ImagingOrderDto;
-using MediRecords.Dto.ImagingOrderRequestDto;
+using System.Security.Claims;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Utility;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediRecords.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ImagingOrderController : ControllerBase
     {
@@ -19,20 +20,33 @@ namespace MediRecords.Controllers
         {
             _service = service;
         }
-
-        [HttpPost]
+        /// <summary>
+        /// Handles the HTTP POST request to create a new imaging order.
+        /// This endpoint validates the request, ensures the user is authorized, 
+        /// and manages exception-to-status-code mapping.
+        /// </summary>
+        /// <param name="dto">The imaging order data transfer object containing request details.</param>
+        /// <returns>
+        /// A 201 Created response on success; 
+        /// 400 Bad Request if validation fails; 
+        /// 404 Not Found if the encounter is missing; 
+        /// 409 Conflict if the encounter is closed; 
+        /// or 500 Internal Server Error for unhandled exceptions.
+        /// </returns>
+        [HttpPost("{EncounterId}")]
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync([FromBody] ImagingOrderRequestDto dto)
+        public async Task<ActionResult> CreateAsync(int EncounterId,[FromBody] ImagingOrderRequestDto imagingDto)
         {
-            if (dto == null)
+            if (imagingDto == null){
                 return BadRequest(Constant.RequestCannotBeNull);
-
+            }   
             try
             {
-                await _service.AddAsync(dto);
+                var userIdClaim = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                await _service.AddAsync(EncounterId,imagingDto,userIdClaim);
                 return StatusCode(StatusCodes.Status201Created, Constant.OrderCreated);
             }
             catch (ArgumentException ex)

@@ -5,6 +5,6 @@ namespace MediRecords.Services.ImagingReportServices;
 
 public interface IImagingReportServices
 {
-    Task CreateReportAsync(ImagingReportRequestDto dto);
+    Task CreateReportAsync(int ImagingOrderID,ImagingReportRequestDto dto);
 
 }

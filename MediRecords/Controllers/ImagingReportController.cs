@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediRecords.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ImagingReportController : ControllerBase
     {
@@ -18,19 +18,19 @@ namespace MediRecords.Controllers
             _service = service;
 
         }
-        [HttpPost]
+        [HttpPost("{ImagingOrderID}")]
         [Authorize(Roles = Constant.LabTech)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync([FromBody] ImagingReportRequestDto dto)
+        public async Task<ActionResult> CreateAsync([FromQuery] int ImagingOrderID, [FromBody] ImagingReportRequestDto dto)
         {
             if (dto == null) return BadRequest(Constant.RequestCannotBeNull);
 
             try
             {
-                await _service.CreateReportAsync(dto);
+                await _service.CreateReportAsync(ImagingOrderID,dto);
                 return StatusCode(StatusCodes.Status201Created, Constant.ReportCreated);
             }
             catch (ArgumentException ex)

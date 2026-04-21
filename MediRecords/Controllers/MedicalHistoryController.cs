@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Microsoft.Extensions.FileProviders;
 
 namespace MediRecords.Controllers
 {
@@ -26,13 +27,28 @@ namespace MediRecords.Controllers
         [HttpPost("{patientId}/medical-history")]
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddMedicalHistory(int patientId, MedicalHistoryCreateRequestDto dto)
         {
+            if(!ModelState.IsValid || dto == null)
+            {
+                return BadRequest(ModelState);
+            }
+            
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             try {
                 await _medicalHistoryService.CreateMedicalHistoryAsync(patientId, dto, userId);
                 return Ok(Constant.MedicalHistoryCreated);
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch(MediRecordsException ex)
             {

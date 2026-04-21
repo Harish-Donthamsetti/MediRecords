@@ -11,19 +11,21 @@ public class ImagingReportServices : IImagingReportServices
 {
     private readonly IImagingReportRepository _repo;
 
-    public ImagingReportServices(IImagingReportRepository repo) => _repo = repo;
+    public ImagingReportServices(IImagingReportRepository repo)
+    {
+        _repo = repo;
+    }
 
-    public async Task CreateReportAsync(ImagingReportRequestDto dto)
+    public async Task CreateReportAsync(int ImagingOrderID,ImagingReportRequestDto dto)
     {
         if (dto.Findings == null || dto.Findings.Count == 0)
             throw new ArgumentException(Constant.InvalidFindings);
 
-        // Serialize Dictionary to JSON String for VARCHAR(MAX) column
         string jsonFindings = JsonSerializer.Serialize(dto.Findings);
 
         var report = new ImagingReport
         {
-            ImagingOrderId = dto.ImagingOrderID,
+            ImagingOrderId = ImagingOrderID,
             Findings = jsonFindings,
             Impression = dto.Impression,
             ReportDate = DateTime.UtcNow,

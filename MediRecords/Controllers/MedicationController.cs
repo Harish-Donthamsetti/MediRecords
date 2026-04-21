@@ -36,9 +36,9 @@ public class MedicationController : ControllerBase
             }
             return Ok(result);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500, new { message = Constant.InternalError });
+            return StatusCode(500, new { message = Constant.InternalError + ex.Message });
         }
     }
 }
