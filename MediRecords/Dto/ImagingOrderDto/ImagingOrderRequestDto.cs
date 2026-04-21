@@ -7,8 +7,8 @@ public class ImagingOrderRequestDto
 {
     [Required]
     [EnumDataType(typeof(ImagingOrderStudyType))]
-    public ImagingOrderStudyType StudyType { get; set; }
+    public ImagingOrderStudyType? StudyType { get; set; }
 
     [Required]
-    public string Notes { get; set; }
+    public string? Notes { get; set; }
 }

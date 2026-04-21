@@ -44,7 +44,7 @@ public class ImagingOrderServices : IImagingOrderServices
         var order = new ImagingOrder
         {
             EncounterId = EncounterID,
-            StudyType = dto.StudyType,
+            StudyType = dto.StudyType!.Value,
             Notes = dto.Notes,
             OrderedDate = DateTime.UtcNow,
             Status = true
