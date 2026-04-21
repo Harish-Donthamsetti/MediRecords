@@ -1,6 +1,8 @@
-using MediRecords.Dto.ImagingOrdertDto;
+using System.Security.Claims;
+using MediRecords.Dto.ImagingOrderDto;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Utility;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,19 +32,20 @@ namespace MediRecords.Controllers
         /// 409 Conflict if the encounter is closed; 
         /// or 500 Internal Server Error for unhandled exceptions.
         /// </returns>
-        [HttpPost]
+        [HttpPost("{EncounterId}")]
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync([FromBody] ImagingOrderRequestDto dto)
+        public async Task<ActionResult> CreateAsync(int EncounterId,[FromBody] ImagingOrderRequestDto dto)
         {
-            if (dto == null)
+            if (dto == null){
                 return BadRequest(Constant.RequestCannotBeNull);
-
+            }   
             try
             {
-                await _service.AddAsync(dto);
+                var userIdClaim = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                await _service.AddAsync(EncounterId,dto,userIdClaim);
                 return StatusCode(StatusCodes.Status201Created, Constant.OrderCreated);
             }
             catch (ArgumentException ex)
