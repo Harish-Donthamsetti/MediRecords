@@ -89,7 +89,7 @@ public class LabOrderController : ControllerBase
     /// </summary>
     /// <param name="encounterId">The numeric ID of the encounter.</param>
     /// <returns>Returns a list of lab orders for the encounter or a not found error.</returns>
-    [HttpGet("encounter/{encounterId}")]
+    [HttpGet("{encounterId}")]
     [Authorize]
     [ProducesResponseType(typeof(IEnumerable<LabOrderResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
