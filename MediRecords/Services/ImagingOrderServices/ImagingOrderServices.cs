@@ -32,7 +32,7 @@ public class ImagingOrderServices : IImagingOrderServices
         {
             throw new ArgumentException(Constant.InvalidEncounterId);
         }
-        if(dto.StudyType == null)
+        if(dto.StudyType < 0)
         {
             throw new ArgumentException(Constant.StudyType);
         }
@@ -51,7 +51,7 @@ public class ImagingOrderServices : IImagingOrderServices
         await _repo.AddAsync(order);
         await _authService.SaveAuditLog(
             userId,
-            $"Imagin Order created for Encounter Id :{EncounterID}"
+            $"Imaging Order created for Encounter Id :{EncounterID}"
         );
     }
 }
