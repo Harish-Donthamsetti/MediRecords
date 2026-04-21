@@ -10,7 +10,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace MediRecords.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class MedicalHistoryController : ControllerBase
     {
