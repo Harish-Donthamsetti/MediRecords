@@ -87,6 +87,8 @@
 
 		public const string ImagingOrderAlreadyExists = "Imaging Order Already Exists";
 
+		public const string ImagingOrderNotExists = "Imaging Order does not exists with these filters";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
