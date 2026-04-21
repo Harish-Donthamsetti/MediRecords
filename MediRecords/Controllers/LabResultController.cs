@@ -61,7 +61,7 @@ public class LabResultController : ControllerBase
     /// </summary>
     /// <param name="id">The numeric ID of the lab result.</param>
     /// <returns>Returns the lab result details or a not found error.</returns>
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [Authorize]
     [ProducesResponseType(typeof(LabResultResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -87,7 +87,7 @@ public class LabResultController : ControllerBase
     /// </summary>
     /// <param name="labOrderId">The numeric ID of the lab order.</param>
     /// <returns>Returns a list of lab results for the lab order or a not found error.</returns>
-    [HttpGet("laborder/{labOrderId}")]
+    [HttpGet("laborder/{labOrderId:int}")]
     [Authorize]
     [ProducesResponseType(typeof(IEnumerable<LabResultResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

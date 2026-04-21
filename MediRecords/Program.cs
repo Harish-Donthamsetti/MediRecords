@@ -127,6 +127,10 @@ builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
 builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
+builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
+builder.Services.AddScoped<ILabOrderService, LabOrderService>();
+builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
+builder.Services.AddScoped<ILabResultService, LabResultService>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
