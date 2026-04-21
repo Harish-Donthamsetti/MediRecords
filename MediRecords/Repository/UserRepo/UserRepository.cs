@@ -108,7 +108,7 @@ public class UserRepository : IUserRepository
     public async Task SoftDeleteUserByIdAsync(int id)
     {
         var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserId == id && u.Status) ?? throw new KeyNotFoundException(Constant.Admin);
+            .FirstOrDefaultAsync(u => u.UserId == id && u.Status) ?? throw new KeyNotFoundException(Constant.UserUpdate.UserStatus);
         user.Status = false;
         await _context.SaveChangesAsync();
     }

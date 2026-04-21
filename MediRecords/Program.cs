@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore; 
-using MediRecords.Domain.Entities;   
+using MediRecords.Domain.Entities;   
 using MediRecords.Services.AuthServices;
 using MediRecords.Services.UserServices;
 using MediRecords.Repository;
@@ -8,7 +8,7 @@ using MediRecords.Repository.UserRepo;
 using MediRecords.Repository.MedicationRepository;
 using MediRecords.Services.MedicationServices;
 using MediRecords.Repository.PrescriptionItemRepository;
-using MediRecords.Services.PrescriptionItemServices;
+using MediRecords.Services.PrescriptionItemServices; 
 using Microsoft.OpenApi;
 using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
@@ -33,9 +33,10 @@ using MediRecords.Repository.MedicalHistoryRepository;
 using MediRecords.Services.PrescriptionService;
 using MediRecords.Repository.PrescriptionRepository;
 
+
 var builder = WebApplication.CreateBuilder(args);
-
-
+ 
+ 
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
@@ -118,6 +119,7 @@ builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionItemRepository, PrescriptionItemRepository>();
 builder.Services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
+ 
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
@@ -128,7 +130,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapControllers();
 }
-
+  
 app.UseHttpsRedirection();
  
 // Authentication and Authorization

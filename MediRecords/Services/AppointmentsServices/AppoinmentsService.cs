@@ -17,6 +17,10 @@ public class AppointmentsService : IAppointmentsService
 
     public async Task<AppointmentsResponseDto> BookAppointmentAsync(AppointmentsRequestDto dto)
     {
+        if(dto.DateTime < DateTime.Now)
+        {
+            throw new ArgumentException("You can not book appointment in the past");
+        }
         // Guard clauses for required IDs
         if (dto.PatientId <= 0)
             throw new ArgumentException("PatientId is required");
@@ -25,12 +29,17 @@ public class AppointmentsService : IAppointmentsService
             throw new ArgumentException("ProviderId is required");
 
         // Patient check
-        if (!await _context.Patients.AnyAsync(p => p.PatientId == dto.PatientId))
+        if (!await _context.Patients.AnyAsync(p => p.PatientId == dto.PatientId && p.Status == 0))
             throw new ArgumentException("Patient not found");
 
         // Provider check + duration
+
+        var requestedDate = dto.DateTime.Date;
+
         var providerSchedule = await _context.ProviderSchedules
-            .FirstOrDefaultAsync(pr => pr.ProviderId == dto.ProviderId);
+            .FirstOrDefaultAsync(pr => pr.ProviderId == dto.ProviderId && pr.StartTime.Date == requestedDate);
+
+        Console.WriteLine(providerSchedule);
 
         if (providerSchedule == null)
             throw new ArgumentException("Provider not found");
@@ -42,7 +51,7 @@ public class AppointmentsService : IAppointmentsService
             dto.DateTime < a.DateTime.AddMinutes(providerSchedule.SlotDuration) &&
             dto.DateTime.AddMinutes(providerSchedule.SlotDuration) > a.DateTime);
 
-        if (slotTaken)
+        if (slotTaken || providerSchedule.Status == false)
             throw new InvalidOperationException("Provider slot unavailable");
 
         // Create appointment

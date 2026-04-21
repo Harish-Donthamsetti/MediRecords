@@ -46,13 +46,24 @@
 
 		public const string DeleteSucess = "User deleted Successfully";
 
+		public const string PatientIdRequired = "PatientId is doesnot exiat";
+		public const string ProviderIdRequired = "ProviderId is doesnot exist";
+
+		// Validation & Error Messages
+		public const string RequestCannotBeNull = "Request body cannot be null.";
+		public const string InvalidEncounterId = "Provide a valid EncounterId.";
+		public const string EncounterNotFound = "The specified Encounter does not exist.";
+		public const string EncounterClosed = "Cannot add imaging orders to a closed encounter.";
+
+		// Success & General Responses
+		public const string OrderCreated = "Order created successfully.";
+		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
+
 		public const string ProblemCreated = "Problem Added Successfully";
 
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
-		public const string PatientIdRequired="PatientId is doesnot exiat";
-		public const string ProviderIdRequired="ProviderId is doesnot exist";
 		
 		public const string AllergyExists = "Allergy already exists for this patient.";
 
@@ -75,6 +86,7 @@
 			public const string UpdateUserRequest = "Update request cannot be null.";
 			public const string InvalidUserId = "Invalid UserID.";
 			public const string UserNotFound = "User not found.";
+			public const string UserStatus = "User not found or User is already deleted";
 			public const string NameRequired = "Name is required.";
 			public const string PhoneRequired = "Phone number is required.";
 			public const string InvalidRoleId = "Invalid RoleID.";
@@ -106,7 +118,8 @@
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
 
-		public static class PatientMessages {
+		public static class PatientMessages
+		{
 			public const string RequestNull = "Request body cannot be null.";
 			public const string RequiredFields = "Required Field are missing";
 			public const string NameRequired = "Patient name is required.";
@@ -118,10 +131,21 @@
 			public const string PatientNotFound = "Patient not found";
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
-			public const string InvalidProviderId= "The providerId is not a physician.";
-			public const string NoSuchPrimaryProvider = "No primary provider is assigned to this patient.";
-			public const string UnauthorizedAccess = "You are not authorized to access this patient's clinical data.";
+			public const string InvalidProviderId = "The providerId is not a physician.";
 		}
-	}
 
+		public static class SOAPNoteMessages
+		{
+			public const string InvalidEncounterId = "Invalid encounter ID.";
+			public const string EncounterNotFound = "Encounter not found.";
+			public const string EncounterLocked = "This encounter is locked. SOAP note cannot be saved.";
+			public const string HPIRequired = "HPI (History of Present Illness) is required.";
+			public const string SOAPNoteSaved = "SOAP note saved as draft successfully.";
+			public const string SOAPNoteSigned = "SOAP note signed and locked successfully.";
+			public const string SOAPNoteNotFound = "SOAP note not found.";
+			public const string SOAPNoteLocked = "This SOAP note is signed and locked. It cannot be modified.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
+
+	}
 }
