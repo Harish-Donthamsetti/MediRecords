@@ -22,6 +22,18 @@ using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
+using MediRecords.Repository.ImagingOrderRepository;
+using MediRecords.Services.ImagingOrderServices;
+using MediRecords.Services.ProblemListServices;
+using MediRecords.Repository.ProblemListRepository;
+using MediRecords.Services.AllergyServices;
+using MediRecords.Repository.AllergyRepository;
+using MediRecords.Services.MedicalHistoryServices;
+using MediRecords.Repository.MedicalHistoryRepository;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
+using MediRecords.Repository.ImagingRepo;
+using MediRecords.Services.ImagingServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,17 +101,28 @@ builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 builder.Services.AddScoped<IMedicationService, MedicationService>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
-
 builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
 builder.Services.AddScoped<IEncounterService, EncounterService>();
 builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
 builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
-builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
- 
+
+builder.Services.AddScoped<ISOAPNoteRepository, SOAPNoteRepository>();
+builder.Services.AddScoped<ISOAPNoteService, SOAPNoteService>();
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
+builder.Services.AddScoped<IImagingOrderServices,ImagingOrderServices>();
+builder.Services.AddScoped<IProblemListService, ProblemListService>();
+builder.Services.AddScoped<IProblemListRepository, ProblemListRepository>();
+builder.Services.AddScoped<IAllergyService, AllergyService>();
+builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
+builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
+builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
+builder.Services.AddScoped<IImagingService, ImagingService>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.
@@ -110,7 +133,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapControllers();
 }
- 
+
 app.UseHttpsRedirection();
  
 // Authentication and Authorization

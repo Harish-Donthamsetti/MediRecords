@@ -8,6 +8,7 @@ using MediRecords.Dto.UserDtos;
 using MediRecords.Repositories;
 using BCrypt.Net;
 using MediRecords.Dto.LoginDtos;
+using MediRecords.Utility;
 
 namespace MediRecords.Services.AuthServices;
 
@@ -81,6 +82,7 @@ public class AuthService : IAuthService
         {
             new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name,user.Name)
 
         };
         if (!string.IsNullOrWhiteSpace(user.RoleIdNavigation?.Name))
@@ -112,5 +114,18 @@ public class AuthService : IAuthService
     public string GenerateRefreshToken()
     {
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+    }
+
+    public void EnsurePrimaryProviderAccess(Patient patient, int loggedInUserId)
+    {
+        if(patient.PrimaryProviderId == null)
+        {
+            throw new UnauthorizedAccessException(Constant.PatientMessages.NoSuchPrimaryProvider);
+        }
+
+        if(patient.PrimaryProviderId != loggedInUserId)
+        {
+            throw new UnauthorizedAccessException(Constant.PatientMessages.UnauthorizedAccess);
+        }
     }
 }

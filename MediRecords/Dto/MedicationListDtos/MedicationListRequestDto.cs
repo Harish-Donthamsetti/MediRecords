@@ -6,6 +6,7 @@ public class MedicationListRequestDto
 {
     public int? PatientId { get; set; }
     public int? MedId { get; set; }
+    public string? PatientName { get; set; }
     public string? DrugName { get; set; }
     public string? Dose { get; set; }
     public string? Frequency { get; set; }

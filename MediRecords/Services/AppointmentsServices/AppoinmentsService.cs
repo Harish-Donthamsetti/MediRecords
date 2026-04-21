@@ -31,7 +31,7 @@ public class AppointmentsService : IAppointmentsService
             throw new ArgumentException("ProviderId is required");
 
         // Patient check
-        if (!await _context.Patients.AnyAsync(p => p.PatientId == dto.PatientId))
+        if (!await _context.Patients.AnyAsync(p => p.PatientId == dto.PatientId && p.Status == 0))
             throw new ArgumentException("Patient not found");
 
         // Provider check + duration
