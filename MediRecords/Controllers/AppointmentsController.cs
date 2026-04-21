@@ -38,5 +38,21 @@ namespace MediRecords.Controllers
                 return Conflict(new { message = ex.Message });
             }
         }
+
+        // Unified GET endpoint with flexible filters
+        [HttpGet]
+        public async Task<IActionResult> GetAppointments(
+            [FromQuery] int? id,
+            [FromQuery] int? patientId,
+            [FromQuery] int? providerId,
+            [FromQuery] string? date)
+        {
+            var response = await _appointmentService.GetAppointmentsAsync(id, patientId, providerId, date);
+
+            if (id.HasValue && response.Count == 0)
+                return NotFound(new { message = "Appointment not found" });
+
+            return Ok(response);
+        }
     }
 }
