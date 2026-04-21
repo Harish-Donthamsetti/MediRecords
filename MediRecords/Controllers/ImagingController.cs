@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediRecords.Controllers;
 
-[Route("api/v1/imaging")]
+[Route("api/v1/[controller]")]
 [ApiController]
 public class ImagingController : ControllerBase
 {
@@ -17,10 +17,6 @@ public class ImagingController : ControllerBase
         _imagingService = imagingService;
     }
 
-    /// <summary>
-    /// Returns all imaging reports for a given imaging order.
-    /// </summary>
-    /// <param name="orderId">The Imaging Order ID.</param>
     [Authorize(Roles = Constant.Physician)]
     [HttpGet("orders/{orderId}/reports")]
     [ProducesResponseType(typeof(IEnumerable<ImagingReportResponseDto>), StatusCodes.Status200OK)]
