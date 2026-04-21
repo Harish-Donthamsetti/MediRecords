@@ -132,6 +132,8 @@
 			public const string ProviderNotFound = "Primary provider does not exist.";
 			public const string DuplicatePatient = "Patient already exists with the given phone number and date of birth.";
 			public const string InvalidProviderId = "The providerId is not a physician.";
+			public const string NoSuchPrimaryProvider = "This patient does not have a primary provider assigned.";
+			public const string UnauthorizedAccess = "You are not authorized to access this patient's records.";
 		}
 
 		public static class SOAPNoteMessages
