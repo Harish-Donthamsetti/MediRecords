@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using MediRecords.Dto.ImagingOrdertDto;
+using MediRecords.Dto.ImagingOrderDto;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Utility;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;

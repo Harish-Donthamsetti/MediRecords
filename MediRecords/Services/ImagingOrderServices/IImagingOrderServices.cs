@@ -1,5 +1,5 @@
 using System;
-using MediRecords.Dto.ImagingOrdertDto;
+using MediRecords.Dto.ImagingOrderDto;
 namespace MediRecords.Services.ImagingOrderServices;
 
 public interface IImagingOrderServices

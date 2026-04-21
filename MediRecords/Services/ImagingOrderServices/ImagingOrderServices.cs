@@ -1,6 +1,6 @@
 using System;
 using MediRecords.Domain.Entities;
-using MediRecords.Dto.ImagingOrdertDto;
+using MediRecords.Dto.ImagingOrderDto;
 using MediRecords.Repository.ImagingOrderRepository;
 using MediRecords.Services.AuthServices;
 using MediRecords.Utility;
@@ -43,7 +43,7 @@ public class ImagingOrderServices : IImagingOrderServices
         var order = new ImagingOrder
         {
             EncounterId = EncounterID,
-            StudyType = dto.StudyType,
+            StudyType = dto.StudyType!.Value,
             Notes = dto.Notes,
             OrderedDate = DateTime.UtcNow,
             Status = true
