@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediRecords.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AllergyController : ControllerBase
     {
