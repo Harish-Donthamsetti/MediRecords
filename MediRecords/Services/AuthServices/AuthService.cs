@@ -120,12 +120,12 @@ public class AuthService : IAuthService
     {
         if(patient.PrimaryProviderId == null)
         {
-            // throw new UnauthorizedAccessException(Constant.PatientMessages.NoSuchPrimaryProvider);
+            throw new UnauthorizedAccessException(Constant.PatientMessages.NoSuchPrimaryProvider);
         }
 
         if(patient.PrimaryProviderId != loggedInUserId)
         {
-            // throw new UnauthorizedAccessException(Constant.PatientMessages.UnauthorizedAccess);
+            throw new UnauthorizedAccessException(Constant.PatientMessages.UnauthorizedAccess);
         }
     }
 }
