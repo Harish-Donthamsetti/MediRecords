@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using MediRecords.Domain.Enums;
 using MediRecords.Dto.LabOrderDtos;
 using MediRecords.Services.LabOrderServices;
 using MediRecords.Utility;
@@ -25,7 +26,7 @@ public class LabOrderController : ControllerBase
     /// <param name="requestDto">The lab order request data transfer object containing lab order details.</param>
     /// <returns>Returns the created lab order or an error message.</returns>
     [HttpPost]
-    [Authorize(Roles = Constant.Physician)]
+    [Authorize(Roles =nameof(UserRoleEnums.Physician))]
     [ProducesResponseType(typeof(LabOrderResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

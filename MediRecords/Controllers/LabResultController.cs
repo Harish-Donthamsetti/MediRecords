@@ -4,6 +4,7 @@ using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Controllers;
 
@@ -24,7 +25,7 @@ public class LabResultController : ControllerBase
     /// <param name="requestDto">The lab result request data transfer object containing result details.</param>
     /// <returns>Returns the created lab result or an error message.</returns>
     [HttpPost]
-    [Authorize(Roles = Constant.LabTech)]
+    [Authorize(Roles = nameof(UserRoleEnums.LabTechnician))]
     [ProducesResponseType(typeof(LabResultResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
