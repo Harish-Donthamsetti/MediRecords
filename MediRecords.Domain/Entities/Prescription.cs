@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Xsl;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities
 {
@@ -20,7 +21,7 @@ namespace MediRecords.Domain.Entities
         
         public DateTime CreatedDate { get; set; }
         
-        public bool Status { get; set; }
+        public PrescriptionStatus Status { get; set; } = PrescriptionStatus.Draft;
 
         public virtual ICollection<PrescriptionItem> PrescriptionItems { get; set; } = new List<PrescriptionItem>();
         
