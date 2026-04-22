@@ -154,6 +154,16 @@
 			public const string SOAPNoteLocked = "This SOAP note is signed and locked. It cannot be modified.";
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
+		public static class CarePlanMessages
+		{
+			public const string PatientIdRequired = "Patient ID is required.";
+			public const string InvalidPatientId = "Invalid patient ID.";
+			public const string PatientNotFound = "Patient not found.";
+			public const string GoalsRequired = "At least one goal is required.";
+			public const string InstructionsRequired = "Instructions are required.";
+			public const string CarePlanCreated = "Care plan created successfully.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
 
 		public static class ImagingMessages
 		{
