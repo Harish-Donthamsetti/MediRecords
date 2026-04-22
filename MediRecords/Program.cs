@@ -33,6 +33,10 @@ using MediRecords.Repository.PrescriptionWithItemsRepository;
 
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
+using MediRecords.Repository.ImagingRepo;
+using MediRecords.Services.ImagingServices;
+using MediRecords.Services.LabOrderServices;
+using MediRecords.Repository.LabOrderRepository;            
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -106,7 +110,7 @@ builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
 builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
-builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile));
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile),typeof(ImagingMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IProblemListService, ProblemListService>();
@@ -115,6 +119,12 @@ builder.Services.AddScoped<IAllergyService, AllergyService>();
 builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
 builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
+builder.Services.AddScoped<IImagingService, ImagingService>();
+builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
+builder.Services.AddScoped<ILabOrderService, LabOrderService>();
+builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
+builder.Services.AddScoped<ILabResultService, LabResultService>();
 builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
 builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
