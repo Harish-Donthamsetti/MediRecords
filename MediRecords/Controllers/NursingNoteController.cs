@@ -8,7 +8,7 @@ using System.Security.Claims;
  
 namespace MediRecords.Controllers;
  
-[Route("api/v1")]
+[Route("api/v1/[controller]")]
 [ApiController]
 [Authorize]
 public class NursingNoteController : ControllerBase
@@ -53,7 +53,7 @@ public class NursingNoteController : ControllerBase
         }
     }
  
-    [HttpPut("nursing-notes/{noteId}")]
+    [HttpPut("{noteId}")]
     [ProducesResponseType(typeof(NursingNoteResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
