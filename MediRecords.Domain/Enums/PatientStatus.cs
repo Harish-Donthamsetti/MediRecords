@@ -2,7 +2,7 @@ namespace MediRecords.Domain.Enums;
 
 public enum PatientStatus 
 { 
-    Active, 
-    Inactive, 
+    Inactive , 
+    Active , 
     Deceased 
 }

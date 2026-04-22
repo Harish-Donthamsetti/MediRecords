@@ -7,8 +7,6 @@ using MediRecords.Repositories;
 using MediRecords.Repository.UserRepo;
 using MediRecords.Repository.MedicationRepository;
 using MediRecords.Services.MedicationServices;
-using MediRecords.Repository.PrescriptionItemRepository;
-using MediRecords.Services.PrescriptionItemServices; 
 using Microsoft.OpenApi;
 using MediRecords.Repository.UserRoleRepository;
 using Microsoft.IdentityModel.Tokens;
@@ -30,9 +28,11 @@ using MediRecords.Services.AllergyServices;
 using MediRecords.Repository.AllergyRepository;
 using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
-using MediRecords.Services.PrescriptionService;
-using MediRecords.Repository.PrescriptionRepository;
+using MediRecords.Services.PrescriptionWithItemsServices;
+using MediRecords.Repository.PrescriptionWithItemsRepository;
 
+using MediRecords.Repository.ImagingRepo;
+using MediRecords.Services.ImagingServices;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -106,7 +106,7 @@ builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
 builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
-builder.Services.AddAutoMapper(typeof(EncounterMappingProfile));
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IProblemListService, ProblemListService>();
@@ -115,10 +115,10 @@ builder.Services.AddScoped<IAllergyService, AllergyService>();
 builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
 builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
-builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
-builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
-builder.Services.AddScoped<IPrescriptionItemRepository, PrescriptionItemRepository>();
-builder.Services.AddScoped<IPrescriptionItemService, PrescriptionItemService>();
+builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
+builder.Services.AddScoped<IImagingService, ImagingService>();
+builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
+builder.Services.AddScoped<IPrescriptionWithItemsRepository, PrescriptionWithItemsRepository>();
  
 var app = builder.Build();
  
