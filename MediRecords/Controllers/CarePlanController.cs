@@ -17,12 +17,7 @@ public class CarePlanController : ControllerBase
     {
         _carePlanService = carePlanService;
     }
-
-    /// <summary>
-    /// Creates a new care plan for a patient with goals and instructions.
-    /// Goals are passed as a list and stored as JSON internally.
     /// Status: false = Active | true = Completed
-    /// </summary>
     [Authorize(Roles = Constant.Physician)]
     [HttpPost]
     [ProducesResponseType(typeof(CarePlanResponseDto), StatusCodes.Status201Created)]
@@ -42,8 +37,7 @@ public class CarePlanController : ControllerBase
 
             return BadRequest(new { message });
         }
-
-        // 201 Created with CarePlanId as per acceptance criteria
+        
         return CreatedAtAction(nameof(CreateCarePlan),
             new { id = data!.CarePlanId }, data);
     }

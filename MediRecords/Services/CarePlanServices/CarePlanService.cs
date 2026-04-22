@@ -21,28 +21,22 @@ public class CarePlanService : ICarePlanService
     {
         try
         {
-            // Validate PatientId
             if (dto.PatientId <= 0)
                 return (false, Constant.CarePlanMessages.InvalidPatientId, null);
 
-            // Validate Goals
             if (dto.Goals == null || dto.Goals.Count == 0 ||
                 dto.Goals.All(g => string.IsNullOrWhiteSpace(g)))
                 return (false, Constant.CarePlanMessages.GoalsRequired, null);
 
-            // Validate Instructions
             if (string.IsNullOrWhiteSpace(dto.Instructions))
                 return (false, Constant.CarePlanMessages.InstructionsRequired, null);
 
-            // Check patient exists
             var patientExists = await _carePlanRepository.PatientExistsAsync(dto.PatientId);
             if (!patientExists)
                 return (false, Constant.CarePlanMessages.PatientNotFound, null);
 
-            // Serialize Goals list to JSON string for storage
             var goalsJson = JsonSerializer.Serialize(dto.Goals);
 
-            // Create CarePlan entity
             var carePlan = new CarePlan
             {
                 PatientId    = dto.PatientId,
@@ -53,7 +47,6 @@ public class CarePlanService : ICarePlanService
 
             var saved = await _carePlanRepository.AddAsync(carePlan);
 
-            // Deserialize GoalsJSON back for response
             var response = new CarePlanResponseDto
             {
                 CarePlanId   = saved.CarePlanId,
@@ -69,7 +62,5 @@ public class CarePlanService : ICarePlanService
         {
             return (false, Constant.CarePlanMessages.SomethingWentWrong, null);
         }
-    }
-
-    
+    }  
 }
