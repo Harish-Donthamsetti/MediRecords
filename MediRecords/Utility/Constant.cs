@@ -172,6 +172,9 @@
 			public const string InvalidAmount = "Amount must be greater than zero.";
 			public const string AmountRequired = "Amount is required.";
 			public const string ChargeUpdated = "Visit charge amount updated successfully.";
+			public const string InvalidPageNumber     = "Page number must be greater than zero.";
+			public const string InvalidPageSize       = "Page size must be between 1 and 100.";
+			public const string InvalidDateRange      = "From date cannot be greater than To date.";
 		}
 	}
 }

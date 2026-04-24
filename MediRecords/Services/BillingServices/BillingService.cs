@@ -115,4 +115,52 @@ public class BillingService : IBillingService
             return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
         }
     }
+    public async Task<(bool Success, string Message, PagedResponseDto<UnbilledEncounterResponseDto>? Data, int StatusCode)>
+        GetUnbilledEncountersAsync(DateTime? fromDate, DateTime? toDate, int? providerId, int page, int pageSize)
+    {
+        try
+        {
+            if (page <= 0)
+                return (false, Constant.BillingMessages.InvalidPageNumber, null, 400);
+
+            if (pageSize <= 0 || pageSize > 100)
+                return (false, Constant.BillingMessages.InvalidPageSize, null, 400);
+
+            if (fromDate.HasValue && toDate.HasValue && fromDate.Value > toDate.Value)
+                return (false, Constant.BillingMessages.InvalidDateRange, null, 400);
+
+            var (encounters, totalCount) = await _billingRepository
+                .GetUnbilledEncountersAsync(fromDate, toDate, providerId, page, pageSize);
+
+            var data = encounters.Select(e => new UnbilledEncounterResponseDto
+            {
+                EncounterId = e.EncounterId,
+                PatientId = e.PatientId,
+                PatientName = e.PatientIdNavigation?.Name ?? "Unknown",
+                ProviderId = e.ProviderId,
+                ProviderName = e.ProviderIdNavigation?.Name ?? "Unknown",
+                VisitType = e.VisitType,
+                Date = e.Date,
+                TotalChargeAmount = e.VisitChargeRefs
+                                       .Where(v => !v.Status)
+                                       .Sum(v => v.Amount),
+                UnbilledChargeCount = e.VisitChargeRefs
+                                       .Count(v => !v.Status)
+            });
+
+            var response = new PagedResponseDto<UnbilledEncounterResponseDto>
+            {
+                Data = data,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
+
+            return (true, string.Empty, response, 200);
+        }
+        catch (Exception)
+        {
+            return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
+        }
+    }
 }
