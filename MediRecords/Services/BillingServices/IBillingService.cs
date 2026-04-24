@@ -10,4 +10,7 @@ public interface IBillingService
 
     Task<(bool Success, string Message, VisitChargeResponseDto? Data, int StatusCode)>
         UpdateVisitChargeAmountAsync(int chargeId, UpdateVisitChargeRequestDto dto);
+    
+    Task<(bool Success, string Message, IEnumerable<VisitChargeResponseDto>? Data, int StatusCode)>
+        GetChargesByEncounterIdAsync(int encounterId);
 }

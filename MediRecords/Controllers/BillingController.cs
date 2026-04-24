@@ -65,4 +65,29 @@ public class BillingController : ControllerBase
             _   => BadRequest(new { message })
         };
     }
+
+    [Authorize(Roles = $"{Constant.Physician},{Constant.Admin}")]
+    [HttpGet("encounters/{id}/charges")]
+    [ProducesResponseType(typeof(IEnumerable<VisitChargeResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetChargesByEncounterId(int id)
+    {
+        if (id <= 0)
+            return BadRequest(new { message = Constant.BillingMessages.InvalidEncounterId });
+
+        var (success, message, data, statusCode) =
+            await _billingService.GetChargesByEncounterIdAsync(id);
+
+        return statusCode switch
+        {
+            200 => Ok(data),
+            404 => NotFound(new { message }),
+            500 => StatusCode(500, new { message }),
+            _   => BadRequest(new { message })
+        };
+    }
 }

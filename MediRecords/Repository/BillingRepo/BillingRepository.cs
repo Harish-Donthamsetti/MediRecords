@@ -50,4 +50,13 @@ public class BillingRepository : IBillingRepository
         await _context.SaveChangesAsync();
         return charge;
     }
+
+    public async Task<IEnumerable<VisitChargeRef>> GetChargesByEncounterIdAsync(int encounterId)
+    {
+        return await _context.VisitChargeRefs
+            .Include(v => v.ProcedureCodeNavigation)
+            .Where(v => v.EncounterId == encounterId)
+            .OrderBy(v => v.ChargeId)
+            .ToListAsync();
+    }
 }

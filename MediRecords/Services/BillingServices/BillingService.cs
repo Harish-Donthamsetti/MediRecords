@@ -93,4 +93,26 @@ public class BillingService : IBillingService
             return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
         }
     }
+    public async Task<(bool Success, string Message, IEnumerable<VisitChargeResponseDto>? Data, int StatusCode)>
+        GetChargesByEncounterIdAsync(int encounterId)
+    {
+        try
+        {
+            if (encounterId <= 0)
+                return (false, Constant.BillingMessages.InvalidEncounterId, null, 400);
+
+            var encounterExists = await _billingRepository.EncounterExistsAsync(encounterId);
+            if (!encounterExists)
+                return (false, Constant.BillingMessages.EncounterNotFound, null, 404);
+
+            var charges  = await _billingRepository.GetChargesByEncounterIdAsync(encounterId);
+            var response = _mapper.Map<IEnumerable<VisitChargeResponseDto>>(charges);
+
+            return (true, string.Empty, response, 200);
+        }
+        catch (Exception)
+        {
+            return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
+        }
+    }
 }
