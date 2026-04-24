@@ -34,6 +34,8 @@ using MediRecords.Repository.SOAPNoteRepo;
 using MediRecords.Services.SOAPNoteService;
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
+using MediRecords.Repository.BillingRepo;
+using MediRecords.Services.BillingServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,7 +112,7 @@ builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
 
 builder.Services.AddScoped<ISOAPNoteRepository, SOAPNoteRepository>();
 builder.Services.AddScoped<ISOAPNoteService, SOAPNoteService>();
-builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile));
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile),typeof(BillingMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
@@ -123,6 +125,8 @@ builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
 builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
+builder.Services.AddScoped<IBillingRepository, BillingRepository>();
+builder.Services.AddScoped<IBillingService, BillingService>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.

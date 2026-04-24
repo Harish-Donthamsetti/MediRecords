@@ -1,0 +1,11 @@
+using System;
+using MediRecords.Domain.Entities;
+namespace MediRecords.Repository.BillingRepo;
+
+public interface IBillingRepository
+{
+    Task<bool> EncounterExistsAsync(int encounterId);
+    Task<ProcedureCode?> GetProcedureCodeByIdAsync(int codeId);
+    Task<bool> ChargeExistsAsync(int encounterId, int codeId);
+    Task<VisitChargeRef> AddAsync(VisitChargeRef charge);
+}
