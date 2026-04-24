@@ -24,15 +24,11 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Dto\ImagingOrderDto\" />
-<<<<<<< HEAD
     <Folder Include="Dto\ImagingReportDto\" />
-=======
->>>>>>> MRP-84
     <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
     <Folder Include="Dto\EncounterDtos\Response\" />
-<<<<<<< HEAD
     <Folder Include="MappingProfiles\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\EncounterRepo\" />
@@ -43,7 +39,6 @@
     <Folder Include="Services\EncounterServices\" />
     <Folder Include="Services\ImagingOrderServices\" />
     <Folder Include="Services\ImagingReportServices\" />
-=======
     <Folder Include="Dto\ProblemListDtos\" />
     <Folder Include="Dto\SOAPNoteDtos\" />
     <Folder Include="Dto\SOAPNoteDtos\Request\" />
@@ -62,7 +57,6 @@
     <Folder Include="Services\ProblemListServices\" />
     <Folder Include="Services\SOAPNoteService\" />
     <Folder Include="Services\ImagingOrderServices\" />
->>>>>>> MRP-84
     <Folder Include="Utility\TokenUtility\" />
     <Folder Include="Services\UserServices\" />
   </ItemGroup>

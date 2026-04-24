@@ -20,10 +20,11 @@ public class ImagingReport
     [Column(TypeName = "VARCHAR(100)")]
     public string Impression { get; set; } = null!;
 
+    [Column(TypeName = "VARCHAR(MAX)")]
+    public string? AttachmentPath { get; set; }
+
     public DateTime ReportDate { get; set; }
 
     public bool Status { get; set; }
-
-    /*-------------------------Foreign Key References--------------------------------*/
     public virtual ImagingOrder? ImagingOrderIdNavigation { get; set; }
 }

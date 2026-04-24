@@ -7,7 +7,7 @@ public class UserRegisterRequestDto
 {   
     /* This is the data transfer object (DTO) for user registration. It contains the necessary properties required to create a new user in the system. The data is coming from the client while registering */
     public required string Name { get; set; }
-    public required int RoleId { get; set; }
+    public required UserRole RoleId { get; set; }
     public required string Email { get; set; }
     public string? Phone { get; set; }
     public required string Password { get; set; }

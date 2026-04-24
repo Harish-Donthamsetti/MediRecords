@@ -24,7 +24,7 @@ namespace MediRecords.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync([FromQuery] int ImagingOrderID, [FromBody] ImagingReportRequestDto dto)
+        public async Task<ActionResult> CreateAsync([FromRoute] int ImagingOrderID, [FromForm] ImagingReportRequestDto dto)
         {
             if (dto == null) return BadRequest(Constant.RequestCannotBeNull);
 

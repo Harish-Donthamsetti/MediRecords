@@ -18,9 +18,16 @@ public class ImagingReportServices : IImagingReportServices
 
     public async Task CreateReportAsync(int ImagingOrderID,ImagingReportRequestDto dto)
     {
-        if (dto.Findings == null || dto.Findings.Count == 0)
+        if (dto.Findings == null)
             throw new ArgumentException(Constant.InvalidFindings);
 
+        string? savedFilePath = null;
+        if (dto.ReportFile != null && dto.ReportFile.Length > 0)
+        {
+            savedFilePath = await _repo.SaveFileAsync(dto.ReportFile);
+        }
+
+        
         string jsonFindings = JsonSerializer.Serialize(dto.Findings);
 
         var report = new ImagingReport
@@ -28,6 +35,7 @@ public class ImagingReportServices : IImagingReportServices
             ImagingOrderId = ImagingOrderID,
             Findings = jsonFindings,
             Impression = dto.Impression,
+            AttachmentPath = savedFilePath,
             ReportDate = DateTime.UtcNow,
             Status = true
         };

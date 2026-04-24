@@ -6,5 +6,5 @@ public class ImagingReportRequestDto
 {
     public Dictionary<string, string> Findings { get; set; } = new(); 
     public string Impression { get; set; } = null!;
-
+    public FormFile? ReportFile {get;set;}
 }
