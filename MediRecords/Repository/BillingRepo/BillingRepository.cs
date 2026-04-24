@@ -110,4 +110,34 @@ public class BillingRepository : IBillingRepository
         await _context.AuditLogs.AddAsync(auditLog);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<VisitChargeRef>> GetChargesForExportAsync(
+        string status, DateTime? fromDate, DateTime? toDate)
+    {
+        var query = _context.VisitChargeRefs
+            .Include(v => v.ProcedureCodeNavigation)
+            .Include(v => v.EncounterIdNavigation)
+                .ThenInclude(e => e!.PatientIdNavigation)
+            .AsQueryable();
+
+        // Filter by status
+        query = status.ToLower() switch
+        {
+            "unbilled" => query.Where(v => !v.Status),  // false = Unbilled
+            "billed"   => query.Where(v => v.Status),   // true  = Billed
+            _          => query                          // All
+        };
+
+        // Filter by date range on encounter date
+        if (fromDate.HasValue)
+            query = query.Where(v => v.EncounterIdNavigation!.Date >= fromDate.Value.Date);
+
+        if (toDate.HasValue)
+            query = query.Where(v =>
+                v.EncounterIdNavigation!.Date <= toDate.Value.Date.AddDays(1).AddTicks(-1));
+
+        return await query
+            .OrderBy(v => v.EncounterIdNavigation!.Date)
+            .ToListAsync();
+    }
 }
