@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediRecords.Controllers;
 
 [Route("api/v1/[controller]")]
+[Authorize]
 [ApiController]
 public class CarePlanController : ControllerBase
 {
