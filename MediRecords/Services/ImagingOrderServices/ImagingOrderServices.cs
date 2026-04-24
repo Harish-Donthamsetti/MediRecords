@@ -86,9 +86,7 @@ public class ImagingOrderServices : IImagingOrderServices
                 Impression = r.Impression,
                 ReportDate = r.ReportDate,
                 Status = r.Status,
-                Findings = string.IsNullOrWhiteSpace(r.Findings)
-                    ? new Dictionary<string, string>()
-                    : JsonSerializer.Deserialize<Dictionary<string, string>>(r.Findings) ?? new()
+                Findings = r.Findings
             }).ToList()
         }).ToList();
     }

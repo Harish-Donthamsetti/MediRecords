@@ -7,7 +7,7 @@ namespace MediRecords.Domain.Entities;
 public class SOAPNote
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int NoteId { get; set; }
     
     [Required]

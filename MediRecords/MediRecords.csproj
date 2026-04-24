@@ -24,6 +24,10 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Dto\ImagingOrderDto\" />
+    <Folder Include="Dto\AllergyDtos\" />
+    <Folder Include="Dto\ImagingDtos\" />
+    <Folder Include="Dto\ImagingDtos\Response\" />
+    <Folder Include="Dto\MedicalHistoryDtos\" />
     <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
@@ -35,6 +39,7 @@
     <Folder Include="MappingProfiles\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\EncounterRepo\" />
+    <Folder Include="Repository\ImagingRepo\" />
     <Folder Include="Repository\MedicalHistoryRepository\" />
     <Folder Include="Repository\ProblemListRepository\" />
     <Folder Include="Repository\SOAPNoteRepo\" />
@@ -42,6 +47,7 @@
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\EncounterServices\" />
+    <Folder Include="Services\ImagingServices\" />
     <Folder Include="Services\MedicalHistoryServices\" />
     <Folder Include="Services\ProblemListServices\" />
     <Folder Include="Services\SOAPNoteService\" />

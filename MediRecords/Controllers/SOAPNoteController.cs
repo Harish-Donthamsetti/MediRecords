@@ -26,12 +26,12 @@ public class SOAPNoteController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> SaveSOAPNote(int id, [FromBody] SaveSOAPNoteRequestDto dto)
+    public async Task<IActionResult> SaveSOAPNote([FromBody] SaveSOAPNoteRequestDto dto)
     {
-        if (id <= 0)
+        if (dto.EncounterId <= 0)
             return BadRequest(new { message = Constant.SOAPNoteMessages.InvalidEncounterId });
 
-        var (success, message, data) = await _soapNoteService.SaveSOAPNoteAsync(id, dto);
+        var (success, message, data) = await _soapNoteService.SaveSOAPNoteAsync(dto.EncounterId, dto);
 
         if (!success)
         {
