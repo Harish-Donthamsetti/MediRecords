@@ -5,7 +5,7 @@ namespace MediRecords.Domain.Enums;
 public enum ImagingOrderStudyType
 {
     
-    Xray,
+    Xray = 1,
     CT,
     MRI,
     UltraSound
