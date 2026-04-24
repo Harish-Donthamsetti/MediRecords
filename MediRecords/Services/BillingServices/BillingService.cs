@@ -62,4 +62,35 @@ public class BillingService : IBillingService
             return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
         }
     }
+    public async Task<(bool Success, string Message, VisitChargeResponseDto? Data, int StatusCode)>
+        UpdateVisitChargeAmountAsync(int chargeId, UpdateVisitChargeRequestDto dto)
+    {
+        try
+        {
+            // Validate ChargeId
+            if (chargeId <= 0)
+                return (false, Constant.BillingMessages.InvalidChargeId, null, 400);
+
+            // Validate Amount
+            if (dto.Amount <= 0)
+                return (false, Constant.BillingMessages.InvalidAmount, null, 400);
+
+            // Check charge exists
+            var charge = await _billingRepository.GetChargeByIdAsync(chargeId);
+            if (charge == null)
+                return (false, Constant.BillingMessages.ChargeNotFound, null, 404);
+
+            // Update amount
+            charge.Amount = dto.Amount;
+
+            var updated  = await _billingRepository.UpdateAsync(charge);
+            var response = _mapper.Map<VisitChargeResponseDto>(updated);
+
+            return (true, Constant.BillingMessages.ChargeUpdated, response, 200);
+        }
+        catch (Exception)
+        {
+            return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
+        }
+    }
 }

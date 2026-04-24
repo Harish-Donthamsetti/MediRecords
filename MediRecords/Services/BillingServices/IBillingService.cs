@@ -7,4 +7,7 @@ public interface IBillingService
 {
     Task<(bool Success, string Message, VisitChargeResponseDto? Data, int StatusCode)>
        AssignVisitChargeAsync(AssignVisitChargeRequestDto dto);
+
+    Task<(bool Success, string Message, VisitChargeResponseDto? Data, int StatusCode)>
+        UpdateVisitChargeAmountAsync(int chargeId, UpdateVisitChargeRequestDto dto);
 }

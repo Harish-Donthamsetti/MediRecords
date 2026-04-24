@@ -42,4 +42,27 @@ public class BillingController : ControllerBase
             _   => BadRequest(new { message })
         };
     }
+
+    [Authorize(Roles = Constant.Admin)]
+    [HttpPut("visit-charges/{id}")]
+    [ProducesResponseType(typeof(VisitChargeResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateVisitChargeAmount(
+        int id, [FromBody] UpdateVisitChargeRequestDto dto)
+    {
+        var (success, message, data, statusCode) =
+            await _billingService.UpdateVisitChargeAmountAsync(id, dto);
+
+        return statusCode switch
+        {
+            200 => Ok(data),
+            404 => NotFound(new { message }),
+            500 => StatusCode(500, new { message }),
+            _   => BadRequest(new { message })
+        };
+    }
 }

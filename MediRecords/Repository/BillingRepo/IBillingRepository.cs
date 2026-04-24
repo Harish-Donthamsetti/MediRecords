@@ -8,4 +8,6 @@ public interface IBillingRepository
     Task<ProcedureCode?> GetProcedureCodeByIdAsync(int codeId);
     Task<bool> ChargeExistsAsync(int encounterId, int codeId);
     Task<VisitChargeRef> AddAsync(VisitChargeRef charge);
+    Task<VisitChargeRef?> GetChargeByIdAsync(int chargeId);
+    Task<VisitChargeRef> UpdateAsync(VisitChargeRef charge);
 }
