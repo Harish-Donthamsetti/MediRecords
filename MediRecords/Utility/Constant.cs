@@ -175,6 +175,8 @@
 			public const string InvalidPageNumber     = "Page number must be greater than zero.";
 			public const string InvalidPageSize       = "Page size must be between 1 and 100.";
 			public const string InvalidDateRange      = "From date cannot be greater than To date.";
+			public const string ChargeIdsRequired     = "At least one charge ID is required.";
+    		public const string ChargesMarkedBilled   = "Charges processed successfully.";
 		}
 	}
 }

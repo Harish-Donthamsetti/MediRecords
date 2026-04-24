@@ -16,4 +16,7 @@ public interface IBillingService
     
     Task<(bool Success, string Message, PagedResponseDto<UnbilledEncounterResponseDto>? Data, int StatusCode)>
         GetUnbilledEncountersAsync(DateTime? fromDate, DateTime? toDate, int? providerId, int page, int pageSize);
+
+    Task<(bool Success, string Message, MarkBilledResponseDto? Data, int StatusCode)>
+        MarkChargesAsBilledAsync(MarkChargesBilledRequestDto dto, int userId);
 }

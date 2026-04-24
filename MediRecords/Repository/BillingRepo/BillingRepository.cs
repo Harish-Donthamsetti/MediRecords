@@ -92,4 +92,22 @@ public class BillingRepository : IBillingRepository
 
         return (encounters, totalCount);
     }
+     public async Task<List<VisitChargeRef>> GetChargesByIdsAsync(List<int> chargeIds)
+    {
+        return await _context.VisitChargeRefs
+            .Where(v => chargeIds.Contains(v.ChargeId))
+            .ToListAsync();
+    }
+
+    public async Task UpdateRangeAsync(List<VisitChargeRef> charges)
+    {
+        _context.VisitChargeRefs.UpdateRange(charges);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddAuditLogAsync(AuditLog auditLog)
+    {
+        await _context.AuditLogs.AddAsync(auditLog);
+        await _context.SaveChangesAsync();
+    }
 }

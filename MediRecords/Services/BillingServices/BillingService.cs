@@ -163,4 +163,53 @@ public class BillingService : IBillingService
             return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
         }
     }
+    public async Task<(bool Success, string Message, MarkBilledResponseDto? Data, int StatusCode)>
+        MarkChargesAsBilledAsync(MarkChargesBilledRequestDto dto, int userId)
+    {
+        try
+        {
+            if (dto.ChargeIds == null || dto.ChargeIds.Count == 0)
+                return (false, Constant.BillingMessages.ChargeIdsRequired, null, 400);
+
+            var distinctIds = dto.ChargeIds.Distinct().ToList();
+
+            var charges = await _billingRepository.GetChargesByIdsAsync(distinctIds);
+
+            var foundIds      = charges.Select(c => c.ChargeId).ToList();
+            var notFoundIds   = distinctIds.Except(foundIds).ToList();
+            var alreadyBilled = charges.Where(c => c.Status).Select(c => c.ChargeId).ToList();
+            var toBill        = charges.Where(c => !c.Status).ToList(); // false = Unbilled
+
+            toBill.ForEach(c => c.Status = true);
+
+            if (toBill.Any())
+            {
+                await _billingRepository.UpdateRangeAsync(toBill);
+
+                var auditLog = new AuditLog
+                {
+                    UserId = userId,
+                    Action = "MarkAsBilled",
+                    Resource = $"VisitChargeRefs: [{string.Join(",", toBill.Select(c => c.ChargeId))}]",
+                    TimeStamp = DateTime.UtcNow
+                };
+
+                await _billingRepository.AddAuditLogAsync(auditLog);
+            }
+
+            var response = new MarkBilledResponseDto
+            {
+                MarkedAsBilled = toBill.Select(c => c.ChargeId).ToList(),
+                AlreadyBilled  = alreadyBilled,
+                NotFound = notFoundIds,
+                Message = Constant.BillingMessages.ChargesMarkedBilled
+            };
+
+            return (true, Constant.BillingMessages.ChargesMarkedBilled, response, 200);
+        }
+        catch (Exception)
+        {
+            return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
+        }
+    }
 }
