@@ -62,4 +62,11 @@ public class LabOrderRepository : ILabOrderRepository
 
         return await query.OrderByDescending(lo => lo.OrderDate).ToListAsync();
     }
+
+    public async Task<LabOrder> UpdateLabOrderAsync(LabOrder labOrder)
+    {
+        _context.LabOrders.Update(labOrder);
+        await _context.SaveChangesAsync();
+        return labOrder;
+    }
 }

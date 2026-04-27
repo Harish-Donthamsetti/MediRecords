@@ -53,6 +53,14 @@ public class LabOrderController : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = Constant.InternalError, error = ex.Message });
@@ -112,24 +120,32 @@ public class LabOrderController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves lab orders with optional filters.
+    /// Updates the status of a lab order. Only lab technicians can update lab order status.
     /// </summary>
-    /// <param name="filters">The filter criteria for lab orders.</param>
-    /// <returns>Returns a list of lab orders matching the filters or a not found error.</returns>
-    [HttpGet]
-    [Authorize]
-    [ProducesResponseType(typeof(IEnumerable<LabOrderResponseDto>), StatusCodes.Status200OK)]
+    /// <param name="id">The ID of the lab order to update.</param>
+    /// <param name="status">The new status for the lab order (true for Completed, false for Ordered).</param>
+    /// <returns>Returns the updated lab order or an error message.</returns>
+    [HttpPut("{id:int}/status")]
+    [Authorize(Roles = nameof(UserRoleEnums.LabTechnician))]
+    [ProducesResponseType(typeof(LabOrderResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetLabOrders([FromQuery] LabOrderRequestDto filters)
+    public async Task<IActionResult> UpdateLabOrderStatus(int id, [FromBody] bool status)
     {
         try
         {
-            var result = await _labOrderService.GetLabOrdersAsync(filters);
-            if (result == null || !result.Any())
-                return NotFound(new { message = "No lab orders found matching the provided filters." });
-
+            var result = await _labOrderService.UpdateLabOrderStatusAsync(id, status);
             return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
         }
         catch (Exception ex)
         {

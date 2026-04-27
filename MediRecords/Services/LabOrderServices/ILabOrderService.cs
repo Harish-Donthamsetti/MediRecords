@@ -8,4 +8,5 @@ public interface ILabOrderService
     Task<LabOrderResponseDto?> GetLabOrderByIdAsync(int labOrderId);
     Task<IEnumerable<LabOrderResponseDto>> GetLabOrdersByEncounterIdAsync(int encounterId);
     Task<IEnumerable<LabOrderResponseDto>> GetLabOrdersAsync(LabOrderRequestDto filter);
+    Task<LabOrderResponseDto> UpdateLabOrderStatusAsync(int labOrderId, bool status);
 }

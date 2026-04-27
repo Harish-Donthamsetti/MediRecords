@@ -14,4 +14,6 @@ public enum UserRoleEnums
     LabTechnician,
     [EnumMember(Value = "FrontDesk")]
     FrontDesk
+
+    
 }
