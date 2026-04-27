@@ -30,6 +30,9 @@
     <Folder Include="Dto\AllergyDtos\" />
     <Folder Include="Dto\ImagingDtos\" />
     <Folder Include="Dto\ImagingDtos\Response\" />
+    <Folder Include="Dto\CarePlanDtos\" />
+    <Folder Include="Dto\CarePlanDtos\Request\" />
+    <Folder Include="Dto\CarePlanDtos\Response\" />
     <Folder Include="Dto\MedicalHistoryDtos\" />
     <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Dto\EncounterDtos\" />
@@ -42,6 +45,8 @@
     <Folder Include="MappingProfiles\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\BillingRepo\" />
+    <Folder Include="Repository\AllergyRepository\" />
+    <Folder Include="Repository\CarePlanRepo\" />
     <Folder Include="Repository\EncounterRepo\" />
     <Folder Include="Repository\ImagingRepo\" />
     <Folder Include="Repository\MedicalHistoryRepository\" />

@@ -36,6 +36,12 @@ using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
 using MediRecords.Repository.BillingRepo;
 using MediRecords.Services.BillingServices;
+using MediRecords.Repository.LabOrderRepository;
+using MediRecords.Services.LabOrderServices;
+using MediRecords.Repository.LabResultRepository;
+using MediRecords.Services.LabResultServices;
+using MediRecords.Repository.CarePlanRepo;
+using MediRecords.Services.CarePlanServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,6 +133,12 @@ builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
 builder.Services.AddScoped<IBillingRepository, BillingRepository>();
 builder.Services.AddScoped<IBillingService, BillingService>();
+builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
+builder.Services.AddScoped<ILabOrderService, LabOrderService>();
+builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
+builder.Services.AddScoped<ILabResultService, LabResultService>();
+builder.Services.AddScoped<ICarePlanRepository, CarePlanRepository>();
+builder.Services.AddScoped<ICarePlanService, CarePlanService>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.

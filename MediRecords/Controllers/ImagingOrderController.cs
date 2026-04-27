@@ -1,6 +1,9 @@
-using MediRecords.Dto.ImagingOrdertDto;
+using MediRecords.Domain.Entities;
+using MediRecords.Dto.ImagingOrderDto;
+using System.Security.Claims;
 using MediRecords.Services.ImagingOrderServices;
 using MediRecords.Utility;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,19 +33,21 @@ namespace MediRecords.Controllers
         /// 409 Conflict if the encounter is closed; 
         /// or 500 Internal Server Error for unhandled exceptions.
         /// </returns>
-        [HttpPost]
+        [HttpPost("{EncounterId}")]
         [Authorize(Roles = Constant.Physician)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> CreateAsync([FromBody] ImagingOrderRequestDto dto)
+        public async Task<ActionResult> CreateAsync(int EncounterId, [FromBody] ImagingOrderRequestDto imagingDto)
         {
-            if (dto == null)
+            if (imagingDto == null)
+            {
                 return BadRequest(Constant.RequestCannotBeNull);
-
+            }
             try
             {
-                await _service.AddAsync(dto);
+                var userIdClaim = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                await _service.AddAsync(EncounterId, imagingDto, userIdClaim);
                 return StatusCode(StatusCodes.Status201Created, Constant.OrderCreated);
             }
             catch (ArgumentException ex)
@@ -52,6 +57,37 @@ namespace MediRecords.Controllers
             catch (InvalidOperationException ex)
             {
                 return Conflict(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, Constant.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves imaging orders based on the provided filter criteria.
+        /// </summary>
+        /// <param name="filter">
+        /// Query parameters used to filter imaging orders.
+        /// </param>
+        /// <returns>
+        /// Returns a list of imaging orders if found; otherwise, a not found response.
+        /// </returns>
+        [HttpGet]
+        [Authorize(Roles = Constant.Physician)]
+        [ProducesResponseType(typeof(List<ImagingOrder>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> GetAllAsync([FromQuery] ImagingOrderFilterDto filter)
+        {
+            try
+            {
+                var results = await _service.GetAllAsync(filter);
+                return Ok(results);
             }
             catch (KeyNotFoundException ex)
             {
