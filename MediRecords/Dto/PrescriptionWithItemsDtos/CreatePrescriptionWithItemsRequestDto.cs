@@ -22,7 +22,7 @@ public class PrescriptionItemCreateDto
     public string? Instructions { get; set; }
 }
 
-public class CreatePrescriptionWithItemsRequest
+public class CreatePrescriptionWithItemsRequestDto
 {
     [Required]
     public int EncounterId { get; set; }

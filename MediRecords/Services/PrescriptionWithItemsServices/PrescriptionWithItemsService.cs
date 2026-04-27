@@ -1,6 +1,7 @@
 using MediRecords.Dto.PrescriptionWithItemsDtos;
 using MediRecords.Repository.PrescriptionWithItemsRepository;
 using MediRecords.Utility;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Services.PrescriptionWithItemsServices;
 
@@ -13,15 +14,28 @@ public class PrescriptionWithItemsService : IPrescriptionWithItemsService
         _repository = repository;
     }
 
-    public async Task<PrescriptionWithItemsResponse> CreatePrescriptionWithItemsAsync(CreatePrescriptionWithItemsRequest request)
+    public async Task<PrescriptionWithItemsResponseDto> CreatePrescriptionWithItemsAsync(CreatePrescriptionWithItemsRequestDto request)
     {
         if (request == null)
             throw new MediRecordsException(Constant.RequestNull);
 
+        if(request.EncounterId <= 0)
+            throw new MediRecordsException("Invalid encounter ID.");
+
+        var encounter = await _repository.GetEncounterByIdAsync(request.EncounterId);
+        if (encounter == null)
+            throw new MediRecordsException("Encounter not found.");
+
+        if(request.PrescriptionItems.Any(pi => pi.DurationDays <= 0))
+            throw new MediRecordsException("Duration days must be greater than zero for all prescription items.");
+
+        if(request.PrescriptionItems.Any(pi => !string.IsNullOrWhiteSpace(pi.Frequency) && string.IsNullOrWhiteSpace(pi.Route)))
+            throw new MediRecordsException("Route is required when frequency is provided for a prescription item.");
+
         return await _repository.CreatePrescriptionWithItemsAsync(request);
     }
 
-    public async Task<PrescriptionWithItemsResponse?> GetPrescriptionWithItemsByIdAsync(int prescriptionId)
+    public async Task<PrescriptionWithItemsResponseDto?> GetPrescriptionWithItemsByIdAsync(int prescriptionId)
     {
         if (prescriptionId <= 0)
             throw new MediRecordsException("Invalid prescription ID.");
@@ -29,12 +43,12 @@ public class PrescriptionWithItemsService : IPrescriptionWithItemsService
         return await _repository.GetPrescriptionWithItemsByIdAsync(prescriptionId);
     }
 
-    public async Task<IEnumerable<PrescriptionWithItemsResponse>> GetAllPrescriptionsWithItemsAsync()
+    public async Task<IEnumerable<PrescriptionWithItemsResponseDto>> GetAllPrescriptionsWithItemsAsync()
     {
         return await _repository.GetAllPrescriptionsWithItemsAsync();
     }
 
-    public async Task<PrescriptionWithItemsResponse> UpdatePrescriptionWithItemsAsync(int prescriptionId, UpdatePrescriptionWithItemsRequest request)
+    public async Task<PrescriptionWithItemsResponseDto> UpdatePrescriptionWithItemsAsync(int prescriptionId, UpdatePrescriptionWithItemsRequestDto request)
     {
         if (request == null)
             throw new MediRecordsException(Constant.RequestNull);

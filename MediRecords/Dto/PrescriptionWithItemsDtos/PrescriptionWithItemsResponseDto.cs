@@ -15,7 +15,7 @@ public class PrescriptionItemWithPrescriptionResponseDto
     public string? Instructions { get; set; }
 }
 
-public class PrescriptionWithItemsResponse
+public class PrescriptionWithItemsResponseDto
 {
     public int PrescriptionId { get; set; }
     public int EncounterId { get; set; }
@@ -25,7 +25,7 @@ public class PrescriptionWithItemsResponse
     public List<PrescriptionItemWithPrescriptionResponseDto> PrescriptionItems { get; set; } = new();
 }
 
-public class UpdatePrescriptionWithItemsRequest
+public class UpdatePrescriptionWithItemsRequestDto
 {
     [Required]
     public int ProviderId { get; set; }

@@ -14,7 +14,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
         _context = context;
     }
 
-    public async Task<PrescriptionWithItemsResponse> CreatePrescriptionWithItemsAsync(CreatePrescriptionWithItemsRequest request)
+    public async Task<PrescriptionWithItemsResponseDto> CreatePrescriptionWithItemsAsync(CreatePrescriptionWithItemsRequestDto request)
     {
         try
         {
@@ -35,7 +35,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
                 throw new InvalidOperationException($"Encounter with ID {request.EncounterId} not found.");
 
             if (encounter.Status != Domain.Enums.EncounterStatus.Open)
-                throw new InvalidOperationException($"Encounter status is {encounter.Status}, but must be Open (status=1) to create prescriptions.");
+                throw new InvalidOperationException($"Encounter status is {encounter.Status}, but must be Open to create prescriptions.");
 
             // Parse status string to enum
             var prescriptionStatus = Enum.Parse<PrescriptionStatus>(request.Status ?? "Draft", ignoreCase: true);
@@ -83,7 +83,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
         _context.Prescriptions.Add(prescription);
         await _context.SaveChangesAsync();
 
-        return new PrescriptionWithItemsResponse
+        return new PrescriptionWithItemsResponseDto
         {
             PrescriptionId = prescription.PrescriptionId,
             EncounterId = prescription.EncounterId,
@@ -113,7 +113,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
         }
     }
 
-    public async Task<PrescriptionWithItemsResponse?> GetPrescriptionWithItemsByIdAsync(int prescriptionId)
+    public async Task<PrescriptionWithItemsResponseDto?> GetPrescriptionWithItemsByIdAsync(int prescriptionId)
     {
         var prescription = await _context.Prescriptions
             .Include(p => p.PrescriptionItems)
@@ -122,7 +122,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
         if (prescription == null)
             return null;
 
-        return new PrescriptionWithItemsResponse
+        return new PrescriptionWithItemsResponseDto
         {
             PrescriptionId = prescription.PrescriptionId,
             EncounterId = prescription.EncounterId,
@@ -148,13 +148,13 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
         return await _context.Encounters.FindAsync(encounterId);
     }
 
-    public async Task<IEnumerable<PrescriptionWithItemsResponse>> GetAllPrescriptionsWithItemsAsync()
+    public async Task<IEnumerable<PrescriptionWithItemsResponseDto>> GetAllPrescriptionsWithItemsAsync()
     {
         var prescriptions = await _context.Prescriptions
             .Include(p => p.PrescriptionItems)
             .ToListAsync();
 
-        return prescriptions.Select(p => new PrescriptionWithItemsResponse
+        return prescriptions.Select(p => new PrescriptionWithItemsResponseDto
         {
             PrescriptionId = p.PrescriptionId,
             EncounterId = p.EncounterId,
@@ -175,7 +175,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
         }).ToList();
     }
 
-    public async Task<PrescriptionWithItemsResponse> UpdatePrescriptionWithItemsAsync(int prescriptionId, UpdatePrescriptionWithItemsRequest request)
+    public async Task<PrescriptionWithItemsResponseDto> UpdatePrescriptionWithItemsAsync(int prescriptionId, UpdatePrescriptionWithItemsRequestDto request)
     {
         if (request == null)
             throw new ArgumentNullException(nameof(request));
@@ -254,7 +254,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
             _context.Prescriptions.Update(prescription);
             await _context.SaveChangesAsync();
 
-            return new PrescriptionWithItemsResponse
+            return new PrescriptionWithItemsResponseDto
             {
                 PrescriptionId = prescription.PrescriptionId,
                 EncounterId = prescription.EncounterId,

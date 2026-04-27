@@ -6,27 +6,28 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MediRecords.Domain.Entities;
 using MediRecords.Repository.PrescriptionWithItemsRepository;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Controllers;
 
 [Route("api/v1/[controller]")]
+[Authorize]
 [ApiController]
 public class PrescriptionWithItemsController : ControllerBase
 {
     private readonly IPrescriptionWithItemsService _service;
 
-    public PrescriptionWithItemsController(MediRecordsDbContext context)
+    public PrescriptionWithItemsController(IPrescriptionWithItemsService service)
     {
-        var repository = new MediRecords.Repository.PrescriptionWithItemsRepository.PrescriptionWithItemsRepository(context);
-        _service = new PrescriptionWithItemsService(repository);
+        _service = service;
     }
 
     [HttpPost]
-    [Authorize]
-    [ProducesResponseType(typeof(PrescriptionWithItemsResponse), StatusCodes.Status201Created)]
+    [Authorize(Roles = nameof(UserRoleEnums.Physician))]
+    [ProducesResponseType(typeof(PrescriptionWithItemsResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreatePrescriptionWithItems([FromBody] CreatePrescriptionWithItemsRequest request)
+    public async Task<IActionResult> CreatePrescriptionWithItems([FromBody] CreatePrescriptionWithItemsRequestDto request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -55,8 +56,8 @@ public class PrescriptionWithItemsController : ControllerBase
     }
 
     [HttpGet("{prescriptionId}")]
-    [Authorize]
-    [ProducesResponseType(typeof(PrescriptionWithItemsResponse), StatusCodes.Status200OK)]
+    [Authorize(Roles = nameof(UserRoleEnums.Physician) + "," + nameof(UserRoleEnums.FrontDesk) + "," + nameof(UserRoleEnums.Nurse))]
+    [ProducesResponseType(typeof(PrescriptionWithItemsResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetPrescriptionWithItemsById(int prescriptionId)
@@ -80,8 +81,8 @@ public class PrescriptionWithItemsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
-    [ProducesResponseType(typeof(IEnumerable<PrescriptionWithItemsResponse>), StatusCodes.Status200OK)]
+    [Authorize(Roles = nameof(UserRoleEnums.Physician) + "," + nameof(UserRoleEnums.FrontDesk))]
+    [ProducesResponseType(typeof(IEnumerable<PrescriptionWithItemsResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllPrescriptionsWithItems()
     {
@@ -97,12 +98,12 @@ public class PrescriptionWithItemsController : ControllerBase
     }
 
     [HttpPut("{prescriptionId}")]
-    [Authorize]
-    [ProducesResponseType(typeof(PrescriptionWithItemsResponse), StatusCodes.Status200OK)]
+    [Authorize(Roles = nameof(UserRoleEnums.Physician))]
+    [ProducesResponseType(typeof(PrescriptionWithItemsResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdatePrescriptionWithItems(int prescriptionId, [FromBody] UpdatePrescriptionWithItemsRequest request)
+    public async Task<IActionResult> UpdatePrescriptionWithItems(int prescriptionId, [FromBody] UpdatePrescriptionWithItemsRequestDto request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -131,7 +132,7 @@ public class PrescriptionWithItemsController : ControllerBase
     }
 
     [HttpDelete("{prescriptionId}")]
-    [Authorize]
+    [Authorize(Roles = nameof(UserRoleEnums.Admin))]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]

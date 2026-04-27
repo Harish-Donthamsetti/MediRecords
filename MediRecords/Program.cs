@@ -36,7 +36,9 @@ using MediRecords.Services.ImagingServices;
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
 using MediRecords.Services.LabOrderServices;
-using MediRecords.Repository.LabOrderRepository;            
+using MediRecords.Repository.LabOrderRepository;
+using MediRecords.Services.LabResultServices;
+using MediRecords.Repository.LabResultRepository;
 
 var builder = WebApplication.CreateBuilder(args);
  
