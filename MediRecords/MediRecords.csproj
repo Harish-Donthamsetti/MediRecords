@@ -30,6 +30,7 @@
     <Folder Include="Dto\CarePlanDtos\" />
     <Folder Include="Dto\CarePlanDtos\Request\" />
     <Folder Include="Dto\CarePlanDtos\Response\" />
+    <Folder Include="Dto\ImmunizationDtos\" />
     <Folder Include="Dto\MedicalHistoryDtos\" />
     <Folder Include="Dto\MedicationListDtos\" />
     <Folder Include="Dto\EncounterDtos\" />
@@ -45,6 +46,7 @@
     <Folder Include="Repository\CarePlanRepo\" />
     <Folder Include="Repository\EncounterRepo\" />
     <Folder Include="Repository\ImagingRepo\" />
+    <Folder Include="Repository\ImmunizationRepository\" />
     <Folder Include="Repository\MedicalHistoryRepository\" />
     <Folder Include="Repository\ProblemListRepository\" />
     <Folder Include="Repository\SOAPNoteRepo\" />
@@ -53,6 +55,7 @@
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\EncounterServices\" />
     <Folder Include="Services\ImagingServices\" />
+    <Folder Include="Services\ImmunizationService\" />
     <Folder Include="Services\MedicalHistoryServices\" />
     <Folder Include="Services\ProblemListServices\" />
     <Folder Include="Services\SOAPNoteService\" />
