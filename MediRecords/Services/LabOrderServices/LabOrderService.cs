@@ -23,12 +23,12 @@ public class LabOrderService : ILabOrderService
         _authService = authService;
     }
 
-    public async Task<LabOrderResponseDto> CreateLabOrderAsync(LabOrderRequestDto requestDto, int providerId)
+    public async Task<LabOrderResponseDto> CreateLabOrderAsync(LabOrderCreateRequestDto requestDto, int providerId)
     {
         if (requestDto == null)
             throw new ArgumentNullException(nameof(requestDto));
 
-        if (!requestDto.EncounterId.HasValue)
+        if (requestDto.EncounterId <= 0)
             throw new ArgumentException("EncounterId is required.");
 
         if (string.IsNullOrWhiteSpace(requestDto.TestJson))
@@ -38,16 +38,16 @@ public class LabOrderService : ILabOrderService
         if (requestDto.OrderDate.HasValue && requestDto.OrderDate.Value.Date < DateTime.UtcNow.Date)
             throw new ArgumentException("OrderDate cannot be in the past.");
 
-        var encounter = await _encounterRepository.GetByIdAsync(requestDto.EncounterId.Value);
+        var encounter = await _encounterRepository.GetByIdAsync(requestDto.EncounterId);
         if (encounter == null)
-            throw new KeyNotFoundException($"Encounter with ID {requestDto.EncounterId.Value} not found.");
+            throw new KeyNotFoundException($"Encounter with ID {requestDto.EncounterId} not found.");
 
         if (encounter.Status != EncounterStatus.Open)
             throw new InvalidOperationException($"Lab orders cannot be created for encounters with status {encounter.Status}.");
 
         var labOrder = new LabOrder
         {
-            EncounterId = requestDto.EncounterId.Value,
+            EncounterId = requestDto.EncounterId,
             OrderedBy = providerId,
             TestJson = requestDto.TestJson,
             OrderDate = requestDto.OrderDate ?? DateTime.UtcNow,
@@ -71,9 +71,9 @@ public class LabOrderService : ILabOrderService
         return labOrders.Select(LabOrderResponseDto.FromEntity);
     }
 
-    public async Task<IEnumerable<LabOrderResponseDto>> GetLabOrdersAsync(LabOrderRequestDto filter)
+    public async Task<IEnumerable<LabOrderResponseDto>> GetLabOrdersAsync(LabOrderFilterRequestDto filter)
     {
-        filter ??= new LabOrderRequestDto();
+        filter ??= new LabOrderFilterRequestDto();
         var labOrders = await _labOrderRepository.GetLabOrdersAsync(filter);
         return labOrders.Select(LabOrderResponseDto.FromEntity);
     }

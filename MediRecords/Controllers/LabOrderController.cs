@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using MediRecords.Domain.Enums;
-using MediRecords.Dto.LabOrderDtos;
+using MediRecords.Dto.LabOrderDtos; 
 using MediRecords.Services.LabOrderServices;
 using MediRecords.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +31,7 @@ public class LabOrderController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateLabOrder([FromBody] LabOrderRequestDto requestDto)
+    public async Task<IActionResult> CreateLabOrder([FromBody] LabOrderCreateRequestDto requestDto)
     {
         if (!ModelState.IsValid || requestDto == null)
         {
@@ -120,13 +120,39 @@ public class LabOrderController : ControllerBase
     }
 
     /// <summary>
+    /// Retrieves lab orders with optional filters.
+    /// </summary>
+    /// <param name="filters">The filter criteria for lab orders.</param>
+    /// <returns>Returns a list of lab orders matching the filters or a not found error.</returns>
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(typeof(IEnumerable<LabOrderResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetLabOrders([FromQuery] LabOrderFilterRequestDto filters)
+    {
+        try
+        {
+            var result = await _labOrderService.GetLabOrdersAsync(filters);
+            if (result == null || !result.Any())
+                return NotFound(new { message = "No lab orders found matching the provided filters." });
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = Constant.InternalError, error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Updates the status of a lab order. Only lab technicians can update lab order status.
     /// </summary>
     /// <param name="id">The ID of the lab order to update.</param>
     /// <param name="status">The new status for the lab order (true for Completed, false for Ordered).</param>
     /// <returns>Returns the updated lab order or an error message.</returns>
     [HttpPut("{id:int}/status")]
-    [Authorize(Roles = nameof(UserRoleEnums.LabTechnician))]
+    [Authorize(Roles = nameof(UserRoleEnums.LabTech))]
     [ProducesResponseType(typeof(LabOrderResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
