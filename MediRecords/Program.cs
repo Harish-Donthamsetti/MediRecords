@@ -30,9 +30,8 @@ using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
 using MediRecords.Services.PrescriptionWithItemsServices;
 using MediRecords.Repository.PrescriptionWithItemsRepository;
-
-using MediRecords.Repository.ImagingRepo;
-using MediRecords.Services.ImagingServices;
+using MediRecords.Repository.DocumentRepository;
+using MediRecords.Services.DocumentServices;
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
 using MediRecords.Services.LabOrderServices;
@@ -131,6 +130,8 @@ builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
 builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
 builder.Services.AddScoped<IPrescriptionWithItemsRepository, PrescriptionWithItemsRepository>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
  
 var app = builder.Build();
  
