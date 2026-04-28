@@ -23,6 +23,7 @@
  
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Dto\FollowUpDtos\" />
     <Folder Include="Dto\ImagingOrderDto\" />
     <Folder Include="Dto\AllergyDtos\" />
     <Folder Include="Dto\ImagingDtos\" />
@@ -45,6 +46,7 @@
     <Folder Include="Repository\AllergyRepository\" />
     <Folder Include="Repository\CarePlanRepo\" />
     <Folder Include="Repository\EncounterRepo\" />
+    <Folder Include="Repository\FollowUpRepository\" />
     <Folder Include="Repository\ImagingRepo\" />
     <Folder Include="Repository\ImmunizationRepository\" />
     <Folder Include="Repository\MedicalHistoryRepository\" />
@@ -54,6 +56,7 @@
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\EncounterServices\" />
+    <Folder Include="Services\FollowUpService\" />
     <Folder Include="Services\ImagingServices\" />
     <Folder Include="Services\ImmunizationService\" />
     <Folder Include="Services\MedicalHistoryServices\" />
