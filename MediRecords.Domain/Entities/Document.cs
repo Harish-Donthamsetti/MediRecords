@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities;
 
@@ -14,18 +15,21 @@ public class Document
     [ForeignKey("PatientIdNavigation")]
     public int PatientID { get; set; }
 
+    [Required]
     [ForeignKey("EncounterIdNavigation")]
-    public int? EncounterID { get; set; }
+    public int EncounterID { get; set; }
 
     [Required]
-    [MaxLength(50)]
-    [Column(TypeName = "varchar(50)")]
-    public string DocType { get; set; } = string.Empty;
+    public DocumentType DocType { get; set; }
 
     [Required]
     [MaxLength(255)]
     [Column(TypeName = "varchar(255)")]
     public string FileURI { get; set; } = string.Empty;
+
+    [MaxLength(255)]
+    [Column(TypeName = "varchar(255)")]
+    public string? FileName { get; set; }
 
     [Required]
     public int UploadedBy { get; set; }
@@ -35,7 +39,9 @@ public class Document
     public DateTime UploadedDate { get; set; }
 
     [Required]
-    public bool Status { get; set; }
+    public DocumentStatus Status { get; set; } = DocumentStatus.Active;
+
+    public bool ProviderOnlyVisibility { get; set; } = false;
 
     public virtual Patient? PatientIdNavigation { get; set; }
     public virtual Encounter? EncounterIdNavigation { get; set; }
