@@ -76,3 +76,6 @@ Migrations
 #
 SqlTestQuries/ Seeding Data.sql
 MediRecords.Domain.sln
+
+# Subfolders inside Documents Folder
+Documents/**
