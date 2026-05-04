@@ -89,6 +89,14 @@
 
 		public const string ImagingOrderNotExists = "Imaging Order does not exists with these filters";
 
+		public const string FutureDate = "Given Date cannot be in future";
+
+		public const string FollowUpDate = "Follow-up date cannot be in the future";
+
+		public const string FollowUpForbidden = "You are not authorized to add follow-ups for this encounter.";
+
+		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
@@ -195,6 +203,9 @@
 			public const string InvalidDateRange      = "From date cannot be greater than To date.";
 			public const string ChargeIdsRequired     = "At least one charge ID is required.";
     		public const string ChargesMarkedBilled   = "Charges processed successfully.";
+			public const string UnsupportedFormat = "Unsupported format. Use 'csv' or 'json'.";
+			public const string UnsupportedStatus = "Unsupported status. Use 'Unbilled', 'Billed' or 'All'.";
+			public const string NoChargesFound = "No charges found for the given filters.";
 		}
 	}
 }
