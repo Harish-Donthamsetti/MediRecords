@@ -47,6 +47,11 @@ public class ImagingOrderRepository : IImagingOrderRepository
         await _context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// fatches imaging orders based on the given filter from db.
+    /// </summary>
+    /// <param name="filter">These filters will be used to fatch imging order</param>
+    /// <returns>Retuns the imaging order based on the filter</returns>
     public async Task<List<ImagingOrder>> GetAllAsync(ImagingOrderFilterDto filter)
     {
         var query = _context.ImagingOrders.Include(x => x.ImagingReports).AsNoTracking().AsQueryable();

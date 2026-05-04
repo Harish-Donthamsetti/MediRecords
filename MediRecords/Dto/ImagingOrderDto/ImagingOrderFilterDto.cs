@@ -11,5 +11,13 @@ public class ImagingOrderFilterDto
     public string? Notes { get; set; }
     public DateTime? OrderedDate { get; set; }
     public bool? Status { get; set; }
-
+    public bool HasAnyValue()
+    {
+        return ImagingOrderID.HasValue
+            || EncounterID.HasValue
+            || StudyType.HasValue
+            || !string.IsNullOrWhiteSpace(Notes)
+            || OrderedDate.HasValue
+            || Status.HasValue;
+    }
 }

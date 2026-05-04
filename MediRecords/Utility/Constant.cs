@@ -94,6 +94,16 @@
 
 		public const string ImagingOrderAlreadyExists = "Imaging Order Already Exists";
 
+		public const string ImagingOrderNotExists = "Imaging Order does not exists with these filters";
+
+		public const string FutureDate = "Given Date cannot be in future";
+
+		public const string FollowUpDate = "Follow-up date cannot be in the future";
+
+		public const string FollowUpForbidden = "You are not authorized to add follow-ups for this encounter.";
+
+		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
@@ -161,6 +171,16 @@
 			public const string SOAPNoteLocked = "This SOAP note is signed and locked. It cannot be modified.";
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
+		public static class CarePlanMessages
+		{
+			public const string PatientIdRequired = "Patient ID is required.";
+			public const string InvalidPatientId = "Invalid patient ID.";
+			public const string PatientNotFound = "Patient not found.";
+			public const string GoalsRequired = "At least one goal is required.";
+			public const string InstructionsRequired = "Instructions are required.";
+			public const string CarePlanCreated = "Care plan created successfully.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
 
 		public static class ImagingMessages
 		{
@@ -168,6 +188,31 @@
 			public const string ImagingOrderNotFound = "Imaging order not found.";
 			public const string NoReportsFound = "No reports found for this imaging order.";
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+		}
+		public static class BillingMessages
+		{
+			public const string EncounterIdRequired = "Encounter ID is required.";
+			public const string CodeIdRequired = "Procedure code ID is required.";
+			public const string InvalidEncounterId = "Invalid encounter ID.";
+			public const string InvalidCodeId = "Invalid procedure code ID.";
+			public const string EncounterNotFound = "Encounter not found.";
+			public const string ProcedureCodeNotFound  = "Procedure code not found.";
+			public const string DuplicateCharge = "This procedure code is already assigned to the encounter.";
+			public const string ChargeCreated = "Visit charge assigned successfully.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+			public const string InvalidChargeId = "Invalid charge ID.";
+			public const string ChargeNotFound = "Visit charge not found.";
+			public const string InvalidAmount = "Amount must be greater than zero.";
+			public const string AmountRequired = "Amount is required.";
+			public const string ChargeUpdated = "Visit charge amount updated successfully.";
+			public const string InvalidPageNumber     = "Page number must be greater than zero.";
+			public const string InvalidPageSize       = "Page size must be between 1 and 100.";
+			public const string InvalidDateRange      = "From date cannot be greater than To date.";
+			public const string ChargeIdsRequired     = "At least one charge ID is required.";
+    		public const string ChargesMarkedBilled   = "Charges processed successfully.";
+			public const string UnsupportedFormat = "Unsupported format. Use 'csv' or 'json'.";
+			public const string UnsupportedStatus = "Unsupported status. Use 'Unbilled', 'Billed' or 'All'.";
+			public const string NoChargesFound = "No charges found for the given filters.";
 		}
 	}
 }
