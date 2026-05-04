@@ -5,6 +5,8 @@ using AutoMapper;
 using MediRecords.Domain.Entities;
 using MediRecords.Repository.BillingRepo;
 using MediRecords.Utility;
+using System.Text;
+using System.Text.Json;
 
 
 namespace MediRecords.Services.BillingServices;
@@ -13,6 +15,9 @@ public class BillingService : IBillingService
 {
     private readonly IBillingRepository _billingRepository;
     private readonly IMapper _mapper;
+
+    private static readonly List<string> ValidFormats  = new() { "csv", "json" };
+    private static readonly List<string> ValidStatuses = new() { "unbilled", "billed", "all" };
 
     public BillingService(IBillingRepository billingRepository, IMapper mapper)
     {
@@ -211,5 +216,78 @@ public class BillingService : IBillingService
         {
             return (false, Constant.BillingMessages.SomethingWentWrong, null, 500);
         }
+    }
+
+    public async Task<(bool Success, string Message, byte[]? FileContent, string ContentType, string FileName, int StatusCode)>
+        ExportChargesAsync(string format, string status, DateTime? fromDate, DateTime? toDate)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(format) || !ValidFormats.Contains(format.ToLower()))
+                return (false, Constant.BillingMessages.UnsupportedFormat, null, string.Empty, string.Empty, 400);
+
+            if (string.IsNullOrWhiteSpace(status) || !ValidStatuses.Contains(status.ToLower()))
+                return (false, Constant.BillingMessages.UnsupportedStatus, null, string.Empty, string.Empty, 400);
+
+            if (fromDate.HasValue && toDate.HasValue && fromDate.Value > toDate.Value)
+                return (false, Constant.BillingMessages.InvalidDateRange, null, string.Empty, string.Empty, 400);
+
+            var charges = await _billingRepository.GetChargesForExportAsync(status, fromDate, toDate);
+
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+
+            if (format.ToLower() == "csv")
+            {
+                var csv = BuildCsv(charges);
+                var bytes = Encoding.UTF8.GetBytes(csv);
+                var fileName = $"visit-charges-{status}-{timestamp}.csv";
+                return (true, string.Empty, bytes, "text/csv", fileName, 200);
+            }
+            else
+            {
+                var exportData = charges.Select(v => new
+                {
+                    v.ChargeId,
+                    v.EncounterId,
+                    PatientName = v.EncounterIdNavigation?.PatientIdNavigation?.Name ?? "Unknown",
+                    Code = v.ProcedureCodeNavigation?.Code ?? string.Empty,
+                    Description = v.ProcedureCodeNavigation?.Description ?? string.Empty,
+                    v.Amount,
+                    Status = v.Status ? "Billed" : "Unbilled",
+                    EncounterDate = v.EncounterIdNavigation?.Date
+                });
+
+                var json = JsonSerializer.Serialize(exportData,
+                    new JsonSerializerOptions { WriteIndented = true });
+                var bytes = Encoding.UTF8.GetBytes(json);
+                var fileName = $"visit-charges-{status}-{timestamp}.json";
+                return (true, string.Empty, bytes, "application/json", fileName, 200);
+            }
+        }
+        catch (Exception)
+        {
+            return (false, Constant.BillingMessages.SomethingWentWrong, null, string.Empty, string.Empty, 500);
+        }
+    }
+
+    private static string BuildCsv(IEnumerable<VisitChargeRef> charges)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("ChargeId,EncounterId,PatientName,Code,Description,Amount,Status,EncounterDate");
+
+        foreach (var v in charges)
+        {
+            var patientName = v.EncounterIdNavigation?.PatientIdNavigation?.Name ?? "Unknown";
+            var code = v.ProcedureCodeNavigation?.Code ?? string.Empty;
+            var description = v.ProcedureCodeNavigation?.Description   ?? string.Empty;
+            var status = v.Status ? "Billed" : "Unbilled";
+            var encounterDate = v.EncounterIdNavigation?.Date.ToString("yyyy-MM-dd") ?? string.Empty;
+
+            sb.AppendLine(
+                $"{v.ChargeId},{v.EncounterId},\"{patientName}\",{code},\"{description}\",{v.Amount},{status},{encounterDate}");
+        }
+
+        return sb.ToString();
     }
 }

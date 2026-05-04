@@ -16,4 +16,6 @@ public interface IBillingRepository
     Task<List<VisitChargeRef>> GetChargesByIdsAsync(List<int> chargeIds);
     Task UpdateRangeAsync(List<VisitChargeRef> charges);
     Task AddAuditLogAsync(AuditLog auditLog);
+    Task<IEnumerable<VisitChargeRef>> GetChargesForExportAsync(
+        string status, DateTime? fromDate, DateTime? toDate);
 }

@@ -19,4 +19,7 @@ public interface IBillingService
 
     Task<(bool Success, string Message, MarkBilledResponseDto? Data, int StatusCode)>
         MarkChargesAsBilledAsync(MarkChargesBilledRequestDto dto, int userId);
+    
+    Task<(bool Success, string Message, byte[]? FileContent, string ContentType, string FileName, int StatusCode)>
+        ExportChargesAsync(string format, string status, DateTime? fromDate, DateTime? toDate);
 }
