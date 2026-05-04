@@ -9,12 +9,10 @@ namespace MediRecords.Repository.DocumentRepository;
 public class DocumentRepository : IDocumentRepository
 {
     private readonly MediRecordsDbContext _dbContext;
-    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public DocumentRepository(MediRecordsDbContext dbContext, IWebHostEnvironment webHostEnvironment)
+    public DocumentRepository(MediRecordsDbContext dbContext)
     {
         _dbContext = dbContext;
-        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<DocumentUploadResponseDto> UploadDocumentAsync(DocumentUploadRequestDto request, int userId)
@@ -42,42 +40,43 @@ public class DocumentRepository : IDocumentRepository
             if (request.File.Length > 10 * 1024 * 1024) // 10MB max
                 throw new MediRecordsException("File size cannot exceed 10MB.");
 
-            // Validate file type
-            var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+            // Validate file type and get MIME type
+            var allowedMimeTypes = new Dictionary<string, string>
+            {
+                { ".pdf", "application/pdf" },
+                { ".jpg", "image/jpeg" },
+                { ".jpeg", "image/jpeg" },
+                { ".png", "image/png" }
+            };
+
             var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
             
-            if (!allowedExtensions.Contains(fileExtension))
+            if (!allowedMimeTypes.ContainsKey(fileExtension))
                 throw new MediRecordsException("Only PDF, JPG, PNG files are allowed.");
+
+            var mimeType = allowedMimeTypes[fileExtension];
 
             // Validate DocType
             if (!Enum.TryParse<DocumentType>(request.DocType, ignoreCase: true, out var docType))
                 throw new MediRecordsException("Invalid document type. Allowed types: Referral, Consent, Report, Photo.");
 
-            // Create directory structure
-            var documentsFolder = Path.Combine(_webHostEnvironment.ContentRootPath, "Documents", $"PatientID_{request.PatientId}");
-            
-            if (!Directory.Exists(documentsFolder))
-                Directory.CreateDirectory(documentsFolder);
-
-            // Generate unique filename with timestamp
-            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            var fileName = $"{timestamp}_{docType.ToString().ToLower()}{fileExtension}";
-            var filePath = Path.Combine(documentsFolder, fileName);
-
-            // Save file to disk
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            // Read file into byte array
+            byte[] fileData;
+            using (var memoryStream = new MemoryStream())
             {
-                await request.File.CopyToAsync(stream);
+                await request.File.CopyToAsync(memoryStream);
+                fileData = memoryStream.ToArray();
             }
 
-            // Create database record
+            // Create database record with file stream
             var document = new Document
             {
                 PatientID = request.PatientId,
                 EncounterID = request.EncounterId,
                 DocType = docType,
-                FileURI = Path.Combine("Documents", $"PatientID_{request.PatientId}", fileName).Replace("\\", "/"),
                 FileName = request.File.FileName,
+                FileType = mimeType,
+                FileData = fileData,
                 UploadedBy = userId,
                 UploadedDate = DateTime.Now,
                 Status = DocumentStatus.Active,
@@ -98,6 +97,7 @@ public class DocumentRepository : IDocumentRepository
                 EncounterId = document.EncounterID,
                 DocType = document.DocType.ToString(),
                 FileName = document.FileName ?? string.Empty,
+                FileType = document.FileType ?? string.Empty,
                 UploadedBy = uploaderName,
                 UploadedDate = document.UploadedDate,
                 Status = document.Status.ToString(),

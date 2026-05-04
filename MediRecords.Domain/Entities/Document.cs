@@ -22,14 +22,16 @@ public class Document
     [Required]
     public DocumentType DocType { get; set; }
 
-    [Required]
-    [MaxLength(255)]
-    [Column(TypeName = "varchar(255)")]
-    public string FileURI { get; set; } = string.Empty;
-
     [MaxLength(255)]
     [Column(TypeName = "varchar(255)")]
     public string? FileName { get; set; }
+
+    [MaxLength(50)]
+    [Column(TypeName = "varchar(50)")]
+    public string? FileType { get; set; } // MIME type: application/pdf, image/jpeg, etc.
+
+    [Column(TypeName = "varbinary(max)")]
+    public byte[]? FileData { get; set; } // Binary file content
 
     [Required]
     public int UploadedBy { get; set; }
