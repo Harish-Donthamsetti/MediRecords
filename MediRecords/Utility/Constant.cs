@@ -185,6 +185,11 @@
 			public const string DuplicateCharge = "This procedure code is already assigned to the encounter.";
 			public const string ChargeCreated = "Visit charge assigned successfully.";
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+			public const string InvalidChargeId = "Invalid charge ID.";
+			public const string ChargeNotFound = "Visit charge not found.";
+			public const string InvalidAmount = "Amount must be greater than zero.";
+			public const string AmountRequired = "Amount is required.";
+			public const string ChargeUpdated = "Visit charge amount updated successfully.";
 		}
 	}
 }

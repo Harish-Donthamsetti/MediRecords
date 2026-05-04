@@ -36,4 +36,18 @@ public class BillingRepository : IBillingRepository
     {
         return await _context.ProcedureCodes.FirstOrDefaultAsync(p => p.CodeId == codeId);
     }
+
+    public async Task<VisitChargeRef?> GetChargeByIdAsync(int chargeId)
+    {
+        return await _context.VisitChargeRefs
+            .Include(v => v.ProcedureCodeNavigation)
+            .FirstOrDefaultAsync(v => v.ChargeId == chargeId);
+    }
+
+    public async Task<VisitChargeRef> UpdateAsync(VisitChargeRef charge)
+    {
+        _context.VisitChargeRefs.Update(charge);
+        await _context.SaveChangesAsync();
+        return charge;
+    }
 }
