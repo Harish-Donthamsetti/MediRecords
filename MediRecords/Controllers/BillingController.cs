@@ -142,4 +142,31 @@ public class BillingController : ControllerBase
             _   => BadRequest(new { message })
         };
     }
+
+    [Authorize(Roles = Constant.Admin)]
+    [HttpGet("exports")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ExportCharges(
+        [FromQuery] string    format,
+        [FromQuery] string    status   = "All",
+        [FromQuery] DateTime? fromDate = null,
+        [FromQuery] DateTime? toDate   = null)
+    {
+        var (success, message, fileContent, contentType, fileName, statusCode) =
+            await _billingService.ExportChargesAsync(format, status, fromDate, toDate);
+
+        if (!success)
+        {
+            return statusCode switch
+            {
+                500 => StatusCode(500, new { message }),
+                _   => BadRequest(new { message })
+            };
+        }
+        return File(fileContent!, contentType, fileName);
+    }
 }
