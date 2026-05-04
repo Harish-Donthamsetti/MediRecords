@@ -94,6 +94,22 @@
 
 		public const string ImagingOrderAlreadyExists = "Imaging Order Already Exists";
 
+		//Procdure code Constants
+
+		public const string ProcedureNotFound = "procedure does not found";
+
+		public const string ProcedureFound = "procedure already exists";
+
+		public const string InvalidProcedureCode = "Please enter valid procedure code";
+
+		public const string Description = "Please give the description";
+
+		public const string InvalidPrice = "Price cannot be negative or zero";
+
+		public const string ProcedureCreated = "Procedure Created Successfully";
+
+		public const string ProcdureUpdated = "Procedure Updated Successfully";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";

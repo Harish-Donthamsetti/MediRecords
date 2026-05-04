@@ -22,7 +22,7 @@ public class ImagingReportServices : IImagingReportServices
             throw new ArgumentException(Constant.InvalidFindings);
 
         string? savedFilePath = null;
-        if (dto.ReportFile != null && dto.ReportFile.Length > 0)
+        if (dto.ReportFile != null)
         {
             savedFilePath = await _repo.SaveFileAsync(dto.ReportFile);
         }

@@ -11,21 +11,28 @@ public class ImagingReportRepository : IImagingReportRepository
 
     private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public ImagingReportRepository(MediRecordsDbContext context,IWebHostEnvironment webHostEnvironment)
+    public ImagingReportRepository(MediRecordsDbContext context, IWebHostEnvironment webHostEnvironment)
     {
         _context = context;
         _webHostEnvironment = webHostEnvironment;
     }
 
-    public async Task<string> SaveFileAsync(FormFile file)
+    public async Task<string> SaveFileAsync(IFormFile file)
     {
-        string rootPath = _webHostEnvironment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-    
+        string rootPath = _webHostEnvironment.WebRootPath;
+        if (string.IsNullOrEmpty(rootPath))
+        {
+
+            rootPath = Path.Combine(_webHostEnvironment.ContentRootPath,"wwwroot");
+
+        }
         string uploadsFolder = Path.Combine(rootPath, "imaging_reports");
+
         if (!Directory.Exists(uploadsFolder))
         {
             Directory.CreateDirectory(uploadsFolder);
         }
+
         string uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}";
         string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -33,8 +40,8 @@ public class ImagingReportRepository : IImagingReportRepository
         {
             await file.CopyToAsync(fileStream);
         }
+
         return Path.Combine("imaging_reports", uniqueFileName);
-        
     }
     public async Task AddAsync(ImagingReport report)
     {
@@ -46,7 +53,8 @@ public class ImagingReportRepository : IImagingReportRepository
         }
         var reportExists = await _context.ImagingReports
             .AnyAsync(r => r.ImagingOrderId == report.ImagingOrderId);
-        if (reportExists){ 
+        if (reportExists)
+        {
             throw new InvalidOperationException(Constant.ReportAlreadyExists);
         }
         await _context.ImagingReports.AddAsync(report);

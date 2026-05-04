@@ -40,6 +40,8 @@ using MediRecords.Repository.LabOrderRepository;
 using MediRecords.Services.LabOrderServices;
 using MediRecords.Repository.LabResultRepository;
 using MediRecords.Services.LabResultServices;
+using MediRecords.Repository.ProcedureCodeRepository;
+using MediRecords.Services.ProcedureCodeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,7 +137,10 @@ builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
 builder.Services.AddScoped<ILabOrderService, LabOrderService>();
 builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
 builder.Services.AddScoped<ILabResultService, LabResultService>();
+builder.Services.AddScoped<IProcedureCodeRepository,ProcedureCodeRepository>();
+builder.Services.AddScoped<IProcedureCodeService,ProcedureCodeService>();
 var app = builder.Build();
+app.UseStaticFiles();
  
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
