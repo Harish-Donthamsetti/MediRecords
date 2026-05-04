@@ -90,6 +90,13 @@
 		public const string ImagingOrderNotExists = "Imaging Order does not exists with these filters";
 
 		public const string FutureDate = "Given Date cannot be in future";
+
+		public const string FollowUpDate = "Follow-up date cannot be in the future";
+
+		public const string FollowUpForbidden = "You are not authorized to add follow-ups for this encounter.";
+
+		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
