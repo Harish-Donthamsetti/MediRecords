@@ -43,6 +43,8 @@ using MediRecords.Services.LabResultServices;
 using MediRecords.Repository.LabResultRepository;
 using MediRecords.Repository.CarePlanRepo;
 using MediRecords.Services.CarePlanServices;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
 
 var builder = WebApplication.CreateBuilder(args);
  
