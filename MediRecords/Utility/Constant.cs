@@ -89,6 +89,7 @@
 
 		public const string ImagingOrderNotExists = "Imaging Order does not exists with these filters";
 
+		public const string FutureDate = "Given Date cannot be in future";
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";
