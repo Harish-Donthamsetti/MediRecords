@@ -9,4 +9,5 @@ public interface IEncounterRepository
     Task<IEnumerable<Encounter>> GetByProviderAndDateAsync(int providerId, DateTime date);
     Task<Encounter?> GetByIdAsync(int encounterId);
     Task<Encounter> UpdateStatusAsync(int encounterId, EncounterStatus newStatus);
+    Task<int> GetEncounterCountAsync(DateTime fromDate, DateTime toDate);
 }

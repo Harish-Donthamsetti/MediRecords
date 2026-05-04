@@ -48,4 +48,11 @@ public class EncounterRepository : IEncounterRepository
 
         return encounter;
     }
+
+    public async Task<int> GetEncounterCountAsync(DateTime fromDate, DateTime toDate)
+    {
+        return await _context.Encounters
+            .Where(e => e.Date >= fromDate && e.Date <= toDate)
+            .CountAsync();
+    }
 }

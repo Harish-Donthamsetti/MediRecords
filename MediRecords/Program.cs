@@ -40,6 +40,10 @@ using MediRecords.Repository.LabResultRepository;
 using MediRecords.Services.LabResultServices;
 using MediRecords.Repository.CarePlanRepo;
 using MediRecords.Services.CarePlanServices;
+using MediRecords.Repository.PrescriptionRepository;
+using MediRecords.Services.ReportsServices;
+using MediRecords.Repository.ProviderProductivity;
+using MediRecords.Services.ProviderProductivityServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,6 +139,10 @@ builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
 builder.Services.AddScoped<ILabResultService, LabResultService>();
 builder.Services.AddScoped<ICarePlanRepository, CarePlanRepository>();
 builder.Services.AddScoped<ICarePlanService, CarePlanService>();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IReportsService, ReportsService>();
+builder.Services.AddScoped<IProviderProductivity, ProviderProductivity>();
+builder.Services.AddScoped<IProviderProductivityService, ProviderProductivityService>();
 var app = builder.Build();
  
 // Configure the HTTP request pipeline.

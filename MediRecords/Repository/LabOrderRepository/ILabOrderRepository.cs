@@ -10,4 +10,5 @@ public interface ILabOrderRepository
     Task<IEnumerable<LabOrder>> GetLabOrdersByEncounterIdAsync(int encounterId);
     Task<IEnumerable<LabOrder>> GetLabOrdersAsync(LabOrderFilterRequestDto filter);
     Task<LabOrder> UpdateLabOrderAsync(LabOrder labOrder);
+    Task<int> GetLabOrderCountAsync(DateTime fromDate, DateTime toDate);
 }
