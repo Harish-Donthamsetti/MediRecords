@@ -62,5 +62,44 @@ public class CarePlanService : ICarePlanService
         {
             return (false, Constant.CarePlanMessages.SomethingWentWrong, null);
         }
-    }  
+    }
+
+    public async Task<CarePlanDetailsDto> GetByIdAsync(int carePlanId)
+    {
+        if (carePlanId <= 0)
+            throw new MediRecordsException("Invalid CarePlanId.");
+
+        var carePlan = await _carePlanRepository.GetByIdAsync(carePlanId);
+
+        if (carePlan == null)
+            throw new MediRecordsException("Care plan not found.");
+
+        return new CarePlanDetailsDto
+        {
+            CarePlanId = carePlan.CarePlanId,
+            PatientId = carePlan.PatientId,
+            PatientName = carePlan.PatientIdNavigation!.Name,
+            GoalsJSON = carePlan.GoalsJSON,
+            Instructions = carePlan.Instructions,
+            Status = carePlan.Status
+        };
+    }
+
+    public async Task<IEnumerable<CarePlanDetailsDto>> GetCarePlansAsync(int? patientId, string? patientName, bool? status)
+    {
+        if (patientId.HasValue && patientId <= 0)
+            throw new MediRecordsException("Invalid PatientId.");
+
+        var plans = await _carePlanRepository.GetAsync(patientId, patientName, status);
+
+        return plans.Select(cp => new CarePlanDetailsDto
+        {
+            CarePlanId = cp.CarePlanId,
+            PatientId = cp.PatientId,
+            PatientName = cp.PatientIdNavigation!.Name,
+            GoalsJSON = cp.GoalsJSON,
+            Instructions = cp.Instructions,
+            Status = cp.Status
+        });
+    }
 }
