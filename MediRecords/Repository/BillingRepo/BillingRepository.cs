@@ -59,4 +59,37 @@ public class BillingRepository : IBillingRepository
             .OrderBy(v => v.ChargeId)
             .ToListAsync();
     }
+    public async Task<(IEnumerable<Encounter> Encounters, int TotalCount)> GetUnbilledEncountersAsync(
+        DateTime? fromDate, DateTime? toDate, int? providerId, int page, int pageSize)
+    {
+        // Base query — encounters that have at least one Unbilled charge
+        var query = _context.Encounters
+            .Include(e => e.PatientIdNavigation)
+            .Include(e => e.ProviderIdNavigation)
+            .Include(e => e.VisitChargeRefs)
+            .Where(e => e.VisitChargeRefs.Any(v => !v.Status)); // false = Unbilled
+
+        // Filter by date range
+        if (fromDate.HasValue)
+            query = query.Where(e => e.Date >= fromDate.Value.Date);
+
+        if (toDate.HasValue)
+            query = query.Where(e => e.Date <= toDate.Value.Date.AddDays(1).AddTicks(-1));
+
+        // Filter by provider
+        if (providerId.HasValue && providerId.Value > 0)
+            query = query.Where(e => e.ProviderId == providerId.Value);
+
+        // Total count before pagination
+        var totalCount = await query.CountAsync();
+
+        // Apply pagination
+        var encounters = await query
+            .OrderByDescending(e => e.Date)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (encounters, totalCount);
+    }
 }

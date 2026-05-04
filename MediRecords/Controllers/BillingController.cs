@@ -90,4 +90,30 @@ public class BillingController : ControllerBase
             _   => BadRequest(new { message })
         };
     }
+
+    [Authorize(Roles = $"{Constant.Admin},{Constant.FrontDesk}")]
+    [HttpGet("unbilled-encounters")]
+    [ProducesResponseType(typeof(PagedResponseDto<UnbilledEncounterResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetUnbilledEncounters(
+        [FromQuery] DateTime? fromDate,
+        [FromQuery] DateTime? toDate,
+        [FromQuery] int? providerId,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var (success, message, data, statusCode) =
+            await _billingService.GetUnbilledEncountersAsync(
+                fromDate, toDate, providerId, page, pageSize);
+
+        return statusCode switch
+        {
+            200 => Ok(data),
+            500 => StatusCode(500, new { message }),
+            _   => BadRequest(new { message })
+        };
+    }
 }

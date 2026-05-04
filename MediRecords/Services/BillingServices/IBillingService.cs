@@ -13,4 +13,7 @@ public interface IBillingService
     
     Task<(bool Success, string Message, IEnumerable<VisitChargeResponseDto>? Data, int StatusCode)>
         GetChargesByEncounterIdAsync(int encounterId);
+    
+    Task<(bool Success, string Message, PagedResponseDto<UnbilledEncounterResponseDto>? Data, int StatusCode)>
+        GetUnbilledEncountersAsync(DateTime? fromDate, DateTime? toDate, int? providerId, int page, int pageSize);
 }

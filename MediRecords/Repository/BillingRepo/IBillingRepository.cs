@@ -11,4 +11,6 @@ public interface IBillingRepository
     Task<VisitChargeRef?> GetChargeByIdAsync(int chargeId);
     Task<VisitChargeRef> UpdateAsync(VisitChargeRef charge);
     Task<IEnumerable<VisitChargeRef>> GetChargesByEncounterIdAsync(int encounterId);
+    Task<(IEnumerable<Encounter> Encounters, int TotalCount)> GetUnbilledEncountersAsync(
+        DateTime? fromDate, DateTime? toDate, int? providerId, int page, int pageSize);
 }
