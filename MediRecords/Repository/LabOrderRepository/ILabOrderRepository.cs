@@ -8,5 +8,6 @@ public interface ILabOrderRepository
     Task<LabOrder> CreateLabOrderAsync(LabOrder labOrder);
     Task<LabOrder?> GetLabOrderByIdAsync(int labOrderId);
     Task<IEnumerable<LabOrder>> GetLabOrdersByEncounterIdAsync(int encounterId);
-    Task<IEnumerable<LabOrder>> GetLabOrdersAsync(LabOrderRequestDto filter);
+    Task<IEnumerable<LabOrder>> GetLabOrdersAsync(LabOrderFilterRequestDto filter);
+    Task<LabOrder> UpdateLabOrderAsync(LabOrder labOrder);
 }
