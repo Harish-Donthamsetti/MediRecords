@@ -36,7 +36,7 @@ public class LabOrderRepository : ILabOrderRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<LabOrder>> GetLabOrdersAsync(LabOrderRequestDto filter)
+    public async Task<IEnumerable<LabOrder>> GetLabOrdersAsync(LabOrderFilterRequestDto filter)
     {
         var query = _context.LabOrders.AsNoTracking().AsQueryable();
 
@@ -61,5 +61,12 @@ public class LabOrderRepository : ILabOrderRepository
             query = query.Where(lo => lo.TestJson.Contains(filter.TestJson));
 
         return await query.OrderByDescending(lo => lo.OrderDate).ToListAsync();
+    }
+
+    public async Task<LabOrder> UpdateLabOrderAsync(LabOrder labOrder)
+    {
+        _context.LabOrders.Update(labOrder);
+        await _context.SaveChangesAsync();
+        return labOrder;
     }
 }
