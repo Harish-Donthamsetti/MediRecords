@@ -24,6 +24,9 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Dto\FollowUpDtos\" />
+    <Folder Include="Dto\BillingDtos\" />
+    <Folder Include="Dto\BillingDtos\Request\" />
+    <Folder Include="Dto\BillingDtos\Response\" />
     <Folder Include="Dto\ImagingOrderDto\" />
     <Folder Include="Dto\AllergyDtos\" />
     <Folder Include="Dto\ImagingDtos\" />
@@ -37,12 +40,14 @@
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
     <Folder Include="Dto\EncounterDtos\Response\" />
+    <Folder Include="Dto\PrescriptionDtos\" />
     <Folder Include="Dto\ProblemListDtos\" />
     <Folder Include="Dto\SOAPNoteDtos\" />
     <Folder Include="Dto\SOAPNoteDtos\Request\" />
     <Folder Include="Dto\SOAPNoteDtos\Response\" />
     <Folder Include="MappingProfiles\" />
     <Folder Include="Repository\" />
+    <Folder Include="Repository\BillingRepo\" />
     <Folder Include="Repository\AllergyRepository\" />
     <Folder Include="Repository\CarePlanRepo\" />
     <Folder Include="Repository\EncounterRepo\" />
@@ -50,16 +55,19 @@
     <Folder Include="Repository\ImagingRepo\" />
     <Folder Include="Repository\ImmunizationRepository\" />
     <Folder Include="Repository\MedicalHistoryRepository\" />
+    <Folder Include="Repository\PrescriptionRepository\" />
     <Folder Include="Repository\ProblemListRepository\" />
     <Folder Include="Repository\SOAPNoteRepo\" />
     <Folder Include="Repository\ImagingOrderRepository\" />
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
+    <Folder Include="Services\BillingServices\" />
     <Folder Include="Services\EncounterServices\" />
     <Folder Include="Services\FollowUpService\" />
     <Folder Include="Services\ImagingServices\" />
     <Folder Include="Services\ImmunizationService\" />
     <Folder Include="Services\MedicalHistoryServices\" />
+    <Folder Include="Services\PrescriptionService\" />
     <Folder Include="Services\ProblemListServices\" />
     <Folder Include="Services\SOAPNoteService\" />
     <Folder Include="Services\ImagingOrderServices\" />

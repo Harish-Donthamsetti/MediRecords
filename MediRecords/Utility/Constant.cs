@@ -182,5 +182,27 @@
 			public const string NoReportsFound = "No reports found for this imaging order.";
 			public const string SomethingWentWrong = "Something went wrong. Please try again.";
 		}
+		public static class BillingMessages
+		{
+			public const string EncounterIdRequired = "Encounter ID is required.";
+			public const string CodeIdRequired = "Procedure code ID is required.";
+			public const string InvalidEncounterId = "Invalid encounter ID.";
+			public const string InvalidCodeId = "Invalid procedure code ID.";
+			public const string EncounterNotFound = "Encounter not found.";
+			public const string ProcedureCodeNotFound  = "Procedure code not found.";
+			public const string DuplicateCharge = "This procedure code is already assigned to the encounter.";
+			public const string ChargeCreated = "Visit charge assigned successfully.";
+			public const string SomethingWentWrong = "Something went wrong. Please try again.";
+			public const string InvalidChargeId = "Invalid charge ID.";
+			public const string ChargeNotFound = "Visit charge not found.";
+			public const string InvalidAmount = "Amount must be greater than zero.";
+			public const string AmountRequired = "Amount is required.";
+			public const string ChargeUpdated = "Visit charge amount updated successfully.";
+			public const string InvalidPageNumber     = "Page number must be greater than zero.";
+			public const string InvalidPageSize       = "Page size must be between 1 and 100.";
+			public const string InvalidDateRange      = "From date cannot be greater than To date.";
+			public const string ChargeIdsRequired     = "At least one charge ID is required.";
+    		public const string ChargesMarkedBilled   = "Charges processed successfully.";
+		}
 	}
 }
