@@ -10,4 +10,5 @@ public interface IBillingRepository
     Task<VisitChargeRef> AddAsync(VisitChargeRef charge);
     Task<VisitChargeRef?> GetChargeByIdAsync(int chargeId);
     Task<VisitChargeRef> UpdateAsync(VisitChargeRef charge);
+    Task<IEnumerable<VisitChargeRef>> GetChargesByEncounterIdAsync(int encounterId);
 }
