@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore; 
-using MediRecords.Domain.Entities;   
+using MediRecords.Domain.Entities;   
 using MediRecords.Services.AuthServices;
 using MediRecords.Services.UserServices;
 using MediRecords.Repository;
@@ -32,24 +32,38 @@ using MediRecords.Services.AllergyServices;
 using MediRecords.Repository.AllergyRepository;
 using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
-using MediRecords.Repository.SOAPNoteRepo;
-using MediRecords.Services.SOAPNoteService;
+using MediRecords.Services.PrescriptionWithItemsServices;
+using MediRecords.Repository.PrescriptionWithItemsRepository;
+using MediRecords.Repository.DocumentRepository;
+using MediRecords.Services.DocumentServices;
+
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
+using MediRecords.Repository.BillingRepo;
+using MediRecords.Services.BillingServices;
 using MediRecords.Repository.LabOrderRepository;
 using MediRecords.Services.LabOrderServices;
-using MediRecords.Repository.LabResultRepository;
 using MediRecords.Services.LabResultServices;
 using MediRecords.Repository.ProcedureCodeRepository;
 using MediRecords.Services.ProcedureCodeServices;
+using MediRecords.Repository.LabResultRepository;
+using MediRecords.Repository.CarePlanRepo;
+using MediRecords.Services.CarePlanServices;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
+using MediRecords.Repository.ImmunizationRepository;
+using MediRecords.Services.ImmunizationService;
+using MediRecords.Repository.FollowUpRepository;
+using MediRecords.Services.FollowUpService;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
+ 
+ 
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("MediRecords")
     )
 );
  
@@ -115,10 +129,11 @@ builder.Services.AddScoped<IVitalSignRepository, VitalSignRepository>();
 builder.Services.AddScoped<IVitalSignService, VitalSignService>();
 builder.Services.AddScoped<INursingNoteRepository, NursingNoteRepository>();
 builder.Services.AddScoped<INursingNoteService, NursingNoteService>();
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile),typeof(ImagingMappingProfile));
 
 builder.Services.AddScoped<ISOAPNoteRepository, SOAPNoteRepository>();
 builder.Services.AddScoped<ISOAPNoteService, SOAPNoteService>();
-builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile));
+builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile),typeof(BillingMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
 builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
@@ -133,12 +148,27 @@ builder.Services.AddScoped<IMedicalHistoryService, MedicalHistoryService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
 builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
+builder.Services.AddScoped<IBillingRepository, BillingRepository>();
+builder.Services.AddScoped<IBillingService, BillingService>();
 builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
 builder.Services.AddScoped<ILabOrderService, LabOrderService>();
 builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
 builder.Services.AddScoped<ILabResultService, LabResultService>();
 builder.Services.AddScoped<IProcedureCodeRepository,ProcedureCodeRepository>();
 builder.Services.AddScoped<IProcedureCodeService,ProcedureCodeService>();
+builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
+builder.Services.AddScoped<IImagingService, ImagingService>();
+builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
+builder.Services.AddScoped<IPrescriptionWithItemsRepository, PrescriptionWithItemsRepository>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+ 
+builder.Services.AddScoped<ICarePlanRepository, CarePlanRepository>();
+builder.Services.AddScoped<ICarePlanService, CarePlanService>();
+builder.Services.AddScoped<IImmunizationRepository, ImmunizationRepository>();
+builder.Services.AddScoped<IImmunizationService, ImmunizationService>(); 
+builder.Services.AddScoped<IFollowUpRepository, FollowUpRepository>();
+builder.Services.AddScoped<IFollowUpService, FollowUpService>();
 var app = builder.Build();
 app.UseStaticFiles();
  
@@ -150,7 +180,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapControllers();
 }
-
+  
 app.UseHttpsRedirection();
  
 // Authentication and Authorization

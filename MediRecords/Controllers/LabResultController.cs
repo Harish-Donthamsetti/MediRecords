@@ -25,7 +25,7 @@ public class LabResultController : ControllerBase
     /// <param name="requestDto">The lab result request data transfer object containing result details.</param>
     /// <returns>Returns the created lab result or an error message.</returns>
     [HttpPost]
-    [Authorize(Roles = nameof(UserRoleEnums.LabTechnician))]
+    [Authorize(Roles = nameof(UserRoleEnums.LabTech))]
     [ProducesResponseType(typeof(LabResultResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

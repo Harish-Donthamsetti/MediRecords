@@ -10,8 +10,10 @@ public enum UserRoleEnums
     Physician,
     [EnumMember(Value = "Nurse")]
     Nurse,
-    [EnumMember(Value = "LabTechnician")]
-    LabTechnician,
+    [EnumMember(Value = "LabTech")]
+    LabTech,
     [EnumMember(Value = "FrontDesk")]
     FrontDesk
+
+    
 }

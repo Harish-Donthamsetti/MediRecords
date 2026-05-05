@@ -18,6 +18,13 @@ namespace MediRecords.Controllers
             _service = service;
 
         }
+
+        /// <summary>
+        /// Endpoint for inserting the report to the database
+        /// </summary>
+        /// <param name="ImagingOrderID">This is the Imaging order id for which report is getting generated</param>
+        /// <param name="dto">this will recieve file and findings and pass to the service layer</param>
+        /// <returns></returns>
         [HttpPost("{ImagingOrderID}")]
         [Authorize(Roles = Constant.LabTech)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
