@@ -34,6 +34,8 @@ using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
 using MediRecords.Services.PrescriptionWithItemsServices;
 using MediRecords.Repository.PrescriptionWithItemsRepository;
+using MediRecords.Repository.DocumentRepository;
+using MediRecords.Services.DocumentServices;
 
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
@@ -45,6 +47,8 @@ using MediRecords.Services.LabResultServices;
 using MediRecords.Repository.LabResultRepository;
 using MediRecords.Repository.CarePlanRepo;
 using MediRecords.Services.CarePlanServices;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
 using MediRecords.Repository.ImmunizationRepository;
 using MediRecords.Services.ImmunizationService;
 using MediRecords.Repository.FollowUpRepository;
@@ -154,6 +158,8 @@ builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
 builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
 builder.Services.AddScoped<IPrescriptionWithItemsRepository, PrescriptionWithItemsRepository>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
  
 builder.Services.AddScoped<ICarePlanRepository, CarePlanRepository>();
 builder.Services.AddScoped<ICarePlanService, CarePlanService>();
