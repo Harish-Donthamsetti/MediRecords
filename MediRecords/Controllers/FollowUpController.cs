@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using MediRecords.Domain.Migrations;
 using MediRecords.Dto.FollowUpDtos;
 using MediRecords.Repository.FollowUpRepository;
 using MediRecords.Services.FollowUpService;

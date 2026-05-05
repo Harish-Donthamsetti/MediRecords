@@ -104,6 +104,10 @@
 
 		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
 
+		public const string FileLength = "Uploaded file is empty.";
+
+		public const string AllowedFile = "Only PDF or image files are allowed.";
+
 		public static class UserUpdate
 		{
 			public const string UpdateUserRequest = "Update request cannot be null.";

@@ -5,7 +5,7 @@ namespace MediRecords.Repository.ImagingReportRepository;
 
 public interface IImagingReportRepository
 {
-    Task<string> SaveFileAsync(FormFile file);
+    Task<string> SaveFileAsync(IFormFile file);
     Task AddAsync(ImagingReport report);
 
 }
