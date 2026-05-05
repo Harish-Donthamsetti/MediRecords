@@ -46,7 +46,7 @@
 
 		public const string DeleteSucess = "User deleted Successfully";
 
-		public const string PatientIdRequired = "PatientId is doesnot exiat";
+		public const string PatientIdRequired = "PatientId is doesnot exist";
 		public const string ProviderIdRequired = "ProviderId is doesnot exist";
 
 		// Validation & Error Messages
@@ -71,7 +71,7 @@
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
-		
+
 		public const string AllergyExists = "Allergy already exists for this patient.";
 
 		public const string MedicalHistoryExists = "Medical history entry already exists.";
@@ -217,6 +217,15 @@
 			public const string UnsupportedFormat = "Unsupported format. Use 'csv' or 'json'.";
 			public const string UnsupportedStatus = "Unsupported status. Use 'Unbilled', 'Billed' or 'All'.";
 			public const string NoChargesFound = "No charges found for the given filters.";
+		}
+		public static class AppointmentMessages
+		{
+			public const string AppointmentNotFound = "Appointment not found.";
+			public const string AppointmentAlreadyCheckedIn = "Appointment already checked-in.";
+			public const string PastDateNotAllowed = "Cannot set appointment to a past date.";
+			public const string ProviderNotAvailable = "Provider not available.";
+			public const string ProviderSlotUnavailable = "Provider slot unavailable.";
+			public const string StatusUpdated = "Appointment updated successfully.";
 		}
 	}
 }
