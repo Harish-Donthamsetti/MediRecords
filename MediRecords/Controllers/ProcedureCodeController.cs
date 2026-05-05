@@ -25,7 +25,7 @@ namespace MediRecords.Controllers
         /// <param name="dto">data that has to be inserted</param>
         /// <returns></returns>
         [HttpPost]
-        // [Authorize(Roles = Utility.Constant.Admin)]
+        [Authorize(Roles = Utility.Constant.Admin)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
@@ -56,7 +56,7 @@ namespace MediRecords.Controllers
         /// </summary>
         /// <returns>this will return all the procedure code</returns>
         [HttpGet]
-        // [Authorize(Roles = $"{Utility.Constant.Physician},{Utility.Constant.Admin}")]
+        [Authorize(Roles = $"{Utility.Constant.Physician},{Utility.Constant.Admin}")]
         [ProducesResponseType(typeof(IEnumerable<ProcedureCodeViewDtos>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllProcedure([FromQuery] string? filterCode)
