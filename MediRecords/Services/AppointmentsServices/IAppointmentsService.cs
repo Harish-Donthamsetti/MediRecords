@@ -1,3 +1,5 @@
+using MediRecords.Domain.Enums;
+using MediRecords.Dto.AppointmentDtos;
 using MediRecords.Dto.AppointmentsDtos;
 using System;
 using System.Collections.Generic;
@@ -15,5 +17,10 @@ namespace MediRecords.Services.AppointmentsServices
             int? patientId,
             int? providerId,
             string? date);
+
+        Task<AppointmentUpdateResponseDto?> UpdateAppointmentAsync(
+            int id,
+            AppointmentStatus newStatus,
+            AppointmentUpdateRequestDto request);
     }
 }

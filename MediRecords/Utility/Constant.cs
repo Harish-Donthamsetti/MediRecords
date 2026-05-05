@@ -46,7 +46,7 @@
 
 		public const string DeleteSucess = "User deleted Successfully";
 
-		public const string PatientIdRequired = "PatientId is doesnot exiat";
+		public const string PatientIdRequired = "PatientId is doesnot exist";
 		public const string ProviderIdRequired = "ProviderId is doesnot exist";
 
 		// Validation & Error Messages
@@ -59,12 +59,19 @@
 		public const string OrderCreated = "Order created successfully.";
 		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
 
+		public const string OrderNotFound = "The specified Imaging Order does not exist.";
+
+		// Report Messages
+		public const string ReportCreated = "Imaging report created successfully.";
+		public const string ReportAlreadyExists = "A report has already been submitted for this order.";
+		public const string InvalidFindings = "Findings must contain at least one result.";
+
 		public const string ProblemCreated = "Problem Added Successfully";
 
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
-		
+
 		public const string AllergyExists = "Allergy already exists for this patient.";
 
 		public const string MedicalHistoryExists = "Medical history entry already exists.";
@@ -96,6 +103,10 @@
 		public const string FollowUpForbidden = "You are not authorized to add follow-ups for this encounter.";
 
 		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
+
+		public const string FileLength = "Uploaded file is empty.";
+
+		public const string AllowedFile = "Only PDF or image files are allowed.";
 
 		public static class UserUpdate
 		{
@@ -206,6 +217,15 @@
 			public const string UnsupportedFormat = "Unsupported format. Use 'csv' or 'json'.";
 			public const string UnsupportedStatus = "Unsupported status. Use 'Unbilled', 'Billed' or 'All'.";
 			public const string NoChargesFound = "No charges found for the given filters.";
+		}
+		public static class AppointmentMessages
+		{
+			public const string AppointmentNotFound = "Appointment not found.";
+			public const string AppointmentAlreadyCheckedIn = "Appointment already checked-in.";
+			public const string PastDateNotAllowed = "Cannot set appointment to a past date.";
+			public const string ProviderNotAvailable = "Provider not available.";
+			public const string ProviderSlotUnavailable = "Provider slot unavailable.";
+			public const string StatusUpdated = "Appointment updated successfully.";
 		}
 	}
 }
