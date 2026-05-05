@@ -41,13 +41,6 @@ public class DocumentController : ControllerBase
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
                 return Unauthorized(new { message = "Invalid or missing user ID" });
 
-            // Check user roles - only Doctor, Nurse, FrontDesk, Admin can upload
-            var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
-            var allowedRoles = new[] { "Doctor", "Nurse", "FrontDesk", "Admin" };
-
-            if (!userRoles.Any(role => allowedRoles.Contains(role)))
-                return Forbid();
-
             var result = await _service.UploadDocumentAsync(request, userId);
             return Ok(result);
         }
