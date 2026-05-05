@@ -76,3 +76,5 @@ Migrations
 #
 SqlTestQuries/ Seeding Data.sql
 MediRecords.Domain.sln
+
+MediRecords/wwwroot/

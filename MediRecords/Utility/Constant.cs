@@ -59,6 +59,13 @@
 		public const string OrderCreated = "Order created successfully.";
 		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
 
+		public const string OrderNotFound = "The specified Imaging Order does not exist.";
+
+		// Report Messages
+		public const string ReportCreated = "Imaging report created successfully.";
+		public const string ReportAlreadyExists = "A report has already been submitted for this order.";
+		public const string InvalidFindings = "Findings must contain at least one result.";
+
 		public const string ProblemCreated = "Problem Added Successfully";
 
 		public const string AllergyCreated = "Allergy Created Successfully";
@@ -96,6 +103,10 @@
 		public const string FollowUpForbidden = "You are not authorized to add follow-ups for this encounter.";
 
 		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
+
+		public const string FileLength = "Uploaded file is empty.";
+
+		public const string AllowedFile = "Only PDF or image files are allowed.";
 
 		public static class UserUpdate
 		{
