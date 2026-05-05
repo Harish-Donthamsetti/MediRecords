@@ -25,7 +25,7 @@ namespace MediRecords.Controllers
         /// <param name="requestDto">The user registration data transfer object containing credentials and profile info.</param>
         /// <returns>Return the Success or ErrorMessage</returns>
         [HttpPost("register")]
-        // [Authorize(Roles = Constant.Admin)]
+        [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
@@ -76,7 +76,7 @@ namespace MediRecords.Controllers
         /// Fetches a specific user's details by their unique ID.
         /// </summary>
         /// <param name="id">The numeric ID of the user.</param>
-        // [Authorize(Roles = Constant.Admin)]
+        [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetById/{id}")]
         [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

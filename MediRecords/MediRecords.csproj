@@ -33,11 +33,13 @@
     <Folder Include="Dto\EncounterDtos\" />
     <Folder Include="Dto\EncounterDtos\Request\" />
     <Folder Include="Dto\EncounterDtos\Response\" />
+    <Folder Include="Dto\ProcedureCodeDtos\" />
     <Folder Include="MappingProfiles\" />
     <Folder Include="Repository\" />
     <Folder Include="Repository\EncounterRepo\" />
     <Folder Include="Repository\ImagingOrderRepository\" />
     <Folder Include="Repository\ImagingReportRepository\" />
+    <Folder Include="Repository\ProcedureCodeRepository\" />
     <Folder Include="Repository\UserRepo\" />
     <Folder Include="Repository\UserRoleRepository\" />
     <Folder Include="Services\EncounterServices\" />
@@ -61,10 +63,12 @@
     <Folder Include="Services\ImagingServices\" />
     <Folder Include="Services\MedicalHistoryServices\" />
     <Folder Include="Services\ProblemListServices\" />
+    <Folder Include="Services\ProcedureCodeServices\" />
     <Folder Include="Services\SOAPNoteService\" />
     <Folder Include="Services\ImagingOrderServices\" />
     <Folder Include="Utility\TokenUtility\" />
     <Folder Include="Services\UserServices\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
  
   <ItemGroup>

@@ -44,6 +44,8 @@ using MediRecords.Services.BillingServices;
 using MediRecords.Repository.LabOrderRepository;
 using MediRecords.Services.LabOrderServices;
 using MediRecords.Services.LabResultServices;
+using MediRecords.Repository.ProcedureCodeRepository;
+using MediRecords.Services.ProcedureCodeServices;
 using MediRecords.Repository.LabResultRepository;
 using MediRecords.Repository.CarePlanRepo;
 using MediRecords.Services.CarePlanServices;
@@ -53,8 +55,6 @@ using MediRecords.Repository.ImmunizationRepository;
 using MediRecords.Services.ImmunizationService;
 using MediRecords.Repository.FollowUpRepository;
 using MediRecords.Services.FollowUpService;
-using MediRecords.Repository.SOAPNoteRepo;
-using MediRecords.Services.SOAPNoteService;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -154,6 +154,8 @@ builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
 builder.Services.AddScoped<ILabOrderService, LabOrderService>();
 builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
 builder.Services.AddScoped<ILabResultService, LabResultService>();
+builder.Services.AddScoped<IProcedureCodeRepository,ProcedureCodeRepository>();
+builder.Services.AddScoped<IProcedureCodeService,ProcedureCodeService>();
 builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
 builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
@@ -168,6 +170,7 @@ builder.Services.AddScoped<IImmunizationService, ImmunizationService>();
 builder.Services.AddScoped<IFollowUpRepository, FollowUpRepository>();
 builder.Services.AddScoped<IFollowUpService, FollowUpService>();
 var app = builder.Build();
+app.UseStaticFiles();
  
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
