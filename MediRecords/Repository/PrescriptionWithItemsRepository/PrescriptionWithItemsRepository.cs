@@ -61,6 +61,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
                 DrugName = item.DrugName,
                 Dose = item.Dose ?? string.Empty,
                 Frequency = item.Frequency ?? string.Empty,
+                Route = item.Route ?? string.Empty,
                 DurationDays = item.DurationDays,
                 Instructions = item.Instructions ?? string.Empty
             });
@@ -72,7 +73,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
                 DrugName = item.DrugName,
                 Dose = item.Dose ?? string.Empty,
                 Frequency = item.Frequency ?? string.Empty,
-                Route = null,
+                Route = item.Route ?? string.Empty,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddDays(item.DurationDays),
                 Status = medicationStatus
@@ -97,6 +98,7 @@ public class PrescriptionWithItemsRepository : IPrescriptionWithItemsRepository
                 DrugName = pi.DrugName,
                 Dose = pi.Dose,
                 Frequency = pi.Frequency,
+                Route = pi.Route,
                 DurationDays = pi.DurationDays,
                 Instructions = pi.Instructions
             }).ToList()
