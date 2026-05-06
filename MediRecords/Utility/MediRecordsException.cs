@@ -8,4 +8,9 @@ public class MediRecordsException : Exception
     {
         
     }
+
+    public MediRecordsException(string? message, Exception? innerException) : base(message, innerException)
+    {
+        
+    }
 }
