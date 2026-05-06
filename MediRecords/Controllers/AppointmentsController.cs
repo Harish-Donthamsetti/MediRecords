@@ -1,3 +1,5 @@
+using MediRecords.Domain.Enums;
+using MediRecords.Dto.AppointmentDtos;
 using MediRecords.Dto.AppointmentsDtos;
 using MediRecords.Services.AppointmentsServices;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +55,41 @@ namespace MediRecords.Controllers
                 return NotFound(new { message = "Appointment not found" });
 
             return Ok(response);
+        }
+
+        [HttpPut("{id}/{status}")]
+        [ProducesResponseType(typeof(AppointmentUpdateResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UpdateAppointmentStatus(
+            int id,
+            AppointmentStatus status,
+            [FromBody] AppointmentUpdateRequestDto request)
+        {
+            if (id <= 0)
+                return BadRequest(new { message = "Invalid appointment ID" });
+
+            try
+            {
+                var response = await _appointmentService.UpdateAppointmentAsync(id, status, request);
+
+                if (response == null)
+                    return NotFound(new { message = "Appointment not found" });
+
+                return Ok(response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "Internal server error" });
+            }
         }
     }
 }

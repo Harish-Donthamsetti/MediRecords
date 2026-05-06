@@ -76,7 +76,7 @@ namespace MediRecords.Controllers
         /// Fetches a specific user's details by their unique ID.
         /// </summary>
         /// <param name="id">The numeric ID of the user.</param>
-        // [Authorize(Roles = Constant.Admin)]
+        [Authorize(Roles = Constant.Admin)]
         [HttpGet("GetById/{id}")]
         [Authorize(Roles = Constant.Admin)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

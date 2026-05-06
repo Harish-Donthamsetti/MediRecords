@@ -46,7 +46,7 @@
 
 		public const string DeleteSucess = "User deleted Successfully";
 
-		public const string PatientIdRequired = "PatientId is doesnot exiat";
+		public const string PatientIdRequired = "PatientId is doesnot exist";
 		public const string ProviderIdRequired = "ProviderId is doesnot exist";
 
 		// Validation & Error Messages
@@ -59,12 +59,19 @@
 		public const string OrderCreated = "Order created successfully.";
 		public const string InternalServerError = "An unexpected error occurred. Please try again later.";
 
+		public const string OrderNotFound = "The specified Imaging Order does not exist.";
+
+		// Report Messages
+		public const string ReportCreated = "Imaging report created successfully.";
+		public const string ReportAlreadyExists = "A report has already been submitted for this order.";
+		public const string InvalidFindings = "Findings must contain at least one result.";
+
 		public const string ProblemCreated = "Problem Added Successfully";
 
 		public const string AllergyCreated = "Allergy Created Successfully";
 
 		public const string MedicalHistoryCreated = "Medical History Created Successfully";
-		
+
 		public const string AllergyExists = "Allergy already exists for this patient.";
 
 		public const string MedicalHistoryExists = "Medical history entry already exists.";
@@ -87,7 +94,34 @@
 
 		public const string ImagingOrderAlreadyExists = "Imaging Order Already Exists";
 
+		//Procdure code Constants
+
+		public const string ProcedureNotFound = "procedure does not found";
+
+		public const string ProcedureFound = "procedure already exists";
+
+		public const string InvalidProcedureCode = "Please enter valid procedure code";
+
+		public const string Description = "Please give the description";
+
+		public const string InvalidPrice = "Price cannot be negative or zero";
+
+		public const string ProcedureCreated = "Procedure Created Successfully";
+
+		public const string ProcdureUpdated = "Procedure Updated Successfully";
 		public const string ImagingOrderNotExists = "Imaging Order does not exists with these filters";
+
+		public const string FutureDate = "Given Date cannot be in future";
+
+		public const string FollowUpDate = "Follow-up date cannot be in the future";
+
+		public const string FollowUpForbidden = "You are not authorized to add follow-ups for this encounter.";
+
+		public const string FollowUpConflict = "Follow-up can only be created for an open encounter.";
+
+		public const string FileLength = "Uploaded file is empty.";
+
+		public const string AllowedFile = "Only PDF or image files are allowed.";
 
 		public static class UserUpdate
 		{
