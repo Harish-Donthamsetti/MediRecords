@@ -22,6 +22,10 @@ using MediRecords.Repository.VitalSignRepository;
 using MediRecords.Services.VitalSignServices;
 using MediRecords.Repository.NursingNoteRepository;
 using MediRecords.Services.NursingNoteServices;
+using MediRecords.Repository.ImagingOrderRepository;
+using MediRecords.Services.ImagingOrderServices;
+using MediRecords.Repository.ImagingReportRepository;
+using MediRecords.Services.ImagingReportServices;
 using MediRecords.Services.ProblemListServices;
 using MediRecords.Repository.ProblemListRepository;
 using MediRecords.Services.AllergyServices;
@@ -30,20 +34,23 @@ using MediRecords.Services.MedicalHistoryServices;
 using MediRecords.Repository.MedicalHistoryRepository;
 using MediRecords.Services.PrescriptionWithItemsServices;
 using MediRecords.Repository.PrescriptionWithItemsRepository;
+using MediRecords.Repository.DocumentRepository;
+using MediRecords.Services.DocumentServices;
 
-using MediRecords.Repository.ImagingRepo;
-using MediRecords.Services.ImagingServices;
 using MediRecords.Repository.ImagingRepo;
 using MediRecords.Services.ImagingServices;
 using MediRecords.Repository.BillingRepo;
 using MediRecords.Services.BillingServices;
 using MediRecords.Repository.LabOrderRepository;
 using MediRecords.Services.LabOrderServices;
-using MediRecords.Repository.LabOrderRepository;
 using MediRecords.Services.LabResultServices;
+using MediRecords.Repository.ProcedureCodeRepository;
+using MediRecords.Services.ProcedureCodeServices;
 using MediRecords.Repository.LabResultRepository;
 using MediRecords.Repository.CarePlanRepo;
 using MediRecords.Services.CarePlanServices;
+using MediRecords.Repository.SOAPNoteRepo;
+using MediRecords.Services.SOAPNoteService;
 using MediRecords.Repository.ImmunizationRepository;
 using MediRecords.Services.ImmunizationService;
 using MediRecords.Repository.FollowUpRepository;
@@ -55,7 +62,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<MediRecordsDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("MediRecords")
     )
 );
  
@@ -128,6 +136,10 @@ builder.Services.AddScoped<ISOAPNoteService, SOAPNoteService>();
 builder.Services.AddAutoMapper(typeof(EncounterMappingProfile),typeof(ImagingMappingProfile),typeof(BillingMappingProfile));
 builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
 builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+builder.Services.AddScoped<IImagingOrderRepository,ImagingOrderRepository>();
+builder.Services.AddScoped<IImagingOrderServices,ImagingOrderServices>();
+builder.Services.AddScoped<IImagingReportRepository, ImagingReportRepository>();
+builder.Services.AddScoped<IImagingReportServices, ImagingReportServices>();
 builder.Services.AddScoped<IProblemListService, ProblemListService>();
 builder.Services.AddScoped<IProblemListRepository, ProblemListRepository>();
 builder.Services.AddScoped<IAllergyService, AllergyService>();
@@ -142,10 +154,14 @@ builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
 builder.Services.AddScoped<ILabOrderService, LabOrderService>();
 builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
 builder.Services.AddScoped<ILabResultService, LabResultService>();
+builder.Services.AddScoped<IProcedureCodeRepository,ProcedureCodeRepository>();
+builder.Services.AddScoped<IProcedureCodeService,ProcedureCodeService>();
 builder.Services.AddScoped<IImagingRepository, ImagingRepository>();
 builder.Services.AddScoped<IImagingService, ImagingService>();
 builder.Services.AddScoped<IPrescriptionWithItemsService, PrescriptionWithItemsService>();
 builder.Services.AddScoped<IPrescriptionWithItemsRepository, PrescriptionWithItemsRepository>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
  
 builder.Services.AddScoped<ICarePlanRepository, CarePlanRepository>();
 builder.Services.AddScoped<ICarePlanService, CarePlanService>();
@@ -154,6 +170,7 @@ builder.Services.AddScoped<IImmunizationService, ImmunizationService>();
 builder.Services.AddScoped<IFollowUpRepository, FollowUpRepository>();
 builder.Services.AddScoped<IFollowUpService, FollowUpService>();
 var app = builder.Build();
+app.UseStaticFiles();
  
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
