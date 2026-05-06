@@ -14,16 +14,17 @@ public class ImagingReport
     [ForeignKey("ImagingOrderIdNavigation")]
     public int ImagingOrderId { get; set; }
 
-    [Column(TypeName = "VARCHAR(MAX)")]
+    [Column(TypeName = "NVARCHAR(MAX)")]
     public string Findings { get; set; } = null!;
 
     [Column(TypeName = "VARCHAR(100)")]
     public string Impression { get; set; } = null!;
 
+    [Column(TypeName = "NVARCHAR(MAX)")]
+    public string? AttachmentPath { get; set; }
+
     public DateTime ReportDate { get; set; }
 
     public bool Status { get; set; }
-
-    /*-------------------------Foreign Key References--------------------------------*/
     public virtual ImagingOrder? ImagingOrderIdNavigation { get; set; }
 }

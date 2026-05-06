@@ -79,3 +79,4 @@ MediRecords.Domain.sln
 
 # Subfolders inside Documents Folder
 Documents/**
+MediRecords/wwwroot/

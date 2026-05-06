@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text;
 using MediRecords.Domain.Migrations;
 using MediRecords.Dto.FollowUpDtos;
 using MediRecords.Repository.FollowUpRepository;
@@ -45,6 +46,57 @@ namespace MediRecords.Controllers
             catch(MediRecordsException ex)
             {
                 return Conflict(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Constant.Physician)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetFollowUps(
+            [FromQuery] int? patientId,
+            [FromQuery] int? encounterId)
+        {
+            try
+            {
+                var result = await _followUpService.GetFollowUpsAsync(patientId, encounterId);
+                if (result == null || !result.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "No immunization records found matching the provided filters."
+                    });
+                }
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new {
+                    message = ex.Message
+            });
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = Constant.Physician)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetFollowUpById(int id)
+        {
+            try
+            {
+                var result = await _followUpService.GetByIdAsync(id);
+                return Ok(result); 
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(MediRecordsException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }

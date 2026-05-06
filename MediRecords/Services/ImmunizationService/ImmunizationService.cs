@@ -67,4 +67,45 @@ public class ImmunizationService : IImmunizationService
         );
         return immunization.ImmunizationId; 
     }
+
+    public async Task<IEnumerable<ImmunizationDetailsDto>> GetImmunizationsAsync(int? patientId, string? patientName, string? vaccine, bool? status)
+    {
+        var list = await _immunizationRepo.GetAsync(patientId, patientName, vaccine, status);
+
+        return list.Select(i => new ImmunizationDetailsDto
+        {
+            ImmunizationId = i.ImmunizationId,
+            PatientId = i.PatientId,
+            PatientName = i.PatientIdNavigation!.Name,
+            Vaccine = i.Vaccine,
+            Dose = i.Dose,
+            GivenDate = i.GivenDate,
+            Status = i.Status
+        });
+    }
+
+    public async Task<ImmunizationDetailsDto> GetByIdAsync(int immunizationId)
+    {
+        if(immunizationId <= 0)
+        {
+            throw new ArgumentException("Invalid immunization id");
+        }
+
+        var immunization = await _immunizationRepo.GetByIdAsync(immunizationId);
+        if (immunization == null)
+        {
+            throw new MediRecordsException($"Immunization with {immunizationId} not found.");
+        }
+
+        return new ImmunizationDetailsDto
+        {
+            ImmunizationId = immunization.ImmunizationId,
+            PatientId = immunization.PatientId,
+            PatientName = immunization.PatientIdNavigation!.Name,
+            Vaccine = immunization.Vaccine,
+            Dose = immunization.Dose,
+            GivenDate = immunization.GivenDate,
+            Status = immunization.Status
+        };
+    }
 }
