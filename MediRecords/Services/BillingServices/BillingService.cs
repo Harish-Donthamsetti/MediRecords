@@ -80,6 +80,8 @@ public class BillingService : IBillingService
             if (charge == null)
                 return (false, Constant.BillingMessages.ChargeNotFound, null, 404);
 
+            if (charge.Status) // true = Billed
+                return (false, Constant.BillingMessages.ChargeAlreadyBilled, null, 400);
             // Update amount
             charge.Amount = dto.Amount;
 

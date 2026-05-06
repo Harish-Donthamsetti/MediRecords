@@ -190,6 +190,24 @@
 			public const string InvalidAmount = "Amount must be greater than zero.";
 			public const string AmountRequired = "Amount is required.";
 			public const string ChargeUpdated = "Visit charge amount updated successfully.";
+			public const string InvalidPageNumber     = "Page number must be greater than zero.";
+			public const string InvalidPageSize       = "Page size must be between 1 and 100.";
+			public const string InvalidDateRange      = "From date cannot be greater than To date.";
+			public const string ChargeIdsRequired     = "At least one charge ID is required.";
+    		public const string ChargesMarkedBilled   = "Charges processed successfully.";
+			public const string UnsupportedFormat = "Unsupported format. Use 'csv' or 'json'.";
+			public const string UnsupportedStatus = "Unsupported status. Use 'Unbilled', 'Billed' or 'All'.";
+			public const string NoChargesFound = "No charges found for the given filters.";
+			public const string ChargeAlreadyBilled   = "Cannot update amount. This charge is already billed.";
+		}
+		public static class AppointmentMessages
+		{
+			public const string AppointmentNotFound = "Appointment not found.";
+			public const string AppointmentAlreadyCheckedIn = "Appointment already checked-in.";
+			public const string PastDateNotAllowed = "Cannot set appointment to a past date.";
+			public const string ProviderNotAvailable = "Provider not available.";
+			public const string ProviderSlotUnavailable = "Provider slot unavailable.";
+			public const string StatusUpdated = "Appointment updated successfully.";
 		}
 	}
 }
