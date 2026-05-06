@@ -53,4 +53,52 @@ public class DocumentController : ControllerBase
             return StatusCode(500, new { message = $"Internal server error: {ex.Message}" });
         }
     }
+
+    /// <summary>
+    /// Download a document by ID with timezone support
+    /// </summary>
+    /// <param name="documentId">Document ID to download</param>
+    /// <param name="timeZone">User's timezone (IANA format: America/New_York, America/Los_Angeles, Asia/Tokyo, etc.). Defaults to UTC</param>
+    /// <returns>File stream with automatic download and local time based on timezone</returns>
+    [HttpGet("download/{documentId}")]
+    [Authorize(Roles = nameof(UserRoleEnums.Admin) + "," + nameof(UserRoleEnums.Physician) + "," + nameof(UserRoleEnums.Nurse) + "," + nameof(UserRoleEnums.FrontDesk))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DownloadDocument(int documentId, [FromHeader(Name = "X-Timezone")] string? timeZone = "UTC")
+    {
+        try
+        {
+            // Use timezone from header, or default to UTC
+            if (string.IsNullOrEmpty(timeZone))
+                timeZone = "UTC";
+
+            // Get current user ID from JWT claims for audit logging
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            int userId = 0;
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var parsedUserId))
+                userId = parsedUserId;
+
+            var result = await _service.DownloadDocumentAsync(documentId, timeZone, userId);
+
+            // Return file with MIME type for auto-download
+            // Content-Disposition header tells browser to download instead of display
+            return File(
+                result.FileData,
+                result.FileType,
+                result.FileName,
+                enableRangeProcessing: true);
+        }
+        catch (MediRecordsException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"Internal server error: {ex.Message}" });
+        }
+    }
 }
