@@ -74,4 +74,45 @@ public class FollowUpService : IFollowUpService
         );
         return followUp.FollowupId;
     }
+
+    public async Task<IEnumerable<FollowUpDetailsDto>> GetFollowUpsAsync(int? patientId, int? encounterId)
+    {
+        var list = await _followUpRepo.GetAsync(patientId, encounterId);
+
+        return list.Select(f => new FollowUpDetailsDto
+        {
+            FollowupId = f.FollowupId,
+            EncounterId = f.EncounterId,
+            PatientId = f.EncounterIdNavigation!.PatientId,
+            PatientName = f.EncounterIdNavigation.PatientIdNavigation!.Name,
+            RecommendedDate = f.RecommendedDate,
+            Notes = f.Notes,
+            CreatedDate = f.CreatedDate
+        });
+    }
+
+    public async Task<FollowUpDetailsDto> GetByIdAsync(int followupId)
+    {
+        if(followupId <= 0)
+        {
+            throw new ArgumentException("Invalid follow-up id");
+        }
+
+        var followUp = await _followUpRepo.GetByIdAsync(followupId);
+        if (followUp == null)
+        {
+            throw new MediRecordsException("Follow‑up not found.");
+        }
+
+        return new FollowUpDetailsDto
+        {
+            FollowupId = followUp.FollowupId,
+            EncounterId = followUp.EncounterId,
+            PatientId = followUp.EncounterIdNavigation!.PatientId,
+            PatientName = followUp.EncounterIdNavigation.PatientIdNavigation!.Name,
+            RecommendedDate = followUp.RecommendedDate,
+            Notes = followUp.Notes,
+            CreatedDate = followUp.CreatedDate
+        };
+    }
 }

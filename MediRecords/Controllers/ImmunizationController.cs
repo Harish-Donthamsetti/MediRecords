@@ -49,5 +49,68 @@ namespace MediRecords.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        
+        [HttpGet]
+        [Authorize(Roles = Constant.Physician + "," + Constant.Nurse)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetImmunizations(
+            [FromQuery] int? patientId,
+            [FromQuery] string? patientName,
+            [FromQuery] string? vaccine,
+            [FromQuery] bool? status)
+        {
+            try
+            {
+                var result = await _immunizationService
+                    .GetImmunizationsAsync(
+                        patientId,
+                        patientName,
+                        vaccine,
+                        status);
+
+                if (result == null || !result.Any())
+                {
+                    return NotFound(new
+                    {
+                        message = "No immunization records found matching the provided filters."
+                    });
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = Constant.InternalError + ex.Message
+                });
+            }
+        }
+
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = Constant.Physician + "," + Constant.Nurse)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetImmunizationById(int id)
+        {
+            try
+            {
+                var result = await _immunizationService.GetByIdAsync(id);
+                return Ok(result);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(MediRecordsException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }
