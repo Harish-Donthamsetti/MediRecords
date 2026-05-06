@@ -69,11 +69,6 @@ public class BillingController : ControllerBase
             200 => Ok(data),
             404 => NotFound(new { message }),
             500 => StatusCode(500, new { message }),
-<<<<<<< HEAD
-            _   => BadRequest(new { message })
-        };
-    }
-=======
             _ => BadRequest(new { message })
         };
     }
@@ -266,5 +261,4 @@ public class BillingController : ControllerBase
             return StatusCode(500, Utility.Constant.InternalServerError);
         }
     }
->>>>>>> 05a4881f010c79392884b5b9c9d7168d63d9a004
 }
