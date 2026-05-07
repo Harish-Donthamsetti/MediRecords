@@ -244,7 +244,7 @@ public class DocumentRepository : IDocumentRepository
                 var auditLog = new AuditLog
                 {
                     UserId = userId,
-                    Action = "LIST",
+                    Action = "SEARCH_DOCUMENTS",
                     Resource = filterDescription.TrimEnd().TrimEnd(','),
                     TimeStamp = DateTime.UtcNow
                 };
