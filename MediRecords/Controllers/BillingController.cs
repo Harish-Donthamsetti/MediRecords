@@ -130,6 +130,7 @@ public class BillingController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> MarkChargesAsBilled([FromBody] MarkChargesBilledRequestDto dto)
     {
@@ -144,6 +145,7 @@ public class BillingController : ControllerBase
         return statusCode switch
         {
             200 => Ok(data),
+            404 => NotFound(new { message }), 
             500 => StatusCode(500, new { message }),
             _ => BadRequest(new { message })
         };
@@ -162,6 +164,9 @@ public class BillingController : ControllerBase
         [FromQuery] DateTime? fromDate = null,
         [FromQuery] DateTime? toDate = null)
     {
+        if (string.IsNullOrWhiteSpace(format))
+            return BadRequest(new { message = Constant.BillingMessages.UnsupportedFormat });
+
         var (success, message, fileContent, contentType, fileName, statusCode) =
             await _billingService.ExportChargesAsync(format, status, fromDate, toDate);
 
@@ -172,7 +177,7 @@ public class BillingController : ControllerBase
                 500 => StatusCode(500, new { message }),
                 _ => BadRequest(new { message })
             };
-        }
+        }   
         return File(fileContent!, contentType, fileName);
     }
 
