@@ -32,4 +32,15 @@ public class DocumentService : IDocumentService
 
         return await _repository.UploadDocumentAsync(request, userId);
     }
+
+    public async Task<DocumentDownloadResponseDto> DownloadDocumentAsync(int documentId, string timeZone = "UTC", int userId = 0)
+    {
+        if (documentId <= 0)
+            throw new MediRecordsException("Invalid document ID.");
+
+        if (string.IsNullOrWhiteSpace(timeZone))
+            timeZone = "UTC";
+
+        return await _repository.DownloadDocumentAsync(documentId, timeZone, userId);
+    }
 }

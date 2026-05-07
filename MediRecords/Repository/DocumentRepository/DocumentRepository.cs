@@ -78,12 +78,23 @@ public class DocumentRepository : IDocumentRepository
                 FileType = mimeType,
                 FileData = fileData,
                 UploadedBy = userId,
-                UploadedDate = DateTime.Now,
+                UploadedDate = DateTime.UtcNow,
                 Status = DocumentStatus.Active,
                 ProviderOnlyVisibility = request.ProviderOnlyVisibility
             };
 
             _dbContext.Documents.Add(document);
+            await _dbContext.SaveChangesAsync();
+
+            // Log to AuditLog
+            var auditLog = new AuditLog
+            {
+                UserId = userId,
+                Action = "UPLOAD",
+                Resource = $"Document - {document.FileName} (Type: {docType})",
+                TimeStamp = DateTime.UtcNow
+            };
+            _dbContext.AuditLogs.Add(auditLog);
             await _dbContext.SaveChangesAsync();
 
             // Get uploader user name
@@ -115,6 +126,66 @@ public class DocumentRepository : IDocumentRepository
         catch (Exception ex)
         {
             throw new MediRecordsException($"Error uploading document: {ex.Message}", ex);
+        }
+    }
+
+    public async Task<DocumentDownloadResponseDto> DownloadDocumentAsync(int documentId, string timeZone = "UTC", int userId = 0)
+    {
+        try
+        {
+            // Retrieve document from database
+            var document = await _dbContext.Documents
+                .FirstOrDefaultAsync(d => d.DocumentID == documentId && d.Status == DocumentStatus.Active);
+
+            if (document == null)
+                throw new MediRecordsException($"Document with ID {documentId} not found or has been deleted.");
+
+            if (document.FileData == null || document.FileData.Length == 0)
+                throw new MediRecordsException("Document file data is corrupted or missing.");
+
+            // Log to AuditLog if userId is provided
+            if (userId > 0)
+            {
+                var auditLog = new AuditLog
+                {
+                    UserId = userId,
+                    Action = "DOWNLOAD",
+                    Resource = $"Document - {document.FileName} (ID: {documentId})",
+                    TimeStamp = DateTime.UtcNow
+                };
+                _dbContext.AuditLogs.Add(auditLog);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            // Convert UTC time to user's timezone
+            DateTime uploadedDateLocal = document.UploadedDate;
+            try
+            {
+                var tzInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+                uploadedDateLocal = TimeZoneInfo.ConvertTime(document.UploadedDate, TimeZoneInfo.Utc, tzInfo);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                // If timezone is invalid, use local time
+                uploadedDateLocal = document.UploadedDate.ToLocalTime();
+            }
+
+            return new DocumentDownloadResponseDto
+            {
+                DocumentId = document.DocumentID,
+                FileName = document.FileName ?? "document",
+                FileType = document.FileType ?? "application/octet-stream",
+                FileData = document.FileData,
+                UploadedDate = uploadedDateLocal
+            };
+        }
+        catch (MediRecordsException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new MediRecordsException($"Error downloading document: {ex.Message}", ex);
         }
     }
 }
