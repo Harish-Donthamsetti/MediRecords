@@ -55,6 +55,7 @@
     <Folder Include="Repository\ImagingRepo\" />
     <Folder Include="Repository\MedicalHistoryRepository\" />
     <Folder Include="Repository\ProblemListRepository\" />
+    <Folder Include="Repository\ProviderProductivity\" />
     <Folder Include="Repository\SOAPNoteRepo\" />
     <Folder Include="Repository\ImagingOrderRepository\" />
     <Folder Include="Repository\UserRepo\" />

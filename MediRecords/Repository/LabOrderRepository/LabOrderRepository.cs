@@ -69,4 +69,11 @@ public class LabOrderRepository : ILabOrderRepository
         await _context.SaveChangesAsync();
         return labOrder;
     }
+
+    public async Task<int> GetLabOrderCountAsync(DateTime fromDate, DateTime toDate)
+    {
+        return await _context.LabOrders
+            .Where(lo => lo.OrderDate >= fromDate && lo.OrderDate <= toDate)
+            .CountAsync();
+    }
 }

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore; 
-using MediRecords.Domain.Entities;   
+using MediRecords.Domain.Entities;  
 using MediRecords.Services.AuthServices;
 using MediRecords.Services.UserServices;
 using MediRecords.Repository;
@@ -55,6 +55,10 @@ using MediRecords.Repository.ImmunizationRepository;
 using MediRecords.Services.ImmunizationService;
 using MediRecords.Repository.FollowUpRepository;
 using MediRecords.Services.FollowUpService;
+using MediRecords.Repository.PrescriptionRepository;
+using MediRecords.Services.ReportsServices;
+using MediRecords.Repository.ProviderProductivity;
+using MediRecords.Services.ProviderProductivityServices;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -169,6 +173,12 @@ builder.Services.AddScoped<IImmunizationRepository, ImmunizationRepository>();
 builder.Services.AddScoped<IImmunizationService, ImmunizationService>(); 
 builder.Services.AddScoped<IFollowUpRepository, FollowUpRepository>();
 builder.Services.AddScoped<IFollowUpService, FollowUpService>();
+
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IReportsService, ReportsService>();
+builder.Services.AddScoped<IProviderProductivity, ProviderProductivity>();
+builder.Services.AddScoped<IProviderProductivityService, ProviderProductivityService>();
+
 var app = builder.Build();
 app.UseStaticFiles();
  
