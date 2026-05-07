@@ -85,6 +85,8 @@ public class BillingService : IBillingService
             if (charge == null)
                 return (false, Constant.BillingMessages.ChargeNotFound, null, 404);
 
+            if (charge.Status) // true = Billed
+                return (false, Constant.BillingMessages.ChargeAlreadyBilled, null, 400);
             // Update amount
             charge.Amount = dto.Amount;
 
@@ -182,6 +184,10 @@ public class BillingService : IBillingService
 
             var foundIds      = charges.Select(c => c.ChargeId).ToList();
             var notFoundIds   = distinctIds.Except(foundIds).ToList();
+
+            if (!charges.Any())
+                return (false, Constant.BillingMessages.ChargeNotFound, null, 404);
+
             var alreadyBilled = charges.Where(c => c.Status).Select(c => c.ChargeId).ToList();
             var toBill        = charges.Where(c => !c.Status).ToList(); // false = Unbilled
 

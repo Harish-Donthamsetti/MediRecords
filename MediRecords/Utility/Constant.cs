@@ -232,6 +232,7 @@
 			public const string UnsupportedFormat = "Unsupported format. Use 'csv' or 'json'.";
 			public const string UnsupportedStatus = "Unsupported status. Use 'Unbilled', 'Billed' or 'All'.";
 			public const string NoChargesFound = "No charges found for the given filters.";
+			public const string ChargeAlreadyBilled   = "Cannot update amount. This charge is already billed.";
 		}
 		public static class AppointmentMessages
 		{
