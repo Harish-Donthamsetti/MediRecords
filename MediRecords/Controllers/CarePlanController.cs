@@ -36,10 +36,58 @@ public class CarePlanController : ControllerBase
             if (message == Constant.CarePlanMessages.PatientNotFound)
                 return NotFound(new { message });
 
-            return BadRequest(new { message });
+            return BadRequest(new { message }); 
         }
         
         return CreatedAtAction(nameof(CreateCarePlan),
             new { id = data!.CarePlanId }, data);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = Constant.Physician + "," + Constant.Nurse)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetCarePlans(
+        [FromQuery] int? patientId,
+        [FromQuery] string? patientName,
+        [FromQuery] bool? status)
+    {
+        try
+        {
+            var result = await _carePlanService.GetCarePlansAsync(patientId, patientName, status);
+            if(result == null || !result.Any())
+            {
+                return NotFound(new
+                {
+                    message = "No care plan records found matching the provided filters"
+                });
+            }
+            return Ok(result);
+        }
+        catch (MediRecordsException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = Constant.Physician + "," + Constant.Nurse)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCarePlanById(int id)
+    {
+        try
+        {
+            var result = await _carePlanService.GetByIdAsync(id);
+            return Ok(result);
+        }
+        catch (MediRecordsException ex)
+        {
+            if (ex.Message.Contains("not found"))
+                return NotFound(ex.Message);
+
+            return BadRequest(ex.Message); 
+        }
     }
 }

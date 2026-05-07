@@ -1,4 +1,5 @@
 using MediRecords.Domain.Entities;
+using MediRecords.Domain.Enums;
 using MediRecords.Dto.MedicationListDtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,8 +50,11 @@ public class MedicationRepository : IMedicationRepository
         if (filter.EndDate.HasValue)
             query = query.Where(x => x.EndDate.HasValue && x.EndDate.Value.Date <= filter.EndDate.Value.Date);
 
-        if (filter.Status.HasValue)
-            query = query.Where(x => x.Status == filter.Status.Value);
+        if (!string.IsNullOrEmpty(filter.Status))
+        {
+            var medicationStatus = Enum.Parse<MedicationStatus>(filter.Status, ignoreCase: true);
+            query = query.Where(x => x.Status == medicationStatus);
+        }
 
         return await query
         .OrderByDescending(x => x.StartDate)

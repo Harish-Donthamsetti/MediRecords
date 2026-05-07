@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MediRecords.Domain.Enums;
 
 namespace MediRecords.Domain.Entities
 {
@@ -33,7 +34,7 @@ namespace MediRecords.Domain.Entities
         [Required]
         public DateTime? EndDate { get; set; }
         
-        public bool Status { get; set; }
+        public MedicationStatus Status { get; set; } = MedicationStatus.Active;
 
         public virtual Patient? PatientIdNavigation { get; set; }
     }

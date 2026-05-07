@@ -24,6 +24,9 @@ namespace MediRecords.Domain.Entities
         [Column(TypeName = "VARCHAR(50)")]
         public string Frequency { get; set; } = null!;
 
+        [Column(TypeName = "VARCHAR(50)")]
+        public string Route { get; set; } = null!;
+
         public int DurationDays { get; set; }
         
         public string Instructions { get; set; } = null!;
