@@ -9,4 +9,5 @@ public interface IEncounterService
     Task<IEnumerable<EncounterSummaryDto>> GetWorkspaceAsync(int providerId, DateTime? date);
     Task<EncounterDetailDto?> GetEncounterByIdAsync(int encounterId);
     Task<(bool Success, string Message, EncounterStatusResponseDto? Data)> UpdateEncounterStatusAsync(int encounterId, EncounterStatusUpdateDto dto);
+    Task<MediRecords.Dto.EncounterDtos.Response.ProviderUtilizationDto> GetProviderUtilizationAsync(int providerId, DateTime startDate, DateTime endDate);
 }

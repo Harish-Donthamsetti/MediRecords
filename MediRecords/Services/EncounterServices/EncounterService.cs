@@ -75,4 +75,22 @@ public class EncounterService : IEncounterService
 
         return (true, Constant.EncounterMessages.StatusUpdated, response);
     }
+
+    public async Task<MediRecords.Dto.EncounterDtos.Response.ProviderUtilizationDto> GetProviderUtilizationAsync(int providerId, DateTime startDate, DateTime endDate)
+    {
+        if (providerId <= 0)
+            throw new MediRecordsException("Invalid provider id.");
+
+        var scheduledCount = await _encounterRepository.GetScheduledAppointmentsCount(providerId, startDate, endDate);
+        var completedCount = await _encounterRepository.GetCompletedEncountersCount(providerId, startDate, endDate);
+        var cancelledCount = await _encounterRepository.GetCancelledEncountersCount(providerId, startDate, endDate);
+
+        return new MediRecords.Dto.EncounterDtos.Response.ProviderUtilizationDto
+        {
+            ScheduledAppointments = scheduledCount,
+            CompletedEncounters = completedCount,
+            CancelledEncounters = cancelledCount,
+            UtilizationRate = scheduledCount > 0 ? (double)completedCount / scheduledCount * 100 : 0
+        };
+    }
 }
