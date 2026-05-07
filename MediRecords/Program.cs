@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore; 
-using MediRecords.Domain.Entities;   
+using MediRecords.Domain.Entities;  
 using MediRecords.Services.AuthServices;
 using MediRecords.Services.UserServices;
 using MediRecords.Repository;
@@ -55,7 +55,6 @@ using MediRecords.Repository.ImmunizationRepository;
 using MediRecords.Services.ImmunizationService;
 using MediRecords.Repository.FollowUpRepository;
 using MediRecords.Services.FollowUpService;
-
 using MediRecords.Repository.PrescriptionRepository;
 using MediRecords.Services.ReportsServices;
 using MediRecords.Repository.ProviderProductivity;
