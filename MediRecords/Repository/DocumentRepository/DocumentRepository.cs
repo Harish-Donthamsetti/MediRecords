@@ -188,4 +188,112 @@ public class DocumentRepository : IDocumentRepository
             throw new MediRecordsException($"Error downloading document: {ex.Message}", ex);
         }
     }
+
+    public async Task<List<DocumentListResponseDto>> GetAllDocumentsAsync(DocumentFilterRequestDto filter, string timeZone = "UTC", int userId = 0)
+    {
+        try
+        {
+            // Build query with filters
+            var query = _dbContext.Documents
+                .Where(d => d.Status == DocumentStatus.Active)
+                .AsQueryable();
+
+            // Filter by PatientID
+            if (filter.PatientId.HasValue && filter.PatientId > 0)
+                query = query.Where(d => d.PatientID == filter.PatientId);
+
+            // Filter by EncounterID
+            if (filter.EncounterId.HasValue && filter.EncounterId > 0)
+                query = query.Where(d => d.EncounterID == filter.EncounterId);
+
+            // Filter by specific UploadedDate (entire day)
+            if (filter.UploadedDate.HasValue)
+            {
+                var dateStart = filter.UploadedDate.Value.Date;
+                var dateEnd = dateStart.AddDays(1);
+                query = query.Where(d => d.UploadedDate >= dateStart && d.UploadedDate < dateEnd);
+            }
+
+            // Filter by UploadedDateFrom
+            if (filter.UploadedDateFrom.HasValue)
+                query = query.Where(d => d.UploadedDate >= filter.UploadedDateFrom);
+
+            // Filter by UploadedDateTo
+            if (filter.UploadedDateTo.HasValue)
+            {
+                var dateEnd = filter.UploadedDateTo.Value.AddDays(1); // Include entire day
+                query = query.Where(d => d.UploadedDate < dateEnd);
+            }
+
+            // Execute query and get documents
+            var documents = await query
+                .Include(d => d.PatientIdNavigation)
+                .ToListAsync();
+
+            // Log to AuditLog if userId is provided
+            if (userId > 0)
+            {
+                var filterDescription = $"Documents retrieved - ";
+                if (filter.PatientId.HasValue)
+                    filterDescription += $"PatientID: {filter.PatientId}, ";
+                if (filter.EncounterId.HasValue)
+                    filterDescription += $"EncounterID: {filter.EncounterId}, ";
+                if (filter.UploadedDate.HasValue)
+                    filterDescription += $"UploadedDate: {filter.UploadedDate:yyyy-MM-dd}";
+
+                var auditLog = new AuditLog
+                {
+                    UserId = userId,
+                    Action = "SEARCH_DOCUMENTS",
+                    Resource = filterDescription.TrimEnd().TrimEnd(','),
+                    TimeStamp = DateTime.UtcNow
+                };
+                _dbContext.AuditLogs.Add(auditLog);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            // Convert to response DTOs with timezone conversion
+            var responseDtos = new List<DocumentListResponseDto>();
+            foreach (var doc in documents)
+            {
+                // Convert UTC time to user's timezone
+                DateTime uploadedDateLocal = doc.UploadedDate;
+                try
+                {
+                    var tzInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+                    uploadedDateLocal = TimeZoneInfo.ConvertTime(doc.UploadedDate, TimeZoneInfo.Utc, tzInfo);
+                }
+                catch (TimeZoneNotFoundException)
+                {
+                    uploadedDateLocal = doc.UploadedDate.ToLocalTime();
+                }
+
+                // Get uploader name
+                var uploader = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == doc.UploadedBy);
+                var uploaderName = uploader?.Name ?? "Unknown";
+
+                responseDtos.Add(new DocumentListResponseDto
+                {
+                    DocumentId = doc.DocumentID,
+                    PatientId = doc.PatientID,
+                    EncounterId = doc.EncounterID,
+                    DocType = doc.DocType.ToString(),
+                    FileName = doc.FileName ?? string.Empty,
+                    UploadedBy = uploaderName,
+                    UploadedDate = DateOnly.FromDateTime(uploadedDateLocal),
+                    Status = doc.Status.ToString()
+                });
+            }
+
+            return responseDtos.OrderByDescending(d => d.UploadedDate).ToList();
+        }
+        catch (MediRecordsException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new MediRecordsException($"Error retrieving documents: {ex.Message}", ex);
+        }
+    }
 }

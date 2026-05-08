@@ -43,4 +43,15 @@ public class DocumentService : IDocumentService
 
         return await _repository.DownloadDocumentAsync(documentId, timeZone, userId);
     }
+
+    public async Task<List<DocumentListResponseDto>> GetAllDocumentsAsync(DocumentFilterRequestDto filter, string timeZone = "UTC", int userId = 0)
+    {
+        if (filter == null)
+            throw new MediRecordsException(Constant.RequestNull);
+
+        if (string.IsNullOrWhiteSpace(timeZone))
+            timeZone = "UTC";
+
+        return await _repository.GetAllDocumentsAsync(filter, timeZone, userId);
+    }
 }
